@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  app:
+    build: ./docker/php
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      CI_ENVIRONMENT: development
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ci4
+      MYSQL_USER: ciuser
+      MYSQL_PASSWORD: cipass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

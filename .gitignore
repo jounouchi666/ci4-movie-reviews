@@ -1,0 +1,20 @@
+# Composer の依存関係
+/vendor/
+
+# 環境ごとの設定ファイル（個人環境の DB 接続など）
+/.env
+
+# キャッシュやログ類（writable 以下）
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+
+# IDE/エディタ関連
+/.idea/
+/.vscode/
+/*.swp
+
+# OS が勝手に作るファイル
+.DS_Store
+Thumbs.db
