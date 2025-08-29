@@ -30,4 +30,19 @@ class Movies extends BaseController
 
         return redirect()->to('/movies')->with('message', '登録しました');
     }
+    
+    /**
+     * 削除
+     *
+     * @param int $id ID
+     * @return RedirectResponse リダイレクト
+     */
+    public function delete($id): RedirectResponse
+    {
+        // 削除
+        $model = model(MovieModel::class);
+        $model->delete($id);
+
+        return redirect()->to('/movies')->with('message', '削除しました');
+    }
 }
