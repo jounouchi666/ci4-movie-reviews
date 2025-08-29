@@ -10,6 +10,17 @@ use CodeIgniter\HTTP\RedirectResponse;
  */
 class Movies extends BaseController
 {    
+        
+    /**
+     * 一覧表示
+     *
+     * @return string view
+     */
+    public function index(): string
+    {
+        return view('movies/index');
+    }
+
     /**
      * 保存（新規登録/更新兼用）
      *
