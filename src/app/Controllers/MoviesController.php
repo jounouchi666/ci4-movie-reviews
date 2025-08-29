@@ -11,7 +11,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 class Movies extends BaseController
 {    
     /**
-     * 保存
+     * 保存（新規登録/更新兼用）
      *
      * @return RedirectResponse リダイレクト
      */
@@ -26,7 +26,7 @@ class Movies extends BaseController
         // 保存
         $data = $this->request->getPost();
         $model = model(MovieModel::class);
-        $model->insert($data);
+        $model->save($data);
 
         return redirect()->to('/movies')->with('message', '登録しました');
     }
