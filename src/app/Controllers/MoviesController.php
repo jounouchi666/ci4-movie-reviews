@@ -4,13 +4,13 @@ namespace App\Controllers;
 
 use App\Models\MovieModel;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 /**
  * Moviesコントローラー
  */
 class Movies extends BaseController
 {    
-        
     /**
      * 一覧表示
      *
@@ -18,8 +18,39 @@ class Movies extends BaseController
      */
     public function index(): string
     {
-        return view('movies/index');
+        $model = model(MovieModel::class);
+        $movies = $model->getMovies();
+
+        return view('templates/header')
+            . view('movies/index', ['movies' => $movies])
+            . view('templates/footer');
     }
+
+
+    /**
+     * 新規登録/編集画面
+     * 
+     * @param int|false $id レビューID（省略で新規登録表示）
+     * @return string view
+     */
+    public function create($id = false): string
+    {
+        $model = model(MovieModel::class);
+    
+        if ($id === false) {
+            $movie = [];
+        } else {
+            $movie = $model->getMovies($id);
+            if (is_null($movie)) {
+                throw new PageNotFoundException('投稿がみつかりませんでした');
+            }
+        }
+
+        return view('templates/header')
+            . view('movies/edit', ['movie' => $movie])
+            . view('templates/footer');
+    }
+
 
     /**
      * 保存（新規登録/更新兼用）
@@ -42,6 +73,7 @@ class Movies extends BaseController
         return redirect()->to('/movies')->with('message', '登録しました');
     }
     
+
     /**
      * 削除
      *
