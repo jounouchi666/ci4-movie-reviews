@@ -64,7 +64,7 @@ class Movies extends BaseController
      *
      * @return RedirectResponse リダイレクト
      */
-    public function store(): RedirectResponse
+    public function save(): RedirectResponse
     {
         // バリデーション
         if (! $this->validate('movie')) {
