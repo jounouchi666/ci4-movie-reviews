@@ -19,13 +19,18 @@ class Movies extends BaseController
     public function index(): string
     {
         $model = model(MovieModel::class);
-        $movies = $model->getMovies();
+        
+        $filter = $this->request->getGet();
+        if (!empty($filter)) {
+            $movies = $model->filter($filter);
+        } else {
+            $movies = $model->getMovies();
+        }
 
         return view('templates/header')
             . view('movies/index', ['movies' => $movies])
             . view('templates/footer');
     }
-
 
     /**
      * 新規登録/編集画面
