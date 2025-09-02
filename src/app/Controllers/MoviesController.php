@@ -38,21 +38,23 @@ class Movies extends BaseController
      * @param int|false $id レビューID（省略で新規登録表示）
      * @return string view
      */
-    public function create($id = false): string
+    public function edit($id = null): string
     {
         $model = model(MovieModel::class);
     
-        if ($id === false) {
-            $movie = [];
-        } else {
+        if ($id) {
             $movie = $model->getMovies($id);
             if (is_null($movie)) {
                 throw new PageNotFoundException('投稿がみつかりませんでした');
             }
+            $mode = 'edit';
+        } else {
+            $movie = null;
+            $mode = 'create';
         }
 
         return view('templates/header')
-            . view('movies/edit', ['movie' => $movie])
+            . view('movies/edit', ['movie' => $movie, 'mode' => $mode])
             . view('templates/footer');
     }
 
