@@ -32,6 +32,27 @@ class Movies extends BaseController
             . view('templates/footer');
     }
 
+    
+    /**
+     * 詳細表示
+     *
+     * @param  @param int $id ID
+     * @return string view
+     */
+    public function show($id = null): string
+    {
+        $model = model(MovieModel::class);
+        
+        $movie = $model->getMovies($id);
+        if (is_null($movie)) {
+            throw new PageNotFoundException('投稿がみつかりませんでした');
+        }
+        return view('templates/header')
+            . view('movies/show', ['movie' => $movie])
+            . view('templates/footer');
+    }
+
+
     /**
      * 新規登録/編集画面
      * 
