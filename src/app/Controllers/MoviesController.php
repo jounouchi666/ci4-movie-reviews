@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\QueryHelper;
 use App\Models\MovieModel;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Exceptions\PageNotFoundException;
@@ -20,7 +21,7 @@ class Movies extends BaseController
     {
         $model = model(MovieModel::class);
         
-        $filter = $this->request->getGet();
+        $filter = QueryHelper::getParam($this->request);
         if (!empty($filter)) {
             $movies = $model->filter($filter);
         } else {
@@ -28,7 +29,10 @@ class Movies extends BaseController
         }
 
         return view('templates/header')
-            . view('movies/index', ['movies' => $movies])
+            . view('movies/index', [
+                'movies' => $movies,
+                'filters' => $filter
+                ])
             . view('templates/footer');
     }
 
@@ -48,7 +52,10 @@ class Movies extends BaseController
             throw new PageNotFoundException('投稿がみつかりませんでした');
         }
         return view('templates/header')
-            . view('movies/show', ['movie' => $movie])
+            . view('movies/show', [
+                'movie' => $movie,
+                'filters' => QueryHelper::getParam($this->request)
+                ])
             . view('templates/footer');
     }
 
@@ -75,7 +82,11 @@ class Movies extends BaseController
         }
 
         return view('templates/header')
-            . view('movies/edit', ['movie' => $movie, 'mode' => $mode])
+            . view('movies/edit', [
+                'movie' => $movie,
+                'mode' => $mode,
+                'filters' => QueryHelper::getParam($this->request)
+                ])
             . view('templates/footer');
     }
 
@@ -98,7 +109,10 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         $model->save($data);
 
-        return redirect()->to('/movies')->with('message', '登録しました');
+
+        $filters = QueryHelper::getParam($this->request);
+        return redirect()->to(QueryHelper::buildUrl('/movies', $filters))
+                         ->with('message', '登録しました');
     }
     
 
@@ -114,6 +128,8 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         $model->delete($id);
 
-        return redirect()->to('/movies')->with('message', '削除しました');
+        $filters = QueryHelper::getParam($this->request);
+        return redirect()->to(QueryHelper::buildUrl('/movies', $filters))
+                         ->with('message', '削除しました');
     }
 }
