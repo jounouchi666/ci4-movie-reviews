@@ -28,15 +28,18 @@ class MovieModel extends Model
      * レコードの取得
      *
      * @param  int|false $id ID指定 or 省略で全件取得
+     * @param  array|null $order ['column', 'direction']
      * @return array|null レコード
      */
-    public function getMovies($id = false): ?array
+    public function getMovies($id = false, $order = null): ?array
     {
-        if ($id === false) {
-            return $this->findAll();
+        $movies = $id ? $this->find($id) : $this->findAll();
+
+        if ($id || empty($order)) {
+            return $movies;
         }
 
-        return $this->find($id);
+        return $this->sort($movies, $order);
     }
 
         
@@ -85,15 +88,37 @@ class MovieModel extends Model
             };
         };
         
-        // ソート
+        $movies = $builder->get()->getResultArray();
+
+        // ソートして返す
+        return isset($conditions['order']) ? $this->sort($movies, $conditions['order']) : $movies;
+    }
+
+    
+    /**
+     * moviesをソートする
+     *
+     * @param  array $movies
+     * @param  array $order ['column', 'direction']
+     * @return array
+     */
+    protected function sort($movies, $order = null): array
+    {
+        $column = $order['column'] ?? null;
+        $direction = ($order['direction'] ?? 'asc') === 'asc' ? 1 : -1;
+
         $allowedColumns = ['title', 'year', 'genre', 'rating']; // 許されしカラム達
-        if (!empty($conditions['order']) && in_array($conditions['order']['column'], $allowedColumns)) {
-            $builder->orderBy(
-                $conditions['order']['column'],
-                strtoupper($conditions['order']['direction']) ?? 'ASC'
-            );
+        if ($column && in_array($column, $allowedColumns)) {
+            usort($movies, function($a, $b) use ($column, $direction) {
+                // 数値比較用
+                if (in_array($column, ['year', 'rating'])) {
+                    return ($a[$column] <=> $b[$column]) * $direction;
+                }
+                // 文字列系比較用
+                return strcmp($a[$column], $b[$column]) * $direction;
+            });
         }
 
-        return $builder->get()->getResultArray();
+        return $movies;
     }
 }
