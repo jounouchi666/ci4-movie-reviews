@@ -22,11 +22,10 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         
         $filter = QueryHelper::getParam($this->request);
-        if (!empty($filter)) {
-            $movies = $model->filter($filter);
-        } else {
-            $movies = $model->getMovies();
-        }
+        // フィルターの有無に応じてレコード取得
+        $movies = !empty($filter)
+            ? $model->filter($filter)
+            : $model->getMovies(false, $filter['order'] ?? null);
 
         return view('templates/header')
             . view('movies/index', [
