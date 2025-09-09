@@ -21,16 +21,16 @@ class Movies extends BaseController
     {
         $model = model(MovieModel::class);
         
-        $filter = QueryHelper::getParam($this->request);
+        $filters = QueryHelper::getParam($this->request);
         // フィルターの有無に応じてレコード取得
-        $movies = !empty($filter)
-            ? $model->filter($filter)
-            : $model->getMovies(false, $filter['order'] ?? null);
+        $movies = !empty($filters)
+            ? $model->filter($filters)
+            : $model->getMovies(false, $filters['order'] ?? null);
 
         return view('templates/header')
             . view('movies/index', [
                 'movies' => $movies,
-                'filters' => $filter
+                'filters' => $filters
                 ])
             . view('templates/footer');
     }
