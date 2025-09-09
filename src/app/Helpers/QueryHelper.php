@@ -14,9 +14,22 @@ class QueryHelper
      * @param  array $keys 取得したい値のキー
      * @return array 取得したパラメータの配列
      */
-    public static function getParam($request, $keys = []): array
+    public static function getParam($request, $keys = null): array
     {
-        return $request->getGet($keys);
+        // 全て取得
+        if (is_Null($keys)) {
+            // 空白のパラメータは除去
+            return array_filter($request->getGet(), function($param) {
+                return $param !== '';
+            });
+        }
+        
+        // 指定したものを全て取得
+        $params = [];
+        foreach ($keys as $key) {
+            $params[$key] = $request->getGet($key);
+        }
+        return $params;
     }
 
     
