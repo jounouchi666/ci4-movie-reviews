@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\MovieViewHelper;
 use App\Helpers\QueryHelper;
 use App\Models\MovieModel;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -67,6 +68,8 @@ class Movies extends BaseController
      */
     public function edit($id = null): string
     {
+        helper('form');
+        
         $model = model(MovieModel::class);
     
         if ($id) {
@@ -84,6 +87,7 @@ class Movies extends BaseController
             . view('movies/edit', [
                 'movie' => $movie,
                 'mode' => $mode,
+                'config' => MovieViewHelper::getModeConfig($mode, $movie),
                 'filters' => QueryHelper::getParam($this->request)
                 ])
             . view('templates/footer');
