@@ -23,6 +23,20 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         
         $filters = QueryHelper::getParam($this->request);
+
+        // バリデーション
+        if (! $this->validate('movieFilter')) {
+            $errors = $this->validator->getErrors();
+
+            return view('templates/header')
+                . view('movies/index', [
+                    'movies' => $model->getMovies(false, $filters['order'] ?? null), // 全件取得する
+                    'filters' => $filters,
+                    'errors' => $errors,
+                    ])
+                . view('templates/footer');
+        }
+
         // フィルターの有無に応じてレコード取得
         $movies = !empty($filters)
             ? $model->filter($filters)
@@ -31,7 +45,8 @@ class Movies extends BaseController
         return view('templates/header')
             . view('movies/index', [
                 'movies' => $movies,
-                'filters' => $filters
+                'filters' => $filters,
+                'errors' => [],
                 ])
             . view('templates/footer');
     }
