@@ -1,5 +1,9 @@
 <?php use App\Helpers\QueryHelper; ?>
 <main>
+    <div>
+        <a href="<?= site_url(QueryHelper::buildUrl(route_to('create'), $filters)) ?>">新規登録</a>
+    </div>
+
     <div class="column-contents">
         <div class="column-content">
             <table id="movies-table">
@@ -16,7 +20,7 @@
                     <?php foreach ($movies as $movie): ?>
                         <tr data-movie-id=<?= $movie['id'] ?>>
                             <td>
-                                <a href="<?= site_url(QueryHelper::buildUrl('movies/show/' . $movie['id'], $filters)) ?>"><?= esc($movie['title']) ?></a>
+                                <a href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie['id']), $filters)) ?>"><?= esc($movie['title']) ?></a>
                             </td>
                             <td><?= esc($movie['year']) ?>年</td>
                             <td><?= esc($movie['genre']) ?></td>
