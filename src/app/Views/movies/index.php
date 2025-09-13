@@ -1,4 +1,7 @@
-<?php use App\Helpers\QueryHelper; ?>
+<?php
+    use App\Helpers\QueryHelper;
+    use App\Helpers\FormValidationHelper;
+?>
 <main>
     <div>
         <a href="<?= site_url(QueryHelper::buildUrl(route_to('create'), $filters)) ?>">新規登録</a>
@@ -35,12 +38,26 @@
         <div class="column-content">
             <form id="search-form" action=<?= route_to('index') ?> method="get">
 
+                <?php $errors = new FormValidationHelper(session()->getFlashdata('error') ?? []); ?>
+
+                <?php if ($errors->hasAny()): ?>
+                    <div class="alert">入力内容に誤りがあります。修正してください。</div>
+                <?php endif ?>
+
                 <fieldset class="search-form-search">
                     <legend>絞り込み</legend>
 
                     <!-- タイトル -->
                     <div class="search-content search-title">
-                        <input type="text" name="title" value="<?= esc($filters['title'] ?? '') ?>" placeholder="タイトル">
+                        <input 
+                            class="<?= $errors->getInputClass('title') ?>"
+                            type="text"
+                            name="title" 
+                            value="<?= esc($filters['title'] ?? '') ?>"
+                            placeholder="タイトル"
+                        >
+
+                        <?= $errors->render('title') ?>
                     </div>
                     
 
@@ -57,19 +74,53 @@
                     </div>
                     
                     <div class="search-content search-year_exact">
-                        <input type="number" name="year_exact" value="<?= esc($filters['year_exact'] ?? '') ?>" placeholder="公開年">
+                        <input
+                            class="<?= $errors->getInputClass('year_exact') ?>"
+                            type="number"
+                            name="year_exact"
+                            value="<?= esc($filters['year_exact'] ?? '') ?>"
+                            placeholder="公開年"
+                        >
                     </div>
 
+                   <?= $errors->render('year_exact') ?>
+
                     <div class="search-content search-year_range">
-                        <input type="number" name="year_min" value="<?= esc($filters['year_min'] ?? '') ?>" placeholder="公開年（下限）">
+                        <input
+                            class="<?= $errors->getInputClass('year_min') ?>"
+                            type="number"
+                            name="year_min"
+                            value="<?= esc($filters['year_min'] ?? '') ?>"
+                            placeholder="公開年（下限）"
+                        >
+                        
+                        <?= $errors->render('year_min') ?>
+
                         <span>～</span>
-                        <input type="number" name="year_max" value="<?= esc($filters['year_max'] ?? '') ?>" placeholder="公開年（上限）">
+
+                        <input
+                            class="<?= $errors->getInputClass('year_max') ?>"
+                            type="number"
+                            name="year_max"
+                            value="<?= esc($filters['year_max'] ?? '') ?>"
+                            placeholder="公開年（上限）"
+                        >
+
+                        <?= $errors->render('year_max') ?>
                     </div>
                     
 
                     <!-- ジャンル -->
                     <div class="search-content search-genre">
-                        <input type="text" name="genre" value="<?= esc($filters['genre'] ?? '') ?>" placeholder="ジャンル">
+                        <input
+                            class="<?= $errors->getInputClass('genre') ?>"
+                            type="text"
+                            name="genre"
+                            value="<?= esc($filters['genre'] ?? '') ?>"
+                            placeholder="ジャンル"
+                        >
+
+                        <?= $errors->render('genre') ?>
                     </div>
 
 
@@ -86,7 +137,7 @@
                     </div>
                     
                     <div class="search-content search-rating_exact">
-                        <select name="rating_exact">
+                        <select class="<?= $errors->getInputClass('rating_exact') ?>" name="rating_exact">
                             <option value="">-- 評価 --</option>
                             <?php for ($i = 1; $i <= 5; $i++): ?>
                                 <option value="<?= $i ?>"
@@ -94,10 +145,12 @@
                                 ><?= str_repeat('★', $i) ?></option>
                             <?php endfor ?>
                         </select>
+
+                        <?= $errors->render('rating_exact') ?>
                     </div>
                     
                     <div class="search-content search-rating_range">
-                        <select name="rating_min">
+                        <select class="<?= $errors->getInputClass('rating_min') ?>" name="rating_min">
                             <option value="">-- 評価（下限） --</option>
                             <?php for ($i = 1; $i <= 5; $i++): ?>
                                 <option value="<?= $i ?>"
@@ -105,8 +158,12 @@
                                 ><?= str_repeat('★', $i) ?></option>
                             <?php endfor ?>
                         </select>
+
+                        <?= $errors->render('rating_min') ?>
+                        
                         <span>～</span>
-                        <select name="rating_max">
+
+                        <select class="<?= $errors->getInputClass('rating_max') ?>" name="rating_max">
                             <option value="">-- 評価（上限） --</option>
                             <?php for ($i = 1; $i <= 5; $i++): ?>
                                 <option value="<?= $i ?>"
@@ -114,6 +171,8 @@
                                 ><?= str_repeat('★', $i) ?></option>
                             <?php endfor ?>
                         </select>
+
+                        <?= $errors->render('rating_max') ?>
                     </div>
                 </fieldset>
                 
