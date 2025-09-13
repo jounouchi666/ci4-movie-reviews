@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Helpers;
+
+/**
+ * 【View用】バリデーションエラーを扱うヘルパークラス
+ */
+class FormValidationHelper
+{    
+    protected $errors;
+    
+    /**
+     * コンストラクタ
+     *
+     * @param  array $errors
+     */
+    public function __construct(array $errors) {
+        $this->errors = $errors;
+    }
+    
+    /**
+     * エラーが存在するかどうか返す
+     *
+     * @return bool 1つでもエラーがあればtrue
+     */
+    public function hasAny(): bool
+    {
+        return !empty($this->errors);
+    }
+    
+    /**
+     * 指定したキーがエラーかどうかを返す
+     *
+     * @param  string $key キー
+     * @return bool エラーならtrue
+     */
+    public function hasError(string $key): bool
+    {
+        return !empty($this->errors[$key]);
+    }
+    
+    /**
+     * 指定したキーのエラー時用クラスを取得する
+     *
+     * @param  string $key キー
+     * @param  string|array $default デフォルトのクラス文字列 or 配列
+     * @return string クラス文字列
+     */
+    public function getInputClass(string $key, string|array $default = ''): string {
+        // クラス名
+        $ERROR_CLASS = 'is-invalid';
+
+        // 文字列化
+        $class = is_array($default) ? implode(' ', $default) : $default; 
+
+        if ($this->hasError($key)) {
+            return $class . ' ' . $ERROR_CLASS;
+        }
+        return $class;
+    }
+
+    /**
+     * 指定したキーのエラーメッセージを取得する
+     *
+     * @param  string $key キー
+     * @return string エラーメッセージ（エラーが無ければ空文字）
+     */
+    public function getErrorMessage(string $key): string
+    {
+        return $this->errors[$key] ?? '';
+    }
+
+    /**
+     * 指定したキーのエラーメッセージをレンダリングする
+     *
+     * @param  string $key キー
+     * @return string エラーメッセージのDOM（エラーが無ければ空文字）
+     */
+    public function render(string $key): string
+    {
+        $message = $this->getErrorMessage($key);
+        return $this->hasError($key)
+            ? '<div class="error-message">' . esc($message) . '</div>'
+            : '';
+    }
+}
