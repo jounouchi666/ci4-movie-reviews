@@ -122,14 +122,17 @@ class Movies extends BaseController
             return redirect()->back()->withInput()->with('error', $error);
         };
 
-        // 保存
         $data = $this->request->getPost();
+
+        // リダイレクト先
+        $redirectTarget = !empty($data['id']) ? route_to('show', $data['id']) : route_to('index');
+
+        // 保存
         $model = model(MovieModel::class);
         $model->save($data);
 
-
         $filters = QueryHelper::getParam($this->request);
-        return redirect()->to(QueryHelper::buildUrl('/movies', $filters))
+        return redirect()->to(QueryHelper::buildUrl($redirectTarget, $filters))
                          ->with('message', '登録しました');
     }
     
