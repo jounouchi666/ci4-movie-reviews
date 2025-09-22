@@ -28,7 +28,7 @@ class Movies extends BaseController
         if (! $this->validate('movieFilter')) {
             $errors = $this->validator->getErrors();
 
-            return view('templates/header')
+            return view('templates/header', ['filters' => $filters])
                 . view('movies/index', [
                     'movies' => $model->getMovies(false, $filters['order'] ?? null), // 全件取得する
                     'filters' => $filters,
@@ -42,7 +42,7 @@ class Movies extends BaseController
             ? $model->filter($filters)
             : $model->getMovies(false, $filters['order'] ?? null);
 
-        return view('templates/header')
+        return view('templates/header', ['filters' => $filters])
             . view('movies/index', [
                 'movies' => $movies,
                 'filters' => $filters,
@@ -66,10 +66,12 @@ class Movies extends BaseController
         if (is_null($movie)) {
             throw new PageNotFoundException('投稿がみつかりませんでした');
         }
-        return view('templates/header')
+
+        $filters = QueryHelper::getParam($this->request);
+        return view('templates/header', ['filters' => $filters])
             . view('movies/show', [
                 'movie' => $movie,
-                'filters' => QueryHelper::getParam($this->request)
+                'filters' => $filters
                 ])
             . view('templates/footer');
     }
@@ -98,12 +100,13 @@ class Movies extends BaseController
             $mode = 'create';
         }
 
-        return view('templates/header')
+        $filters = QueryHelper::getParam($this->request);
+        return view('templates/header', ['filters' => $filters])
             . view('movies/edit', [
                 'movie' => $movie,
                 'mode' => $mode,
                 'config' => MovieViewHelper::getModeConfig($mode, $movie),
-                'filters' => QueryHelper::getParam($this->request)
+                'filters' => $filters
                 ])
             . view('templates/footer');
     }
