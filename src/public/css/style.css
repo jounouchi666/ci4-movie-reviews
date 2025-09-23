@@ -1,0 +1,17 @@
+body {
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+.topic {
+    transition: box-shadow .3s;
+}
+
+.topic:hover {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
+}
+
+.movies-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}

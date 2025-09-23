@@ -2,34 +2,24 @@
     use App\Helpers\QueryHelper;
     use App\Helpers\FormValidationHelper;
 ?>
-<main>
+<main class="container py-3">
+    <h1 class="h2">レビュー一覧</h1>
     <div class="column-contents">
-        <div class="column-content">
-            <table id="movies-table">
-                <thead>
-                    <tr>
-                        <th>タイトル</th>
-                        <th>公開年</th>
-                        <th>ジャンル</th>
-                        <th>評価</th>
-                        <th>レビュー</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($movies as $movie): ?>
-                        <tr data-movie-id=<?= $movie['id'] ?>>
-                            <td>
-                                <a href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie['id']), $filters)) ?>"><?= esc($movie['title']) ?></a>
-                            </td>
-                            <td><?= esc($movie['year']) ?>年</td>
-                            <td><?= esc($movie['genre']) ?></td>
-                            <td><?= str_repeat('★', $movie['rating']) ?></td>
-                            <td><?= esc($movie['review']) ?></td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
+        <ul class="column-content container mt-2 list-unstyled movies-grid">
+            <?php foreach ($movies as $movie): ?>
+                <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie['id'] ?>>
+                    <div class="card-body">
+                        <div>
+                            <span class="badge bg-primary mb-1"><?= esc($movie['genre']) ?></span>    
+                        </div>
+                        <a class="h3 card-title text-decoration-none text-body stretched-link" href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie['id']), $filters)) ?>"><?= esc($movie['title']) ?></a>
+                        <div><?= esc($movie['year']) ?>年</div>
+                        <p class="text-warning mb-0"><?= str_repeat('★', $movie['rating']) ?></p>
+                        <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
+                    </div>
+                </li>
+            <?php endforeach ?>
+        </ul>
 
         <div class="column-content">
             <form id="search-form" action=<?= route_to('index') ?> method="get">
@@ -200,34 +190,3 @@
         </div>
     </div>
 </main>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-    }
-    h1 {
-        text-align: center;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    .rating {
-        font-weight: bold;
-    }
-
-    .column-contents {
-        display: flex;
-        gap: 16px;
-    }
-</style>
