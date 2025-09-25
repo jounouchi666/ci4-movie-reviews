@@ -23,8 +23,8 @@
         <?php endif ?>
 
         <!-- タイトル -->
-        <div class="form-group">
-            <label for="title">タイトル</label>
+        <div>
+            <label class="form-label" for="title">タイトル</label>
             <input
                 id="title"
                 class="<?= $errors->getInputClass('title') ?> form-control mt-1"
@@ -38,8 +38,8 @@
         </div>
         
         <!-- 公開年 -->
-        <div class="form-group">
-            <label for="year">公開年</label>
+        <div>
+            <label class="form-label" for="year">公開年</label>
             <input
                 id="year"
                 class="<?= $errors->getInputClass('year') ?> form-control mt-1"
@@ -55,8 +55,8 @@
         </div>
 
         <!-- ジャンル -->
-        <div class="form-group">
-            <label for="genre">ジャンル</label>
+        <div>
+            <label class="form-label" for="genre">ジャンル</label>
             <input
                 id="genre"
                 class="<?= $errors->getInputClass('genre') ?> form-control mt-1"
@@ -70,9 +70,9 @@
         </div>
 
         <!-- 評価 -->
-        <div class="form-group">
-            <label for="rating">評価</label>
-            <select id="rating" class="<?= $errors->getInputClass('rating') ?> form-select mt-1" name="rating" required>
+        <div>
+            <label class="form-label" for="rating">評価</label>
+            <select id="rating" class="<?= $errors->getInputClass('rating') ?> form-select mt-1 text-warning" name="rating" required>
                 <option value=""></option>
                 <?php for ($i = 1; $i <= 5; $i++): ?>
                     <option
@@ -86,8 +86,8 @@
         </div>
 
         <!-- レビュー -->
-        <div class="form-group">
-            <label for="review">レビュー</label>
+        <div>
+            <label class="form-label" for="review">レビュー</label>
             <textarea 
                 id="review" 
                 class="<?= $errors->getInputClass('review') ?> form-control mt-1"
