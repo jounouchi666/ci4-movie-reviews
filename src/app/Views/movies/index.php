@@ -72,7 +72,7 @@
                                                     >
                                                     <label class="form-check-label" for="year_type-exact">単一指定</label>
                                                 </div>
-                                                <div class="formm-check">
+                                                <div class="form-check">
                                                     <input id="year_type-range" class="form-check-input" type="radio" name="year_type" value="range" 
                                                         <?= isset($filters['year_type']) && $filters['year_type'] === 'range' ? 'checked' : '' ?>
                                                     >
