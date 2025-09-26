@@ -80,7 +80,7 @@
                                                 </div>
                                             </div>
 
-                                            <div id="year_group-exact">
+                                            <div id="year_type-exact-group">
                                                 <input
                                                     id="year-exact"
                                                     class="<?= $errors->getInputClass('year_exact') ?> form-control"
@@ -91,7 +91,7 @@
                                                 <?= $errors->render('year_exact') ?>
                                             </div>
 
-                                            <div id="year_group-range">
+                                            <div id="year_type-range-group">
                                                 <div class="input-group">
                                                     <input
                                                         class="<?= $errors->getInputClass('year_min') ?> form-control"
@@ -147,7 +147,7 @@
                                                 </div>
                                             </div>
                                             
-                                            <div id="rating_group-exact">
+                                            <div id="rating_type-exact-group">
                                                 <select id="rating-exact" class="<?= $errors->getInputClass('rating_exact') ?> form-select" name="rating_exact">
                                                     <option value=""></option>
                                                     <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -159,7 +159,7 @@
                                                 <?= $errors->render('rating_exact') ?>
                                             </div>
                                             
-                                            <div id="rating_group-range">
+                                            <div id="rating_type-range-group">
                                                 <div class="input-group">
                                                     <select id="rating-min" class="<?= $errors->getInputClass('rating_min') ?> form-select" name="rating_min">
                                                         <option class="text-muted" value="">-- 下限 --</option>
