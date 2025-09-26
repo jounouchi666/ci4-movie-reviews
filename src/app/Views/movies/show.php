@@ -2,7 +2,9 @@
 <main class="container py-3">
     <div>
         <h1><?= esc($movie['title']) ?><span class="h3">（<?= esc($movie['year']) ?>年公開）</span></h1>
-        <p class="h4"><?= esc($movie['genre']) ?></p>
+        <div class="h4">
+            <span class="badge bg-primary"><?= esc($movie['genre']) ?></span>
+        </div>
     </div>
     
     <div>
@@ -12,7 +14,7 @@
     <hr>
 
     <div>
-        <h1 class="h2">評価</h1>
+        <h2>評価</h2>
         <p class="text-warning h4"><?= esc(str_repeat('★', $movie['rating'])) ?></p>
         <p><?= esc($movie['review']) ?></p>
     </div>
