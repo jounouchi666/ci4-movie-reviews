@@ -3,10 +3,6 @@
     use App\Helpers\FormValidationHelper;
 ?>
 <main>
-    <div>
-        <a href="<?= site_url(QueryHelper::buildUrl(route_to('create'), $filters)) ?>">新規登録</a>
-    </div>
-
     <div class="column-contents">
         <div class="column-content">
             <table id="movies-table">
