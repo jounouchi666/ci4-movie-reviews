@@ -20,6 +20,8 @@ class Movies extends BaseController
      */
     public function index(): string
     {
+        helper('form');
+        
         $model = model(MovieModel::class);
         
         $filters = QueryHelper::getParam($this->request);
