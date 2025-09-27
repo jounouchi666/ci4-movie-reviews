@@ -25,9 +25,29 @@
         <div class="col-12 col-md-3">
             <a class="btn btn-primary w-100" href="<?= site_url(QueryHelper::buildUrl(route_to('edit', $movie['id']), $filters)) ?>">修正</a>
         </div>
-        <form class="col-12 col-md-3" action=<?= QueryHelper::buildUrl(route_to('delete', $movie['id']), $filters) ?> method="post">
-            <input class="btn btn-danger w-100" type="submit" value="削除">
-        </form>
+        <div class="col-12 col-md-3">
+            <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">削除</button>
+        </div>
         <a class="col-12 col-md-auto text-center" href="<?= site_url(QueryHelper::buildUrl(route_to('index'), $filters)) ?>">一覧に戻る</a>
+    </div>
+
+    <div id="delete-modal" class="modal fade slide-up" tabindex="-1" aria-labelledby="delete-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="delete-modal-label" class="modal-title fs-5">投稿の削除</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>投稿を削除しますか？</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">いいえ</button>
+                    <form action=<?= QueryHelper::buildUrl(route_to('delete', $movie['id']), $filters) ?> method="post">
+                        <input class="btn btn-danger" type="submit" value="はい">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
