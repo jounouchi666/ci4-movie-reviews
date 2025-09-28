@@ -10,8 +10,28 @@ body {
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
 }
 
+/* カード用グリッド */
 .movies-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+/* モーダルウィンドウ */
+.modal.slide-up .modal-dialog {
+  transform: translateY(10%);
+  opacity: 0;
+  transition: transform .3s ease-out, opacity .3s linear;
+}
+
+.modal.slide-up.show .modal-dialog {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .modal.slide-up .modal-dialog {
+    transform: translateY(100%);
+    transition: transform .4s ease-out, opacity .15s linear;
+  }
 }
