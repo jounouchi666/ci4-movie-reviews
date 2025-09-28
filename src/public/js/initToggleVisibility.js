@@ -1,3 +1,8 @@
+/**
+ * ラジオボタン切り替えでターゲット要素を表示/非表示する初期化関数
+ *
+ * @param {string} [selector='.toggle-input'] 対象のラジオボタンのセレクタ
+ */
 export function initToggleVisibility(selector = '.toggle-input') {
     const toggleInputs = document.querySelectorAll(selector);
     
