@@ -67,13 +67,25 @@
                                             <label class="form-label" for="year_type-exact">公開年</label>
                                             <div class="d-flex gap-2 mb-1">
                                                 <div class="form-check">
-                                                    <input id="year_type-exact" class="form-check-input" type="radio" name="year_type" value="exact" 
+                                                    <input
+                                                        id="year_type-exact"
+                                                        class="form-check-input toggle-input"
+                                                        type="radio"
+                                                        name="year_type"
+                                                        value="exact"
+                                                        data-toggle-target="#year_type-exact-group"
                                                         <?= !isset($filters['year_type']) || $filters['year_type'] === 'exact' ? 'checked' : '' ?>
                                                     >
                                                     <label class="form-check-label" for="year_type-exact">単一指定</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input id="year_type-range" class="form-check-input" type="radio" name="year_type" value="range" 
+                                                    <input
+                                                        id="year_type-range"
+                                                        class="form-check-input toggle-input"
+                                                        type="radio"
+                                                        name="year_type"
+                                                        value="range"
+                                                        data-toggle-target="#year_type-range-group"
                                                         <?= isset($filters['year_type']) && $filters['year_type'] === 'range' ? 'checked' : '' ?>
                                                     >
                                                     <label class="form-check-label" for="year_type-range">範囲指定</label>
@@ -86,6 +98,8 @@
                                                     class="<?= $errors->getInputClass('year_exact') ?> form-control"
                                                     type="number"
                                                     name="year_exact"
+                                                    min="1900"
+                                                    max="<?= date('Y') ?>"
                                                     value="<?= esc($filters['year_exact'] ?? '') ?>"
                                                 >
                                                 <?= $errors->render('year_exact') ?>
@@ -97,6 +111,8 @@
                                                         class="<?= $errors->getInputClass('year_min') ?> form-control"
                                                         type="number"
                                                         name="year_min"
+                                                        min="1900"
+                                                        max="<?= date('Y') ?>"
                                                         value="<?= esc($filters['year_min'] ?? '') ?>"
                                                         placeholder="下限"
                                                     >
@@ -108,6 +124,8 @@
                                                         class="<?= $errors->getInputClass('year_max') ?> form-control"
                                                         type="number"
                                                         name="year_max"
+                                                        min="1900"
+                                                        max="<?= date('Y') ?>"
                                                         value="<?= esc($filters['year_max'] ?? '') ?>"
                                                         placeholder="上限"
                                                     >
@@ -134,13 +152,25 @@
                                             <label class="form-label" for="rating-type-exact">評価</label>
                                             <div class="d-flex gap-2 mb-1">
                                                 <div class="form-check">
-                                                    <input id="rating_type-exact" class="form-check-input" type="radio" name="rating_type" value="exact"
+                                                    <input
+                                                        id="rating_type-exact"
+                                                        class="form-check-input toggle-input"
+                                                        type="radio"
+                                                        name="rating_type"
+                                                        value="exact"
+                                                        data-toggle-target="#rating_type-exact-group"
                                                         <?= !isset($filters['rating_type']) || $filters['rating_type'] === 'exact' ? 'checked' : '' ?>
                                                     >
                                                     <label class="form-check-label" for="rating_type-exact">単一指定</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input id="rating_type-range" class="form-check-input" type="radio" name="rating_type" value="range"
+                                                    <input
+                                                        id="rating_type-range"
+                                                        class="form-check-input toggle-input"
+                                                        type="radio"
+                                                        name="rating_type"
+                                                        value="range"
+                                                        data-toggle-target="#rating_type-range-group"
                                                         <?= isset($filters['rating_type']) && $filters['rating_type'] === 'range' ? 'checked' : '' ?>
                                                     >
                                                     <label class="form-check-label" for="rating_type-range">範囲指定</label>
