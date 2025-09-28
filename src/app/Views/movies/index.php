@@ -12,7 +12,7 @@
                         <div>
                             <span class="badge bg-primary mb-1"><?= esc($movie['genre']) ?></span>    
                         </div>
-                        <a class="h3 card-title text-decoration-none text-body stretched-link" href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie['id']), $filters)) ?>"><?= esc($movie['title']) ?></a>
+                        <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie['id']), $filters)) ?>"><?= esc($movie['title']) ?></a>
                         <div><?= esc($movie['year']) ?>年</div>
                         <p class="text-warning mb-0"><?= str_repeat('★', $movie['rating']) ?></p>
                         <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
