@@ -108,7 +108,7 @@
                                             <div id="year_type-range-group">
                                                 <div class="input-group">
                                                     <input
-                                                        class="<?= $errors->getInputClass('year_min') ?> form-control"
+                                                        class="<?= $errors->getInputClass('year_min') ?> form-control range-min"
                                                         type="number"
                                                         name="year_min"
                                                         min="1900"
@@ -121,7 +121,7 @@
                                                     <span class="input-group-text">～</span>
 
                                                     <input
-                                                        class="<?= $errors->getInputClass('year_max') ?> form-control"
+                                                        class="<?= $errors->getInputClass('year_max') ?> form-control range-max"
                                                         type="number"
                                                         name="year_max"
                                                         min="1900"
