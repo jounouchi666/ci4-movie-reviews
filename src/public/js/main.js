@@ -1,3 +1,4 @@
+import { cleanQueryParam } from "./cleanQueryParam.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
 
@@ -24,4 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (yearMaxInput !== '') {
         yearMaxInput.dispatchEvent(new Event('input'));
     }
+
+
+    // GETリクエスト時の空パラメータを送信しないようにする
+    document.getElementById('search-form').addEventListener('submit', cleanQueryParam)
 })
