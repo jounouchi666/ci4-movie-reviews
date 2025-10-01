@@ -72,10 +72,11 @@
         <!-- 評価 -->
         <div>
             <label class="form-label" for="rating">評価</label>
-            <select id="rating" class="<?= $errors->getInputClass('rating') ?> form-select mt-1 text-warning" name="rating" required>
-                <option value=""></option>
+            <select id="rating" class="<?= $errors->getInputClass('rating') ?> form-select mt-1 rating-select" name="rating" required>
+                <option class="text-muted" value="">--評価を選択--</option>
                 <?php for ($i = 1; $i <= 5; $i++): ?>
                     <option
+                        class="text-warning"
                         value="<?= $i ?>"
                         <?= old('rating', $movie['rating'] ?? '') == $i ? 'selected' : '' ?>
                     ><?= str_repeat('★', $i) ?></option>
