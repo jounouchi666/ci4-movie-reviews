@@ -70,11 +70,13 @@ function undisplayTarget(target) {
         if (input.type === 'checkbox' || input.type === 'radio') {
             input.checked = false;
         }
+        input.dispatchEvent(new Event('change', {bubbles: true}));
     });
 
     // textareaのクリア
     Array.from(target.getElementsByTagName('textarea')).forEach(textarea => {
         textarea.value = '';
+        textarea.dispatchEvent(new Event('change', {bubbles: true}));
     });
 
     // セレクトボックスのクリア
@@ -82,5 +84,6 @@ function undisplayTarget(target) {
         Array.from(select.options).forEach(option => {
             option.selected = false;
         })
+        select.dispatchEvent(new Event('change', {bubbles: true}));
     });
 }
