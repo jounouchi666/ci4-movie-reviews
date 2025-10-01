@@ -7,16 +7,14 @@
  */
 export function initInputNumberRange(minInput, maxInput, absMin = null, absMax = null) {
     minInput.addEventListener('input', function() {
-        const minValue = Number(this.value);
         // absMin < min < absMaxとして更新
-        const tempMin = absMin !== null ? Math.max(minValue, absMin) : minValue;
+        const tempMin = this.value !== '' ? Number(this.value) : absMin ?? -Infinity;
         const effectiveMin = absMax !== null ? Math.min(tempMin, absMax) : tempMin;
         maxInput.min = effectiveMin;
     })
     maxInput.addEventListener('input', function() {
-        const maxValue = Number(this.value);
         // absMin < max < absMaxとして更新
-        const tempMax = absMax !== null ? Math.min(maxValue, absMax) : maxValue;
+        const tempMax = this.value !== '' ? Number(this.value) : absMax ?? Infinity;
         const effectiveMax = absMin !== null ? Math.max(tempMax, absMin) : tempMax;
         minInput.max = effectiveMax;
     })
