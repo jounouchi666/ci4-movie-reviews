@@ -178,7 +178,7 @@
                                             </div>
                                             
                                             <div id="rating_type-exact-group">
-                                                <select id="rating-exact" class="<?= $errors->getInputClass('rating_exact') ?> form-select" name="rating_exact">
+                                                <select id="rating-exact" class="<?= $errors->getInputClass('rating_exact') ?> form-select rating-select" name="rating_exact">
                                                     <option value=""></option>
                                                     <?php for ($i = 1; $i <= 5; $i++): ?>
                                                         <option class="text-warning" value="<?= $i ?>"
@@ -191,7 +191,7 @@
                                             
                                             <div id="rating_type-range-group">
                                                 <div class="input-group">
-                                                    <select id="rating-min" class="<?= $errors->getInputClass('rating_min') ?> form-select" name="rating_min">
+                                                    <select id="rating-min" class="<?= $errors->getInputClass('rating_min') ?> form-select rating-select" name="rating_min">
                                                         <option class="text-muted" value="">-- 下限 --</option>
                                                         <?php for ($i = 1; $i <= 5; $i++): ?>
                                                             <option class="text-warning" value="<?= $i ?>"
@@ -204,7 +204,7 @@
                                                     
                                                     <span class="input-group-text">～</span>
 
-                                                    <select class="<?= $errors->getInputClass('rating_max') ?> form-select" name="rating_max">
+                                                    <select class="<?= $errors->getInputClass('rating_max') ?> form-select rating-select" name="rating_max">
                                                         <option class="text-muted" value="">-- 上限 --</option>
                                                         <?php for ($i = 1; $i <= 5; $i++): ?>
                                                             <option class="text-warning" value="<?= $i ?>"
