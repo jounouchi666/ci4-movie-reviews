@@ -22,23 +22,28 @@
         </ul>
 
         <div id="search-form-accordion" class="accordion order-1">
+            <?php $errors = new FormValidationHelper($validationErrors); ?>
+
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button
-                        class="accordion-button collapsed"
+                        class="accordion-button <?= $errors->whenHasErrors('', 'collapsed') ?>"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#search-form-wrapper"
-                        aria-expanded="false"
+                        aria-expanded="<?= $errors->whenHasErrors('true', 'false') ?>"
                         aria-controls="search-form-wrapper"
                     >
                         検索条件
                     </button>
                 </h2>
-                <div id="search-form-wrapper" class="accordion-collapse collapse" data-bs-parent="#search-form-accordion">
+                <div
+                    id="search-form-wrapper"
+                    class="accordion-collapse collapse <?= $errors->whenHasErrors('show') ?>"
+                    data-bs-parent="#search-form-accordion"
+                >
                     <div class="accordion-body">
                         <?= form_open(route_to('index'), ['id' => 'search-form', 'method' => 'get']) ?>
-                            <?php $errors = new FormValidationHelper($validationErrors); ?>
 
                             <?php if ($errors->hasAny()): ?>
                                 <div class="alert">入力内容に誤りがあります。修正してください。</div>
