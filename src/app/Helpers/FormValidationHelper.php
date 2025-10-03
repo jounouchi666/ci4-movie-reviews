@@ -83,4 +83,16 @@ class FormValidationHelper
             ? '<div class="invalid-feedback">' . esc($message) . '</div>'
             : '';
     }
+
+    /**
+     * フォームにバリデーションエラーがあるかどうかで返す値を切り替える
+     *
+     * @param  string|array $then バリデーションエラーがある場合に返す値
+     * @param  string|array $else バリデーションエラーがない場合に返す値。省略時は空文字
+     * @return string 評価結果の文字列
+     */
+    public function whenHasErrors(string|array $then, string|array $else = ''): string {
+        $value = $this->hasAny() ? $then : $else;
+        return is_array($value) ? implode(' ', $value) : $value;
+    }
 }
