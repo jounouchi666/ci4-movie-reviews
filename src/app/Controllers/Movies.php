@@ -34,7 +34,7 @@ class Movies extends BaseController
                 . view('movies/index', [
                     'movies' => $model->getMovies(false, $filters['order'] ?? null), // 全件取得する
                     'filters' => $filters,
-                    'errors' => $errors,
+                    'validationErrors' => $errors,
                     ])
                 . view('templates/footer');
         }
@@ -48,7 +48,7 @@ class Movies extends BaseController
             . view('movies/index', [
                 'movies' => $movies,
                 'filters' => $filters,
-                'errors' => [],
+                'validationErrors' => [],
                 ])
             . view('templates/footer');
     }
