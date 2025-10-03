@@ -19,7 +19,7 @@
 
         <?php $errors = new FormValidationHelper(session()->getFlashdata('error') ?? []); ?>
         <?php if ($errors->hasAny()): ?>
-            <div class="alert">入力内容に誤りがあります。修正してください。</div>
+            <div class="alert alert-danger">入力内容に誤りがあります。修正してください。</div>
         <?php endif ?>
 
         <!-- タイトル -->
@@ -93,7 +93,6 @@
                 id="review" 
                 class="<?= $errors->getInputClass('review') ?> form-control mt-1"
                 name="review" 
-                required
             ><?= old('review', $movie['review'] ?? '') ?></textarea>
 
             <?= $errors->render('review') ?>
