@@ -38,7 +38,7 @@
                 <div id="search-form-wrapper" class="accordion-collapse collapse" data-bs-parent="#search-form-accordion">
                     <div class="accordion-body">
                         <?= form_open(route_to('index'), ['id' => 'search-form', 'method' => 'get']) ?>
-                            <?php $errors = new FormValidationHelper(session()->getFlashdata('error') ?? []); ?>
+                            <?php $errors = new FormValidationHelper($validationErrors); ?>
 
                             <?php if ($errors->hasAny()): ?>
                                 <div class="alert">入力内容に誤りがあります。修正してください。</div>

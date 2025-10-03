@@ -80,7 +80,7 @@ class FormValidationHelper
     {
         $message = $this->getErrorMessage($key);
         return $this->hasError($key)
-            ? '<div class="error-message">' . esc($message) . '</div>'
+            ? '<div class="invalid-feedback">' . esc($message) . '</div>'
             : '';
     }
 }
