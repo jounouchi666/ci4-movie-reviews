@@ -48,7 +48,7 @@ class Validation extends BaseConfig
     public $movie = [
         'title' => 'required|min_length[1]|max_length[255]',
         'year' => 'required|integer|greater_than_equal_to[1900]',
-        'genre' => 'required',
+        'genre' => 'required|max_length[100]',
         'rating' => 'required|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
         'review' => 'permit_empty|max_length[2000]',
     ];
