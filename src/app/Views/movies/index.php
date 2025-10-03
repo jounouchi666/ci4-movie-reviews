@@ -46,7 +46,7 @@
                         <?= form_open(route_to('index'), ['id' => 'search-form', 'method' => 'get']) ?>
 
                             <?php if ($errors->hasAny()): ?>
-                                <div class="alert">入力内容に誤りがあります。修正してください。</div>
+                                <div class="alert alert-danger">入力内容に誤りがあります。修正してください。</div>
                             <?php endif ?>
 
                             <div class="row">
