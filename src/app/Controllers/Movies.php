@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\DynamicValidationHelper;
 use App\Helpers\MovieViewHelper;
 use App\Helpers\QueryHelper;
 use App\Models\MovieModel;
@@ -27,7 +28,21 @@ class Movies extends BaseController
         $filters = QueryHelper::getParam($this->request);
 
         // バリデーション
-        if (! $this->validate('movieFilter')) {
+        $lteThisYear = DynamicValidationHelper::lteThisYearRule();
+        [$rules, $errors] = DynamicValidationHelper::buildRules(
+            'movieFilter',
+            [
+                'year_exact' => $lteThisYear,
+                'year_min' => $lteThisYear,
+                'year_max' => $lteThisYear,
+            ],
+            [
+                'year_exact' => DynamicValidationHelper::lteThisYearMessage('公開年'),
+                'year_min' => DynamicValidationHelper::lteThisYearMessage('公開年の最小値'),
+                'year_max' => DynamicValidationHelper::lteThisYearMessage('公開年の最大値'),
+            ],
+        );
+        if (! $this->validate($rules, $errors)) {
             $errors = $this->validator->getErrors();
 
             return view('templates/header', ['filters' => $filters])
@@ -122,7 +137,13 @@ class Movies extends BaseController
     public function save(): RedirectResponse
     {
         // バリデーション
-        if (! $this->validate('movie')) {
+        [$rules, $errors] = DynamicValidationHelper::buildRules(
+            'movie',
+            ['year' => DynamicValidationHelper::lteThisYearRule()],
+            ['year' => DynamicValidationHelper::lteThisYearMessage('公開年')],
+        );
+
+        if (! $this->validate($rules, $errors)) {
             $error = $this->validator->getErrors();
             return redirect()->back()->withInput()->with('error', $error);
         };

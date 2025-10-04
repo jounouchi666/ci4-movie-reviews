@@ -48,7 +48,7 @@ class Validation extends BaseConfig
     public $movie = [
         'title' => 'required|min_length[1]|max_length[255]',
         'year' => 'required|integer|greater_than_equal_to[1900]',
-        'genre' => 'required',
+        'genre' => 'required|max_length[100]',
         'rating' => 'required|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
         'review' => 'permit_empty|max_length[2000]',
     ];
@@ -63,5 +63,69 @@ class Validation extends BaseConfig
         'rating_exact' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
         'rating_min' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[5]|checkRange[rating_max]',
         'rating_max' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
+    ];
+
+    // --------------------------------------------------------------------
+    // カスタムメッセージ
+    // --------------------------------------------------------------------
+    public $movie_errors = [
+        'title' => [
+            'required' => 'タイトルは必須です。',
+            'min_length' => 'タイトルは1文字以上で入力してください。',
+            'max_length' => 'タイトルは255文字以内で入力してください。',
+        ],
+        'year' => [
+            'required' => '公開年は必須です。',
+            'integer' => '公開年は数字で入力してください。',
+            'greater_than_equal_to' => '公開年は1900年以降である必要があります。',
+        ],
+        'genre' => [
+            'required' => 'ジャンルは必須です。',
+            'max_length' => 'ジャンルは100文字以内で入力してください。',
+        ],
+        'rating' => [
+            'required' => '評価を選択してください（★1～5）。',
+        ],
+        'review' => [
+            'max_length' => 'レビューは2000文字以内で入力してください。',
+        ],
+    ];
+
+    public $movieFilter_errors = [
+        'title' => [
+            'max_length' => 'タイトルは255文字以内で入力してください。',
+        ],
+        'year_exact' => [
+            'integer' => '公開年は数字で入力してください。',
+            'greater_than_equal_to' => '公開年は1900年以降である必要があります。',
+        ],
+        'year_min' => [
+            'integer' => '公開年は数字で入力してください。',
+            'greater_than_equal_to' => '公開年の最小値は1900年以降である必要があります。',
+            'checkRange' => '公開年の最小値は最大値以下である必要があります。',
+        ],
+        'year_max' => [
+            'integer' => '公開年は数字で入力してください。',
+            'greater_than_equal_to' => '公開年の最大値は1900年以降である必要があります。',
+        ],
+        'genre' => [
+            'max_length' => 'ジャンルは100文字以内で入力してください。',
+        ],
+        'rating_exact' => [
+            'integer' => '評価は数値で入力してください。',
+            'greater_than_equal_to' => '評価は★1以上で入力してください。',
+            'less_than_equal_to' => '評価は★5以下で入力してください。',
+        ],
+        'rating_min' => [
+            'integer' => '評価は数値で入力してください。',
+            'greater_than_equal_to' => '評価の最小値は★1以上で入力してください。',
+            'less_than_equal_to' => '評価の最小値は★5以下で入力してください。',
+            'checkRange' => '評価の最小値は最大値以下である必要があります。',
+        ],
+        'rating_max' => [
+            'integer' => '評価は数値で入力してください。',
+            'greater_than_equal_to' => '評価の最大値は★1以上で入力してください。',
+            'less_than_equal_to' => '評価の最大値は★5以下で入力してください。',
+        ]
     ];
 }
