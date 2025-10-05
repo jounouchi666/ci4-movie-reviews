@@ -49,7 +49,7 @@ class Validation extends BaseConfig
         'title' => 'required|min_length[1]|max_length[255]',
         'year' => 'required|integer|greater_than_equal_to[1900]',
         'genre' => 'required|max_length[100]',
-        'rating' => 'required|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
+        'rating' => 'required|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
         'review' => 'permit_empty|max_length[2000]',
     ];
 
@@ -60,9 +60,9 @@ class Validation extends BaseConfig
         'year_min' => 'permit_empty|integer|greater_than_equal_to[1900]|checkRange[year_max]',
         'year_max' => 'permit_empty|integer|greater_than_equal_to[1900]',
         'genre' => 'permit_empty|max_length[100]',
-        'rating_exact' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
-        'rating_min' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[5]|checkRange[rating_max]',
-        'rating_max' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[5]',
+        'rating_exact' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
+        'rating_min' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]|checkRange[rating_max]',
+        'rating_max' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
     ];
 
     // --------------------------------------------------------------------
@@ -85,6 +85,8 @@ class Validation extends BaseConfig
         ],
         'rating' => [
             'required' => '評価を選択してください（★1～5）。',
+            'greater_than_equal_to' => '評価は★1以上で入力してください。',
+            'less_than_equal_to' => '評価は★5以下で入力してください。',
         ],
         'review' => [
             'max_length' => 'レビューは2000文字以内で入力してください。',
@@ -112,18 +114,18 @@ class Validation extends BaseConfig
             'max_length' => 'ジャンルは100文字以内で入力してください。',
         ],
         'rating_exact' => [
-            'integer' => '評価は数値で入力してください。',
+            'integer' => '評価は★1～5で入力してください。',
             'greater_than_equal_to' => '評価は★1以上で入力してください。',
             'less_than_equal_to' => '評価は★5以下で入力してください。',
         ],
         'rating_min' => [
-            'integer' => '評価は数値で入力してください。',
+            'integer' => '評価は★1～5で入力してください。',
             'greater_than_equal_to' => '評価の最小値は★1以上で入力してください。',
             'less_than_equal_to' => '評価の最小値は★5以下で入力してください。',
             'checkRange' => '評価の最小値は最大値以下である必要があります。',
         ],
         'rating_max' => [
-            'integer' => '評価は数値で入力してください。',
+            'integer' => '評価は★1～5で入力してください。',
             'greater_than_equal_to' => '評価の最大値は★1以上で入力してください。',
             'less_than_equal_to' => '評価の最大値は★5以下で入力してください。',
         ]
