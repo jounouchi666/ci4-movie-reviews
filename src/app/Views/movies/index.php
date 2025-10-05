@@ -4,7 +4,7 @@
 ?>
 <main class="container py-3">
     <?php if (session('message')): ?>
-        <div class="alert alert-success flush-success"><?= esc(session('message')) ?></div>
+        <div class="alert alert-success flash-success"><?= esc(session('message')) ?></div>
     <?php endif ?>
     
     <h1 class="h2">レビュー一覧</h1>

@@ -1,7 +1,7 @@
 <?php use App\Helpers\QueryHelper; ?>
 <main class="container py-3">
     <?php if (session('message')): ?>
-        <div class="alert alert-success flush-success"><?= esc(session('message')) ?></div>
+        <div class="alert alert-success flash-success"><?= esc(session('message')) ?></div>
     <?php endif ?>
 
     <div>
