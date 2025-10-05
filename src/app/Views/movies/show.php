@@ -1,5 +1,9 @@
 <?php use App\Helpers\QueryHelper; ?>
 <main class="container py-3">
+    <?php if (session('message')): ?>
+        <div class="alert alert-success flush-success"><?= esc(session('message')) ?></div>
+    <?php endif ?>
+
     <div>
         <h1><?= esc($movie['title']) ?><span class="h3">（<?= esc($movie['year']) ?>年公開）</span></h1>
         <div class="h4">
