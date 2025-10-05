@@ -1,9 +1,17 @@
 import { cleanQueryParam } from "./cleanQueryParam.js";
+import { formSubmitToggler } from "./FormSubmitToggler.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    // フォーム内のsubmitボタンの活性/非活性化
+    const forms = Array.from(document.getElementsByTagName('form'));
+    if (forms) {
+        forms.forEach(form => formSubmitToggler(form));
+    }
+
+
     // 表示切替ラジオボタンの初期化
     initToggleVisibility();
 
