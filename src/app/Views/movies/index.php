@@ -3,6 +3,10 @@
     use App\Helpers\FormValidationHelper;
 ?>
 <main class="container py-3">
+    <?php if (session('message')): ?>
+        <div class="alert alert-success flush-success"><?= esc(session('message')) ?></div>
+    <?php endif ?>
+    
     <h1 class="h2">レビュー一覧</h1>
     <div class="d-flex flex-column gap-3">
         <ul class="list-unstyled movies-grid order-2">
