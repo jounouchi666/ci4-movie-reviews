@@ -1,3 +1,4 @@
+import { autoSlideUp } from "./autoSlideUp.js";
 import { cleanQueryParam } from "./cleanQueryParam.js";
 import { formSubmitToggler } from "./FormSubmitToggler.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
@@ -5,6 +6,11 @@ import { initToggleVisibility } from "./initToggleVisibility.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    // フラッシュメッセージの自動フェードアウト
+    const flashSuccess = document.querySelectorAll('.flash-success');
+    flashSuccess.forEach(el => autoSlideUp(el));
+
+
     // フォーム内のsubmitボタンの活性/非活性化
     const forms = Array.from(document.getElementsByTagName('form'));
     if (forms) {
