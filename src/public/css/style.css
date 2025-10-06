@@ -35,3 +35,16 @@ body {
     transition: transform .4s ease-out, opacity .15s linear;
   }
 }
+
+/* スライドアップ */
+.flash-success {
+  overflow: hidden;
+  transition: height .35s ease, opacity .35s ease;
+  height: auto;
+  opacity: 1;
+}
+
+.flash-success.slide-up-hide {
+  height: 0;
+  opacity: 0;
+}
