@@ -13,3 +13,5 @@ $routes->group('movies', function($routes) {
     $routes->post('save', 'Movies::save', ['as' => 'save']);
     $routes->post('delete/(:num)', 'Movies::delete/$1', ['as' => 'delete']);
 });
+
+service('auth')->routes($routes);
