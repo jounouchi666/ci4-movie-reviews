@@ -15,6 +15,11 @@ class CreateMoviesTable extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'user_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
             'title' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
