@@ -12,8 +12,15 @@
         </div>
 
         <div id="nav-buttons" class="col-md-auto d-flex align-items-center gap-2">
-            <a class="btn btn-primary" href="<?= site_url(QueryHelper::buildUrl(route_to('create'), $filters)) ?>">新規投稿</a>
             <a class="text-decoration-none" href="<?= site_url(QueryHelper::buildUrl(route_to('index'), $filters)) ?>">一覧</a>
+
+            <?php if (auth()->loggedIn()): ?>
+                <a class="btn btn-primary" href="<?= site_url(QueryHelper::buildUrl(route_to('create'), $filters)) ?>">新規投稿</a>
+                <a class="btn btn-outline-secondary" href="<?= route_to('logout') ?>">ログアウト</a>
+            <?php else: ?>
+                <a class="btn btn-outline-primary" href="<?= route_to('login') ?>">ログイン</a>
+                <a class="btn btn-primary" href="<?= route_to('register') ?>">ユーザー登録</a>
+            <?php endif; ?>
         </div>
     </nav>
 </header>
