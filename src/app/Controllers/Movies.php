@@ -45,13 +45,12 @@ class Movies extends BaseController
         if (! $this->validate($rules, $errors)) {
             $errors = $this->validator->getErrors();
 
-            return view('templates/header', ['filters' => $filters])
-                . view('movies/index', [
+            return view(
+                'movies/index', [
                     'movies' => $model->getMovies(false, $filters['order'] ?? null), // 全件取得する
                     'filters' => $filters,
                     'validationErrors' => $errors,
-                    ])
-                . view('templates/footer');
+                ]);
         }
 
         // フィルターの有無に応じてレコード取得
@@ -59,13 +58,12 @@ class Movies extends BaseController
             ? $model->filter($filters)
             : $model->getMovies(false, $filters['order'] ?? null);
 
-        return view('templates/header', ['filters' => $filters])
-            . view('movies/index', [
+        return view(
+            'movies/index', [
                 'movies' => $movies,
                 'filters' => $filters,
                 'validationErrors' => [],
-                ])
-            . view('templates/footer');
+            ]);
     }
 
     
@@ -85,12 +83,11 @@ class Movies extends BaseController
         }
 
         $filters = QueryHelper::getParam($this->request);
-        return view('templates/header', ['filters' => $filters])
-            . view('movies/show', [
+        return view(
+            'movies/show', [
                 'movie' => $movie,
                 'filters' => $filters
-                ])
-            . view('templates/footer');
+            ]);
     }
 
 
@@ -118,14 +115,13 @@ class Movies extends BaseController
         }
 
         $filters = QueryHelper::getParam($this->request);
-        return view('templates/header', ['filters' => $filters])
-            . view('movies/edit', [
+        return view(
+            'movies/edit', [
                 'movie' => $movie,
                 'mode' => $mode,
                 'config' => MovieViewHelper::getModeConfig($mode, $movie),
                 'filters' => $filters
-                ])
-            . view('templates/footer');
+            ]);
     }
 
 
