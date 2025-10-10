@@ -1,3 +1,7 @@
+<?php $this->extend('templates/layout') ?>
+
+<?php $this->section('content') ?>
+
 <?php use App\Helpers\QueryHelper; ?>
 <main class="container py-3">
     <?php if (session('message')): ?>
@@ -60,3 +64,5 @@
         </div>
     </div>
 </main>
+
+<?php $this->endSection() ?>

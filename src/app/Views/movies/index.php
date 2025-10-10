@@ -1,3 +1,7 @@
+<?php $this->extend('templates/layout') ?>
+
+<?php $this->section('content') ?>
+
 <?php
     use App\Helpers\QueryHelper;
     use App\Helpers\FormValidationHelper;
@@ -281,3 +285,5 @@
     </div>
 
 </main>
+
+<?php $this->endSection() ?>
