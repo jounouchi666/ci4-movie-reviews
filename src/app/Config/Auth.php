@@ -48,7 +48,7 @@ class Auth extends ShieldAuth
     public array $views = [
         'login'                       => '\App\Views\Shield\login',
         'register'                    => '\App\Views\Shield\register',
-        'layout'                      => '\App\Views\Shield\layout',
+        'layout'                      => '\App\Views\templates\layout',
         'action_email_2fa'            => '\App\Views\Shield\email_2fa_show',
         'action_email_2fa_verify'     => '\App\Views\Shield\email_2fa_verify',
         'action_email_2fa_email'      => '\App\Views\Shield\Email\email_2fa_email',
