@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"></script>
 
     <!-- CSS -->
+    <?= $this->renderSection('pageStyles') ?>
     <link rel="stylesheet" href="<?= base_url('css/style.css')?>">
 
     <!-- font -->
@@ -25,6 +26,8 @@
 
             <?= view('templates/footer') ?>
         </div>
+
+        <?= $this->renderSection('pageScripts') ?>
         <script type="module" src="<?= base_url('js/main.js') ?>"></script>
     </body>
 </html>
