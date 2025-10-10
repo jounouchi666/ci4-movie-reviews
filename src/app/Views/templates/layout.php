@@ -19,9 +19,9 @@
 </head>
     <body>
         <div id="container">
-            <?= view('templates/header', ['filters' => $filters]) ?>
+            <?= view('templates/header', ['filters' => $filters ?? []]) ?>
 
-            <?= $this->renderSection('content') ?>
+            <?= $this->renderSection('main') ?>
 
             <?= view('templates/footer') ?>
         </div>
