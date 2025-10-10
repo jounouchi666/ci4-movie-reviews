@@ -1,6 +1,6 @@
 <?php $this->extend('templates/layout') ?>
 
-<?php $this->section('content') ?>
+<?php $this->section('main') ?>
 
 <?php
     use App\Helpers\QueryHelper;
