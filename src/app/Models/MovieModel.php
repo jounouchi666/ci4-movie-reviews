@@ -12,6 +12,7 @@ class MovieModel extends Model
     protected $table = 'movies';
     protected $allowedFields = [
         'title',
+        'user_id',
         'year',
         'genre',
         'rating',
