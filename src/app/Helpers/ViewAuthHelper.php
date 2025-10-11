@@ -31,6 +31,6 @@ class ViewAuthHelper
         }
 
         $userId = is_array($model) ? $model['user_id'] : $model->user_id;
-        return auth()->user()->id === $userId;
+        return auth()->user()->id === (int) $userId;
     }
 }
