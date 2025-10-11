@@ -16,6 +16,7 @@ class MoviesSeeder extends Seeder
         // $data = [];
         // for ($i = 0; $i < $NUMBER_OF_RECORDS; $i++) {
         //     $data[] = [
+        //         'user_id' => $faker->numberBetween(1, 5),
         //         'title' => $faker->words(3, true),
         //         'year' => $faker->numberBetween(1900, 2025),
         //         'genre' => $faker->word,
@@ -27,6 +28,7 @@ class MoviesSeeder extends Seeder
         // ====日本語データ====
         $data = [
             [
+                "user_id" => 1,
                 "title" => "インセプション",
                 "year" => 2010,
                 "genre" => "SF",
@@ -34,6 +36,7 @@ class MoviesSeeder extends Seeder
                 "review" => "複雑なストーリーだが映像と音楽が圧倒的。何度も観たくなる。"
             ],
             [
+                "user_id" => 1,
                 "title" => "君の名は。",
                 "year" => 2016,
                 "genre" => "アニメーション / ロマンス",
@@ -41,6 +44,7 @@ class MoviesSeeder extends Seeder
                 "review" => "映像美と音楽が素晴らしい。ややご都合主義に感じる部分も。"
             ],
             [
+                "user_id" => 2,
                 "title" => "ショーシャンクの空に",
                 "year" => 1994,
                 "genre" => "ドラマ",
@@ -48,6 +52,7 @@ class MoviesSeeder extends Seeder
                 "review" => "感動の名作。最後の爽快感が最高。"
             ],
             [
+                "user_id" => 2,
                 "title" => "ジュラシック・パーク",
                 "year" => 1993,
                 "genre" => "アドベンチャー / SF",
@@ -55,6 +60,7 @@ class MoviesSeeder extends Seeder
                 "review" => "迫力ある恐竜描写に圧倒される。ストーリーはシンプル。"
             ],
             [
+                "user_id" => 3,
                 "title" => "タイタニック",
                 "year" => 1997,
                 "genre" => "ロマンス / ドラマ",
@@ -62,6 +68,7 @@ class MoviesSeeder extends Seeder
                 "review" => "壮大なスケールと切ない物語。何度観ても泣ける。"
             ],
             [
+                "user_id" => 3,
                 "title" => "リング",
                 "year" => 1998,
                 "genre" => "ホラー",
@@ -69,6 +76,7 @@ class MoviesSeeder extends Seeder
                 "review" => "雰囲気は怖いが展開がやや古臭く感じる。"
             ],
             [
+                "user_id" => 4,
                 "title" => "アベンジャーズ",
                 "year" => 2012,
                 "genre" => "アクション / ヒーロー",
@@ -76,6 +84,7 @@ class MoviesSeeder extends Seeder
                 "review" => "ヒーロー集合のワクワク感が最高。ストーリーは浅め。"
             ],
             [
+                "user_id" => 4,
                 "title" => "千と千尋の神隠し",
                 "year" => 2001,
                 "genre" => "アニメーション / ファンタジー",
@@ -83,6 +92,7 @@ class MoviesSeeder extends Seeder
                 "review" => "独特の世界観とキャラクターに引き込まれる。ジブリの最高傑作。"
             ],
             [
+                "user_id" => 5,
                 "title" => "ジョーカー",
                 "year" => 2019,
                 "genre" => "サスペンス / ドラマ",
@@ -90,6 +100,7 @@ class MoviesSeeder extends Seeder
                 "review" => "重苦しいが演技が圧倒的。観た後に考えさせられる作品。"
             ],
             [
+                "user_id" => 5,
                 "title" => "ワイルド・スピード",
                 "year" => 2001,
                 "genre" => "アクション",
