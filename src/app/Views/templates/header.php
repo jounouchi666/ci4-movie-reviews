@@ -16,7 +16,14 @@
 
             <?php if (auth()->loggedIn()): ?>
                 <a class="btn btn-primary" href="<?= site_url(QueryHelper::buildUrl(route_to('create'), $filters)) ?>">新規投稿</a>
-                <a class="btn btn-outline-secondary" href="<?= route_to('logout') ?>">ログアウト</a>
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"><?= esc(auth()->user()->username); ?></button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">マイページ</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="<?= route_to('logout') ?>">ログアウト</a></li>
+                    </ul>
+                </div>
             <?php else: ?>
                 <a class="btn btn-outline-primary" href="<?= route_to('login') ?>">ログイン</a>
                 <a class="btn btn-primary" href="<?= route_to('register') ?>">ユーザー登録</a>
