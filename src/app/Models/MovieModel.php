@@ -26,21 +26,27 @@ class MovieModel extends Model
     
 
     /**
-     * レコードの取得
+     * レコードの単一取得
      *
-     * @param  int|false $id ID指定 or 省略で全件取得
-     * @param  array|null $order ['column', 'direction']
-     * @return array|null レコード
+     * @param  int $id ID指定
+     * @return array|null レコード（無ければNULL）
      */
-    public function getMovies($id = false, $order = null): ?array
+    public function getMovieById($id): ?array
     {
-        $movies = $id ? $this->find($id) : $this->findAll();
+        return $this->find($id);
+    }
 
-        if ($id || empty($order)) {
-            return $movies;
-        }
 
-        return $this->sort($movies, $order);
+    /**
+     * レコードの全件取得
+     *
+     * @param  array|null $order ['column', 'direction']
+     * @return array レコード（無ければ空配列）
+     */
+    public function getMovies($order = null): array
+    {
+        $movies = $this->findAll() ?? [];
+        return empty($order) ? $movies : $this->sort($movies, $order);
     }
 
         
@@ -48,7 +54,7 @@ class MovieModel extends Model
      * レコードを絞り込んで取得する
      *
      * @param  array $conditions [カラム名]
-     * @return array
+     * @return array 絞り込み済みレコード（無ければ空配列）
      */
     public function filter($conditions): array
     {
@@ -95,6 +101,34 @@ class MovieModel extends Model
         return isset($conditions['order']) ? $this->sort($movies, $conditions['order']) : $movies;
     }
 
+
+    /**
+     * 【ページネーション付き】レコードの取得
+     *
+     * @param  array|null $order ['column', 'direction']
+     * @param int $perPage 1ページに含める件数
+     * @return array レコード（ページネーション付き）
+     */
+    public function getMoviesPaginated($order = null, $perPage = 10): array {
+        $movies = $this->getMovies($order);
+
+        return  $this->paginateArray($movies, $perPage);
+    }
+
+
+    /**
+     * 【ページネーション付き】レコードを絞り込んで取得する
+     *
+     * @param  array $conditions [カラム名]
+     * @param int $perPage 1ページに含める件数
+     * @return array 絞り込み済みレコード（ページネーション付き）
+     */
+    public function filterPaginated($conditions, $perPage = 10): array {
+        $movies = $this->filter($conditions);
+
+        return  $this->paginateArray($movies, $perPage);
+    }
+
     
     /**
      * moviesをソートする
@@ -121,5 +155,33 @@ class MovieModel extends Model
         }
 
         return $movies;
+    }
+
+
+    /**
+     * moviesをページネーション用に分割する
+     *
+     * @param  array $array
+     * @param  int $perPage 1ページに含める件数
+     * @return array 
+     */
+    protected function paginateArray($array, $perPage = 10): array
+    {
+        // ページ分割
+        $page = max(1, (int)service('request')->get('page'));
+        $total = count($array);
+        $offset = ($page - 1) * $perPage;
+
+        $dataPage = array_slice($array, $offset, $perPage);
+
+        // CI4のPagerと同じ仕組みでリンクを作成
+        $pager = \Config\Services::pager();
+        $pager->setPath(current_url());
+        $pager->makeLinks($page, $perPage, $total);
+
+        return [
+            'movies' => $dataPage,
+            'pager' => $pager,
+        ];
     }
 }
