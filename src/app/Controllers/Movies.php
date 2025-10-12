@@ -26,6 +26,8 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         
         $filters = QueryHelper::getParam($this->request);
+        $order = $filters['order'] ?? null;
+        $perPage = 12;
 
         // バリデーション
         $lteThisYear = DynamicValidationHelper::lteThisYearRule();
@@ -41,13 +43,15 @@ class Movies extends BaseController
                 'year_min' => DynamicValidationHelper::lteThisYearMessage('公開年の最小値'),
                 'year_max' => DynamicValidationHelper::lteThisYearMessage('公開年の最大値'),
             ],
-        );
+        );        
         if (! $this->validate($rules, $errors)) {
             $errors = $this->validator->getErrors();
 
+            $movies = $model->getMoviesPaginated($order, $perPage); // 全件取得する
             return view(
                 'movies/index', [
-                    'movies' => $model->getMovies(false, $filters['order'] ?? null), // 全件取得する
+                    'movies' => $movies['movies'],
+                    'pager' => $movies['pager'],
                     'filters' => $filters,
                     'validationErrors' => $errors,
                 ]);
@@ -55,12 +59,13 @@ class Movies extends BaseController
 
         // フィルターの有無に応じてレコード取得
         $movies = !empty($filters)
-            ? $model->filter($filters)
-            : $model->getMovies(false, $filters['order'] ?? null);
+            ? $model->filterPaginated($filters, $perPage)
+            : $model->getMoviesPaginated($order, $perPage);
 
         return view(
             'movies/index', [
-                'movies' => $movies,
+                'movies' => $movies['movies'],
+                'pager' => $movies['pager'],
                 'filters' => $filters,
                 'validationErrors' => [],
             ]);
@@ -77,7 +82,7 @@ class Movies extends BaseController
     {
         $model = model(MovieModel::class);
         
-        $movie = $model->getMovies($id);
+        $movie = $model->getMovieById($id);
         if (is_null($movie)) {
             throw new PageNotFoundException('投稿がみつかりませんでした');
         }
