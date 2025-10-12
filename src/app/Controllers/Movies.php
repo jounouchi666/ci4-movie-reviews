@@ -43,7 +43,7 @@ class Movies extends BaseController
                 'year_min' => DynamicValidationHelper::lteThisYearMessage('公開年の最小値'),
                 'year_max' => DynamicValidationHelper::lteThisYearMessage('公開年の最大値'),
             ],
-        );        
+        );
         if (! $this->validate($rules, $errors)) {
             $errors = $this->validator->getErrors();
 
