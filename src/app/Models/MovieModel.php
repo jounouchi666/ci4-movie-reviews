@@ -168,7 +168,7 @@ class MovieModel extends Model
     protected function paginateArray($array, $perPage = 10): array
     {
         // ページ分割
-        $page = max(1, (int)service('request')->get('page'));
+        $page = max(1, (int)service('request')->getGet('page'));
         $total = count($array);
         $offset = ($page - 1) * $perPage;
 
