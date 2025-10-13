@@ -162,8 +162,8 @@ class Movies extends BaseController
 
         // リダイレクト先
         $redirectTarget = !empty($id) 
-            ? redirect()->route('show', $id)
-            : redirect()->route('index');
+            ? route_to('show', $id)
+            : route_to('index');
 
         $model = model(MovieModel::class);
         // 権限チェック
