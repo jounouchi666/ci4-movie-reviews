@@ -176,7 +176,7 @@ class MovieModel extends Model
 
         // CI4のPagerと同じ仕組みでリンクを作成
         $pager = \Config\Services::pager();
-        $pager->setPath(current_url());
+        $pager->setPath(uri_string());
         $pager->makeLinks($page, $perPage, $total);
 
         return [
