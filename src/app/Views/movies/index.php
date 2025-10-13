@@ -34,6 +34,8 @@
             <?php endforeach ?>
         </ul>
 
+        <div class="order-3 d-flex justify-content-center align-items-center"><?= $pager->links('default', 'bootstrap') ?></div>
+
         <div id="search-form-accordion" class="accordion order-1">
             <?php $errors = new FormValidationHelper($validationErrors); ?>
 
