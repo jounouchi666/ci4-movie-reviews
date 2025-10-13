@@ -137,6 +137,12 @@ class Movies extends BaseController
      */
     public function save(): RedirectResponse
     {
+        // ログインチェック（一応）
+        $userId = user_id();
+        if (!$userId) {
+            return redirect()->route('index')->with('error', 'ログイン状態を確認できなかったためリダイレクトされました');
+        }
+
         // バリデーション
         [$rules, $errors] = DynamicValidationHelper::buildRules(
             'movie',
@@ -150,12 +156,21 @@ class Movies extends BaseController
         };
 
         $data = $this->request->getPost();
+        $data['user_id'] = $userId;
+
+        $id = $data['id'] ?? null;
 
         // リダイレクト先
-        $redirectTarget = !empty($data['id']) ? route_to('show', $data['id']) : route_to('index');
+        $redirectTarget = !empty($id) 
+            ? redirect()->route('show', $id)
+            : redirect()->route('index');
 
-        // 保存
         $model = model(MovieModel::class);
+        // 権限チェック
+        if (!empty($id) && ! $model->ownedByUser($id, $userId)) {
+                return redirect()->route('show', $id)->with('error', '権限がありません');
+        }
+        // 保存
         $model->save($data);
 
         $filters = QueryHelper::getParam($this->request);
@@ -172,8 +187,18 @@ class Movies extends BaseController
      */
     public function delete($id): RedirectResponse
     {
-        // 削除
+        // 念のためログインチェック
+        $userId = user_id();
+        if (!$userId) {
+            return redirect()->route('index')->with('error', 'ログイン状態を確認できなかったためリダイレクトされました');
+        }
+
         $model = model(MovieModel::class);
+        // 権限チェック
+        if (! $model->ownedByUser($id, $userId)) {
+            return redirect()->back()->with('error', '権限がありません');
+        }
+        // 削除
         $model->delete($id);
 
         $filters = QueryHelper::getParam($this->request);
