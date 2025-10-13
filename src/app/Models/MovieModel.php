@@ -184,4 +184,22 @@ class MovieModel extends Model
             'pager' => $pager,
         ];
     }
+
+    
+    /**
+     * userIdがレコードのuser_idと一致するか確認する
+     *
+     * @param  int $id movieのid
+     * @param  int $userId ユーザーID
+     * @return bool $userId === user_idならtrue
+     */
+    public function ownedByUser($id, $userId): bool
+    {
+        $record = $this->select('id')
+                       ->where('id', $id)
+                       ->where('user_id', $userId)
+                       ->first();
+        
+        return $record !== null;
+    }
 }
