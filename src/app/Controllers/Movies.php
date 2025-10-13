@@ -109,7 +109,7 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
     
         if ($id) {
-            $movie = $model->getMovies($id);
+            $movie = $model->getMovieById($id);
             if (is_null($movie)) {
                 throw new PageNotFoundException('投稿がみつかりませんでした');
             }
