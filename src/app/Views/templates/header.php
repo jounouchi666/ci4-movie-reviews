@@ -19,7 +19,7 @@
                 <div class="btn-group">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"><?= esc(auth()->user()->username); ?></button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">マイページ</a></li>
+                        <li><a class="dropdown-item" href="<?= route_to('userIndex')?>">マイページ</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="<?= route_to('logout') ?>">ログアウト</a></li>
                     </ul>
