@@ -16,7 +16,7 @@ class MyPage extends BaseController
     public function index()
     {
         $currentUser = auth()->user();
-        return $this->renderUserPage($currentUser->id);
+        return $this->renderUserPage($currentUser->id, 'auth');
     }
 
 
@@ -34,10 +34,11 @@ class MyPage extends BaseController
     /**
      * ユーザーページをレンダリングする
      *
-     * @param  @param int $userId ユーザーID
+     * @param  int $userId ユーザーID
+     * @param  string $mode 
      * @return string view
      */
-    private function renderUserPage($userId)
+    private function renderUserPage($userId, $mode = 'show')
     {
         $userModel = model(UserModel::class);
         $user = $userModel->find($userId);
@@ -52,6 +53,7 @@ class MyPage extends BaseController
 
         return view('myPage/index', [
             'user' => $user,
+            'mode' => $mode,
             'movies' => $movies['movies'],
             'pager' => $movies['pager'],
         ]);
