@@ -41,15 +41,13 @@
         <h2 class="h5">投稿者</h2>
         <div class="mt-3 d-inline-block w-100">
             <div class="d-flex justify-content-start gap-3">
-                <img src="https://placehold.co/100x100" alt="ユーザーアイコン" class="rounded-circle profile-icon-100">
+                <img src="https://placehold.co/100x100" alt="<?= esc($movie['username']) ?>のアイコン" class="rounded-circle profile-icon-100">
                 <div class="d-flex flex-column justify-content-start">
                     <h2 class="h5 mb-1">
-                        <a class="link-secondary" href="">User1</a>
+                        <a class="link-secondary" href="<?= route_to('userShow', $movie['user_id']) ?>"><?= esc($movie['username']) ?></a>
                     </h2>
                     <p class="profile-status text-muted">
-                        ステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージ
-                        ステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータスメッセージ
-                        ステータスメッセージステータスメッセージステータスメッセージステータスメッセージステータス
+                        <?= !empty($movie['status_message']) ? esc($movie['status_message']) : 'プロフィールが設定されていません' ?>
                     </p>
                 </div>
             </div>
