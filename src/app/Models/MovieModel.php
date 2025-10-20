@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Model;
 
 /**
@@ -33,7 +34,10 @@ class MovieModel extends Model
      */
     public function getMovieById($id): ?array
     {
-        return $this->find($id);
+        $builder = $this->builder();
+        $this->joinUserInfo($builder, ['username', 'status_message']);
+
+        return $builder->where('movies.id', $id)->get()->getRowArray();
     }
 
 
@@ -45,7 +49,10 @@ class MovieModel extends Model
      */
     public function getMovies($order = null): array
     {
-        $movies = $this->findAll() ?? [];
+        $builder = $this->builder();
+        $this->joinUserInfo($builder);
+        $movies = $builder->get()->getResultArray();
+
         return empty($order) ? $movies : $this->sort($movies, $order);
     }
 
@@ -94,7 +101,8 @@ class MovieModel extends Model
                 $builder->where('rating <=', $conditions['rating_max']);
             };
         };
-        
+
+        $this->joinUserInfo($builder);
         $movies = $builder->get()->getResultArray();
 
         // ソートして返す
@@ -127,6 +135,23 @@ class MovieModel extends Model
         $movies = $this->filter($conditions);
 
         return  $this->paginateArray($movies, $perPage);
+    }
+
+
+    /**
+     * クエリビルダーとUserテーブルを結合する
+     *
+     * @param BaseBuilder $builder クエリビルダー
+     * @param string|array $columns Userテーブルのカラム
+     * @return BaseBuilder JOIN済みのクエリビルダー
+     */
+    private function joinUserInfo($builder, $columns = ['username']): BaseBuilder
+    {
+        $colsArray = is_array($columns) ? $columns : [$columns];
+        $userCols = array_map(fn($col) => 'users.' . $col, $colsArray);
+
+        return $builder->select('movies.*,'. implode(',', $userCols))
+                       ->join('users', 'users.id = movies.user_id');
     }
 
     
