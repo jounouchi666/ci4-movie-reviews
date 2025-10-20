@@ -5,6 +5,8 @@
 <?php
     use App\Helpers\QueryHelper;
     use App\Helpers\FormValidationHelper;
+    use App\Helpers\ViewDateHelper;
+
 ?>
 <main class="container py-3">
     <?php if (session('message')): ?>
@@ -29,6 +31,10 @@
                         <div><?= esc($movie['year']) ?>年</div>
                         <p class="text-warning mb-0"><?= str_repeat('★', $movie['rating']) ?></p>
                         <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
+                        <p class="text-muted fst-italic mb-0">
+                            Posted By <?= esc($movie['username']) ?>
+                            <?= $movie['updated_at'] ? 'at ' .ViewDateHelper::toStringUS(strtotime($movie['updated_at'])) : '' ?>
+                        </p>
                     </div>
                 </li>
             <?php endforeach ?>
