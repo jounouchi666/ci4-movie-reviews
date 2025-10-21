@@ -61,11 +61,17 @@ class MovieModel extends Model
      * レコードを絞り込んで取得する
      *
      * @param  array $conditions [カラム名]
+     * @param  int $userId ユーザーID
      * @return array 絞り込み済みレコード（無ければ空配列）
      */
-    public function filter($conditions): array
+    public function filter($conditions, $userId = null): array
     {
         $builder = $this->builder();
+        // ユーザーID
+        if (!is_null($userId)) {
+            $builder->where('user_id', $userId);
+        }
+
         // title
         if (!empty($conditions['title'])) {
             $builder->like('title', $conditions['title']);
@@ -128,11 +134,12 @@ class MovieModel extends Model
      * 【ページネーション付き】レコードを絞り込んで取得する
      *
      * @param  array $conditions [カラム名]
+     * @param int $userId ユーザーID
      * @param int $perPage 1ページに含める件数
      * @return array 絞り込み済みレコード（ページネーション付き）
      */
-    public function filterPaginated($conditions, $perPage = 10): array {
-        $movies = $this->filter($conditions);
+    public function filterPaginated($conditions, $userId = null, $perPage = 10): array {
+        $movies = $this->filter($conditions, $userId);
 
         return  $this->paginateArray($movies, $perPage);
     }
@@ -167,7 +174,7 @@ class MovieModel extends Model
         $column = $order['column'] ?? null;
         $direction = ($order['direction'] ?? 'asc') === 'asc' ? 1 : -1;
 
-        $allowedColumns = ['title', 'year', 'genre', 'rating']; // 許されしカラム達
+        $allowedColumns = ['title', 'year', 'genre', 'rating', 'updated_at']; // 許されしカラム達
         if ($column && in_array($column, $allowedColumns)) {
             usort($movies, function($a, $b) use ($column, $direction) {
                 // 数値比較用
