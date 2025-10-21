@@ -33,7 +33,7 @@
                         <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
                         <p class="text-muted fst-italic mb-0">
                             Posted By <?= esc($movie['username']) ?>
-                            <?= $movie['updated_at'] ? 'at ' .ViewDateHelper::toStringUS(strtotime($movie['updated_at'])) : '' ?>
+                            <?= $movie['updated_at'] ? 'at ' . ViewDateHelper::toStringUS(strtotime($movie['updated_at'])) : '' ?>
                         </p>
                     </div>
                 </li>
@@ -259,6 +259,7 @@
                                         <div>
                                             <label class="form-label" for="order-column">並べ替え基準</label>
                                             <select id="order-column" class="form-select" name="order[column]">
+                                                <option value="updated_at" <?= isset($filters['order']['column']) && $filters['order']['column'] === 'updated_at' ? 'selected' : '' ?>>投稿日</option>
                                                 <option value="title" <?= isset($filters['order']['column']) && $filters['order']['column'] === 'title' ? 'selected' : '' ?>>タイトル</option>
                                                 <option value="year" <?= isset($filters['order']['column']) && $filters['order']['column'] === 'year' ? 'selected' : '' ?>>公開年</option>
                                                 <option value="genre" <?= isset($filters['order']['column']) && $filters['order']['column'] === 'genre' ? 'selected' : '' ?>>ジャンル</option>
@@ -267,10 +268,10 @@
                                         </div>
 
                                         <div>
-                                            <label class="form-label" for="order-direction">昇順 / 降順</label>
+                                            <label class="form-label" for="order-direction">降順 / 昇順</label>
                                             <select id="order-direction" class="form-select" name="order[direction]">
-                                                <option value="asc" <?= isset($filters['order']['direction']) && $filters['order']['direction'] === 'asc' ? 'selected' : '' ?>>昇順</option>
                                                 <option value="desc" <?= isset($filters['order']['direction']) && $filters['order']['direction'] === 'desc' ? 'selected' : '' ?>>降順</option>
+                                                <option value="asc" <?= isset($filters['order']['direction']) && $filters['order']['direction'] === 'asc' ? 'selected' : '' ?>>昇順</option>
                                             </select>
                                         </div>
                                     </div>
