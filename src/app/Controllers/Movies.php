@@ -26,7 +26,7 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         
         $filters = QueryHelper::getParam($this->request);
-        $order = $filters['order'] ?? null;
+        $order = $filters['order'] ?? $filters['order'] = ['column' => 'updated_at', 'direction' => 'desc'];
         $perPage = 12;
 
         // バリデーション
