@@ -61,15 +61,14 @@ class MovieModel extends Model
      * レコードを絞り込んで取得する
      *
      * @param  array $conditions [カラム名]
-     * @param  int $userId ユーザーID
      * @return array 絞り込み済みレコード（無ければ空配列）
      */
-    public function filter($conditions, $userId = null): array
+    public function filter($conditions): array
     {
         $builder = $this->builder();
         // ユーザーID
-        if (!is_null($userId)) {
-            $builder->where('user_id', $userId);
+        if (!empty($conditions['user_id'])) {
+            $builder->where('user_id', $conditions['user_id']);
         }
 
         // title
@@ -134,12 +133,11 @@ class MovieModel extends Model
      * 【ページネーション付き】レコードを絞り込んで取得する
      *
      * @param  array $conditions [カラム名]
-     * @param int $userId ユーザーID
      * @param int $perPage 1ページに含める件数
      * @return array 絞り込み済みレコード（ページネーション付き）
      */
-    public function filterPaginated($conditions, $userId = null, $perPage = 10): array {
-        $movies = $this->filter($conditions, $userId);
+    public function filterPaginated($conditions, $perPage = 10): array {
+        $movies = $this->filter($conditions);
 
         return  $this->paginateArray($movies, $perPage);
     }
