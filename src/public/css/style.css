@@ -81,3 +81,8 @@ body {
   white-space: normal;
   max-height: 6em;
 }
+
+.fixed-textarea {
+  resize: none;
+  height: 7em !important;
+}
