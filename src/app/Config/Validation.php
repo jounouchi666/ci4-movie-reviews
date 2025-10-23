@@ -65,9 +65,16 @@ class Validation extends BaseConfig
         'rating_max' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
     ];
 
+    // ユーザーステータスメッセージ
+    public $userProfile = [
+        'status_message' => 'permit_empty|max_length[255]',
+    ];
+
     // --------------------------------------------------------------------
     // カスタムメッセージ
     // --------------------------------------------------------------------
+
+    // editフォームなど
     public $movie_errors = [
         'title' => [
             'required' => 'タイトルは必須です。',
@@ -93,6 +100,7 @@ class Validation extends BaseConfig
         ],
     ];
 
+    // フィルター用
     public $movieFilter_errors = [
         'title' => [
             'max_length' => 'タイトルは255文字以内で入力してください。',
@@ -128,6 +136,13 @@ class Validation extends BaseConfig
             'integer' => '評価は★1～5で入力してください。',
             'greater_than_equal_to' => '評価の最大値は★1以上で入力してください。',
             'less_than_equal_to' => '評価の最大値は★5以下で入力してください。',
+        ]
+    ];
+
+    // ユーザーステータスメッセージ
+    public $userProfile_errors = [
+        'status_message' => [
+            'max_length[255]' => 'ステータスメッセージは255文字以内で入力してください。',
         ]
     ];
 }
