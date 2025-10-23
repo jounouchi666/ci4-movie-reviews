@@ -48,3 +48,36 @@ body {
   height: 0;
   opacity: 0;
 }
+
+/* ユーザーアイコン */
+.profile-icon {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.profile-icon-100 {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .profile-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* ユーザープロフィールカード */
+.profile-status {
+  margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: breal-word;
+  white-space: normal;
+  max-height: 6em;
+}

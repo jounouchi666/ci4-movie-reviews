@@ -26,7 +26,7 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
         
         $filters = QueryHelper::getParam($this->request);
-        $order = $filters['order'] ?? null;
+        $order = $filters['order'] ?? $filters['order'] = ['column' => 'updated_at', 'direction' => 'desc'];
         $perPage = 12;
 
         // バリデーション
@@ -109,7 +109,7 @@ class Movies extends BaseController
         $model = model(MovieModel::class);
     
         if ($id) {
-            $movie = $model->getMovies($id);
+            $movie = $model->getMovieById($id);
             if (is_null($movie)) {
                 throw new PageNotFoundException('投稿がみつかりませんでした');
             }
@@ -162,8 +162,8 @@ class Movies extends BaseController
 
         // リダイレクト先
         $redirectTarget = !empty($id) 
-            ? redirect()->route('show', $id)
-            : redirect()->route('index');
+            ? route_to('show', $id)
+            : route_to('index');
 
         $model = model(MovieModel::class);
         // 権限チェック
