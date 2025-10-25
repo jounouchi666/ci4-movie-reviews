@@ -65,9 +65,10 @@ class Validation extends BaseConfig
         'rating_max' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
     ];
 
-    // ユーザーステータスメッセージ
+    // ユーザープロフィール
     public $userProfile = [
         'status_message' => 'permit_empty|max_length[255]',
+        'icon' => 'is_image[icon]|mime_in[icon,image/jpg,image/jpeg,image/png]|max_size[icon,2048]',
     ];
 
     // --------------------------------------------------------------------
@@ -139,10 +140,15 @@ class Validation extends BaseConfig
         ]
     ];
 
-    // ユーザーステータスメッセージ
+    // ユーザープロフィール
     public $userProfile_errors = [
         'status_message' => [
             'max_length[255]' => 'ステータスメッセージは255文字以内で入力してください。',
-        ]
+        ],
+        'icon' => [
+            'is_image' => 'アップロードされたファイルは画像ではありません',
+            'mime_in' => 'JPGまたはPNG形式の画像をアップロードしてください',
+            'max_size' => '画像サイズは2MB以下にしてください',
+        ],
     ];
 }
