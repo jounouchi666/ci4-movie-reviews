@@ -79,7 +79,7 @@ class UserModel extends ShieldUserModel
      * @param int|string $height リサイズファイルの高さ（省略で横幅と同じにする）
      * @return bool
      */
-    private function saveThumb($fileName, $width, $height = $width): bool
+    private function saveThumb($fileName, $width, $height = null): bool
     {
         $filePath = self::ICON_DIR . $fileName;
         $fileNameResized = $this->getResizedFileName($fileName, $width);
@@ -88,7 +88,7 @@ class UserModel extends ShieldUserModel
         
         return Services::image()
                 ->withFile($filePath)
-                ->resize($width, $height, true)
+                ->resize($width, $height ?? $width, true)
                 ->save($thumbPath);
     }
 
