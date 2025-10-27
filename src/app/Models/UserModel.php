@@ -4,6 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Shield\Models\UserModel as ShieldUserModel;
 use App\Entities\User;
+use App\Traits\UserIconTrait;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use Config\Services;
 
@@ -12,15 +13,11 @@ use Config\Services;
  */
 class UserModel extends ShieldUserModel
 {
+    use UserIconTrait;
+
     protected $returnType = User::class;
 
     protected $allowedFields = ['icon_path'];
-
-    // ユーザーアイコンのディレクトリ
-    protected const ICON_DIR = FCPATH . USER_ICON_DIR;
-
-    // サムネイルサイズ
-    protected const THUMB_SIZES = [120, 100];
 
     public function __construct()
     {
@@ -57,7 +54,7 @@ class UserModel extends ShieldUserModel
         }
 
         // ファイルの保存
-        $file->move(self::ICON_DIR, $fileName, true);
+        $file->move($this->ICON_DIR, $fileName, true);
 
         // 縮小サイズファイルの保存
         foreach (self::THUMB_SIZES as $size) {
@@ -107,20 +104,5 @@ class UserModel extends ShieldUserModel
             return unlink($oldFile);
         }
         return false;
-    }
-
-
-    /**
-     * リサイズファイル名を取得する
-     *
-     * @param string $fileName ファイル名
-     * @param int|string $width リサイズファイルの横幅
-     * @return string ファイル名
-     */
-    private function getResizedFileName($fileName, $width): string
-    {
-        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-        $base = pathinfo($fileName, PATHINFO_FILENAME);
-        return $base . '_' . $width . '.' . $ext;
     }
 }
