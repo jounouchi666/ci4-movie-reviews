@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Entities\Movie;
 use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Model;
 
@@ -11,6 +12,7 @@ use CodeIgniter\Model;
 class MovieModel extends Model
 {
     protected $table = 'movies';
+    protected $returnType = Movie::class;
     protected $allowedFields = [
         'title',
         'user_id',
@@ -30,14 +32,11 @@ class MovieModel extends Model
      * レコードの単一取得
      *
      * @param  int $id ID指定
-     * @return array|null レコード（無ければNULL）
+     * @return Movie|null レコード（無ければNULL）
      */
-    public function getMovieById($id): ?array
+    public function getMovieById($id): ?Movie
     {
-        $builder = $this->builder();
-        $this->joinUserInfo($builder, ['username', 'status_message']);
-
-        return $builder->where('movies.id', $id)->get()->getRowArray();
+        return $this->find($id);
     }
 
 
@@ -45,13 +44,13 @@ class MovieModel extends Model
      * レコードの全件取得
      *
      * @param  array|null $order ['column', 'direction']
-     * @return array レコード（無ければ空配列）
+     * @return Movie[]|null レコード（無ければnull）
      */
     public function getMovies($order = null): array
     {
         $builder = $this->builder();
         $this->joinUserInfo($builder);
-        $movies = $builder->get()->getResultArray();
+        $movies = $builder->get()->getResult(Movie::class);
 
         return empty($order) ? $movies : $this->sort($movies, $order);
     }
@@ -61,7 +60,7 @@ class MovieModel extends Model
      * レコードを絞り込んで取得する
      *
      * @param  array $conditions [カラム名]
-     * @return array 絞り込み済みレコード（無ければ空配列）
+     * @return Movie[]|null 絞り込み済みレコード（無ければnull）
      */
     public function filter($conditions): array
     {
@@ -108,7 +107,7 @@ class MovieModel extends Model
         };
 
         $this->joinUserInfo($builder);
-        $movies = $builder->get()->getResultArray();
+        $movies = $builder->get()->getResult(Movie::class);
 
         // ソートして返す
         return isset($conditions['order']) ? $this->sort($movies, $conditions['order']) : $movies;
@@ -120,9 +119,10 @@ class MovieModel extends Model
      *
      * @param  array|null $order ['column', 'direction']
      * @param int $perPage 1ページに含める件数
-     * @return array レコード（ページネーション付き）
+     * @return Movie[] レコード（ページネーション付き）
      */
-    public function getMoviesPaginated($order = null, $perPage = 10): array {
+    public function getMoviesPaginated($order = null, $perPage = 10): array
+    {
         $movies = $this->getMovies($order);
 
         return  $this->paginateArray($movies, $perPage);
@@ -134,15 +134,16 @@ class MovieModel extends Model
      *
      * @param  array $conditions [カラム名]
      * @param int $perPage 1ページに含める件数
-     * @return array 絞り込み済みレコード（ページネーション付き）
+     * @return Movie[] 絞り込み済みレコード（ページネーション付き）
      */
-    public function filterPaginated($conditions, $perPage = 10): array {
+    public function filterPaginated($conditions, $perPage = 10): array
+    {
         $movies = $this->filter($conditions);
 
         return  $this->paginateArray($movies, $perPage);
     }
 
-
+    
     /**
      * クエリビルダーとUserテーブルを結合する
      *
@@ -163,9 +164,9 @@ class MovieModel extends Model
     /**
      * moviesをソートする
      *
-     * @param  array $movies
+     * @param  movie[] $movies
      * @param  array $order ['column', 'direction']
-     * @return array
+     * @return movie[]
      */
     protected function sort($movies, $order = null): array
     {
@@ -177,10 +178,10 @@ class MovieModel extends Model
             usort($movies, function($a, $b) use ($column, $direction) {
                 // 数値比較用
                 if (in_array($column, ['year', 'rating'])) {
-                    return ($a[$column] <=> $b[$column]) * $direction;
+                    return ($a->$column <=> $b->$column) * $direction;
                 }
                 // 文字列系比較用
-                return strcmp($a[$column], $b[$column]) * $direction;
+                return strcmp($a->$column, $b->$column) * $direction;
             });
         }
 
@@ -191,21 +192,21 @@ class MovieModel extends Model
     /**
      * moviesをページネーション用に分割する
      *
-     * @param  array $array
+     * @param  Movie[] $movies
      * @param  int $perPage 1ページに含める件数
-     * @return array 
+     * @return array{movies: Movie[], pager: Pager}
      */
-    protected function paginateArray($array, $perPage = 10): array
+    protected function paginateArray($movies, $perPage = 10): array
     {
         // ページ分割
         $page = max(1, (int)service('request')->getGet('page'));
-        $total = count($array);
+        $total = count($movies);
         $offset = ($page - 1) * $perPage;
 
-        $dataPage = array_slice($array, $offset, $perPage);
+        $dataPage = array_slice($movies, $offset, $perPage);
 
         // CI4のPagerと同じ仕組みでリンクを作成
-        $pager = \Config\Services::pager();
+        $pager = service('pager');
         $pager->setPath(uri_string());
         $pager->makeLinks($page, $perPage, $total);
 
