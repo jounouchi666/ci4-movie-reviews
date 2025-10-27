@@ -4,9 +4,10 @@ namespace App\Controllers;
 
 use App\Helpers\QueryHelper;
 use App\Models\MovieModel;
+use App\Models\UserModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
-use CodeIgniter\Shield\Models\UserModel;
+
 
 class MyPage extends BaseController
 {
@@ -88,9 +89,15 @@ class MyPage extends BaseController
             return redirect()->back()->withInput()->with('errors', $errors);
         }
 
-        // 保存
+        // フォームデータの保存
         $data = $this->request->getPost(['status_message']);
+        $file = $this->request->getFile('icon');
+
         $userModel = model(UserModel::class);
+
+        if ($file && $file->isValid()) {
+            $userModel->saveIcon($userId, $file);
+        }
         $userModel->update($userId, $data);
 
         return redirect()->route('userIndex')->with('message', '保存しました');
