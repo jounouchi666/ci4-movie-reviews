@@ -20,7 +20,7 @@
         <div class="col-12 col-md-4">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <img src="https://placehold.co/120x120" alt="ユーザーアイコン" class="rounded-circle mb-3 profile-icon">
+                    <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="rounded-circle mb-3 profile-icon">
 
                     <h2 class="h4 mb-1"><?= esc($user->username) ?></h2>
 
@@ -45,7 +45,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body d-flex flex-column align-items-center">
-                                <img src="https://placehold.co/120x120" alt="ユーザーアイコン" class="rounded-circle mb-3 profile-icon">
+                                <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="rounded-circle mb-3 profile-icon">
 
                                 <h2 class="h4 mb-3"><?= esc($user->username) ?></h2>
 
@@ -107,17 +107,17 @@
                 <?php endif ?>
 
                 <?php foreach ($movies as $movie): ?>
-                    <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie['id'] ?>>
+                    <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie->id ?>>
                         <div class="card-body">
                             <div>
-                                <span class="badge bg-primary mb-1"><?= esc($movie['genre']) ?></span>    
+                                <span class="badge bg-primary mb-1"><?= esc($movie->genre) ?></span>    
                             </div>
-                            <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= route_to('show', $movie['id']) ?>"><?= esc($movie['title']) ?></a>
-                            <div><?= esc($movie['year']) ?>年</div>
-                            <p class="text-warning mb-0"><?= str_repeat('★', $movie['rating']) ?></p>
-                            <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
+                            <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= route_to('show', $movie->id) ?>"><?= esc($movie->title) ?></a>
+                            <div><?= esc($movie->year) ?>年</div>
+                            <p class="text-warning mb-0"><?= str_repeat('★', $movie->rating) ?></p>
+                            <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie->review) ?></p>
                             <p class="text-muted fst-italic mb-0">
-                                <?= $movie['updated_at'] ? ViewDateHelper::toStringUS(strtotime($movie['updated_at'])) : '' ?>
+                                <?= $movie->updated_at ? ViewDateHelper::toStringUS(strtotime($movie->updated_at)) : '' ?>
                         </p>
                         </div>
                     </li>
