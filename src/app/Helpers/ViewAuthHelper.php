@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use CodeIgniter\Entity\Entity;
+
 /**
  * 【View用】認可状態を扱うヘルパークラス
  */
@@ -21,7 +23,7 @@ class ViewAuthHelper
     /**
      * ログインユーザーのものかどうかを返す
      *
-     * @param  $model user_idを持つモデルインスタンス
+     * @param  Entity $model user_idを持つモデルインスタンス
      * @return bool ログインユーザーのものならtrue
      */
     public static function isLoginUser($model): bool
@@ -30,7 +32,7 @@ class ViewAuthHelper
             return false;
         }
 
-        $userId = is_array($model) ? $model['user_id'] : $model->user_id;
+        $userId = is_array($model) ? $model->user_id : $model->user_id;
         return auth()->user()->id === (int) $userId;
     }
 }
