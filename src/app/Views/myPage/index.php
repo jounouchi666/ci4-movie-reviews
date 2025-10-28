@@ -3,7 +3,9 @@
 <?= $this->section('main') ?>
 
 <?php
-    use App\Helpers\ViewDateHelper;
+
+use App\Helpers\FormValidationHelper;
+use App\Helpers\ViewDateHelper;
 ?>
 
 <main class="container py-3">
@@ -20,7 +22,7 @@
         <div class="col-12 col-md-4">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <img src="https://placehold.co/120x120" alt="ユーザーアイコン" class="rounded-circle mb-3 profile-icon">
+                    <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="rounded-circle border shadow-sm mb-3 profile-icon">
 
                     <h2 class="h4 mb-1"><?= esc($user->username) ?></h2>
 
@@ -44,26 +46,55 @@
                                 <h5 id="profile-modal-label" class="modal-title fs-5">プロフィールの編集</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body d-flex flex-column align-items-center">
-                                <img src="https://placehold.co/120x120" alt="ユーザーアイコン" class="rounded-circle mb-3 profile-icon">
+                            <div class="modal-body">
+                                <?= 
+                                    form_open(route_to('userProfileUpdate'),[
+                                        'method' => 'post',
+                                        'enctype' => 'multipart/form-data',
+                                        'id' => 'userProfileUpdateForm',
+                                        'class' => 'w-100 d-flex flex-column align-items-center'
+                                    ])
+                                ?>
+                                    <?= csrf_field() ?>
 
-                                <h2 class="h4 mb-3"><?= esc($user->username) ?></h2>
+                                    <?php $errors = new FormValidationHelper(session()->getFlashdata('errors') ?? []); ?>
+                                    <?php if ($errors->hasAny()): ?>
+                                        <div class="alert alert-danger w-100 d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                            </svg>   
+                                            <div>入力内容に誤りがあります。修正してください。</div>
+                                        </div>
+                                    <?php endif ?>
 
-                                <span class="badge bg-success mb-2"><?= esc($user->status) ?></span>
+                                    <div class="mb-3 w-100 d-flex flex-column align-items-center">
+                                        <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="mb-3 rounded-circle border shadow-sm profile-icon">
+                                        <input
+                                            class="<?= $errors->getInputClass('icon') ?> form-control"
+                                            type="file"
+                                            name="icon"
+                                            accept="image/jpg, image/jpeg, image/png"
+                                        >
+                                        <?= $errors->render('icon') ?>
+                                    </div>
 
-                                <?= form_open(route_to('userProfileUpdate'), ['method' => 'post', 'id' => 'userProfileUpdateForm', 'class' => 'w-100'])  ?>
+                                    <h2 class="h4 mb-3"><?= esc($user->username) ?></h2>
+
+                                    <span class="badge bg-success mb-2"><?= esc($user->status) ?></span>
+
+                                
                                     <div class="form-floating mb-4 w-100">
                                         <textarea
-                                            class="form-control fixed-textarea"
+                                            class="<?= $errors->getInputClass('status_message') ?> form-control fixed-textarea"
                                             id="floatingStatusMessageInput"
                                             name="status_message"
                                             inputmode="text"
                                             maxlength="255"
                                             autocomplete="status_message"
                                             placeholder="ステータスメッセージ"
-                                            value="<?= old('status_message') ?>"
-                                        ><?= esc($user->status_message) ?></textarea>
+                                        ><?= old('status_message', $user->status_message ?? '') ?></textarea>
                                         <label for="floatingStatusMessageInput">ステータスメッセージ</label>
+                                        <?= $errors->render('status_message') ?>
                                     </div>
                                 <?= form_close() ?>
                             </div>
@@ -107,17 +138,17 @@
                 <?php endif ?>
 
                 <?php foreach ($movies as $movie): ?>
-                    <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie['id'] ?>>
+                    <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie->id ?>>
                         <div class="card-body">
                             <div>
-                                <span class="badge bg-primary mb-1"><?= esc($movie['genre']) ?></span>    
+                                <span class="badge bg-primary mb-1"><?= esc($movie->genre) ?></span>    
                             </div>
-                            <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= route_to('show', $movie['id']) ?>"><?= esc($movie['title']) ?></a>
-                            <div><?= esc($movie['year']) ?>年</div>
-                            <p class="text-warning mb-0"><?= str_repeat('★', $movie['rating']) ?></p>
-                            <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
+                            <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= route_to('show', $movie->id) ?>"><?= esc($movie->title) ?></a>
+                            <div><?= esc($movie->year) ?>年</div>
+                            <p class="text-warning mb-0"><?= str_repeat('★', $movie->rating) ?></p>
+                            <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie->review) ?></p>
                             <p class="text-muted fst-italic mb-0">
-                                <?= $movie['updated_at'] ? ViewDateHelper::toStringUS(strtotime($movie['updated_at'])) : '' ?>
+                                <?= $movie->updated_at ? ViewDateHelper::toStringUS(strtotime($movie->updated_at)) : '' ?>
                         </p>
                         </div>
                     </li>

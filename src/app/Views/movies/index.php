@@ -22,18 +22,18 @@
     <div class="d-flex flex-column gap-3">
         <ul class="list-unstyled movies-grid order-2">
             <?php foreach ($movies as $movie): ?>
-                <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie['id'] ?>>
+                <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie->id ?>>
                     <div class="card-body">
                         <div>
-                            <span class="badge bg-primary mb-1"><?= esc($movie['genre']) ?></span>    
+                            <span class="badge bg-primary mb-1"><?= esc($movie->genre) ?></span>    
                         </div>
-                        <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie['id']), $filters)) ?>"><?= esc($movie['title']) ?></a>
-                        <div><?= esc($movie['year']) ?>年</div>
-                        <p class="text-warning mb-0"><?= str_repeat('★', $movie['rating']) ?></p>
-                        <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie['review']) ?></p>
+                        <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= site_url(QueryHelper::buildUrl(route_to('show', $movie->id), $filters)) ?>"><?= esc($movie->title) ?></a>
+                        <div><?= esc($movie->year) ?>年</div>
+                        <p class="text-warning mb-0"><?= str_repeat('★', $movie->rating) ?></p>
+                        <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie->review) ?></p>
                         <p class="text-muted fst-italic mb-0">
-                            Posted By <?= esc($movie['username']) ?>
-                            <?= $movie['updated_at'] ? 'at ' . ViewDateHelper::toStringUS(strtotime($movie['updated_at'])) : '' ?>
+                            Posted By <?= esc($movie->username) ?>
+                            <?= $movie->updated_at ? 'at ' . ViewDateHelper::toStringUS(strtotime($movie->updated_at)) : '' ?>
                         </p>
                     </div>
                 </li>

@@ -17,7 +17,7 @@
             <input
                 type="hidden"
                 name="id"
-                value="<?= isset($movie['id']) ? esc($movie['id']) : '' ?>"
+                value="<?= isset($movie->id) ? esc($movie->id) : '' ?>"
             >
         <?php endif ?>
 
@@ -39,7 +39,7 @@
                 class="<?= $errors->getInputClass('title') ?> form-control mt-1"
                 type="text"
                 name="title"
-                value="<?= old('title', $movie['title'] ?? '') ?>"
+                value="<?= old('title', $movie->title ?? '') ?>"
                 required
             >
             
@@ -56,7 +56,7 @@
                 name="year"
                 min="1900"
                 max="<?= date('Y') ?>"
-                value="<?= old('year', $movie['year'] ?? '') ?>"
+                value="<?= old('year', $movie->year ?? '') ?>"
                 required
             >
 
@@ -71,7 +71,7 @@
                 class="<?= $errors->getInputClass('genre') ?> form-control mt-1"
                 type="text"
                 name="genre"
-                value="<?= old('genre', $movie['genre'] ?? '') ?>"
+                value="<?= old('genre', $movie->genre ?? '') ?>"
                 required
             >
 
@@ -87,7 +87,7 @@
                     <option
                         class="text-warning"
                         value="<?= $i ?>"
-                        <?= old('rating', $movie['rating'] ?? '') == $i ? 'selected' : '' ?>
+                        <?= old('rating', $movie->rating ?? '') == $i ? 'selected' : '' ?>
                     ><?= str_repeat('★', $i) ?></option>
                 <?php endfor ?>
             </select>
@@ -102,7 +102,7 @@
                 id="review" 
                 class="<?= $errors->getInputClass('review') ?> form-control mt-1"
                 name="review" 
-            ><?= old('review', $movie['review'] ?? '') ?></textarea>
+            ><?= old('review', $movie->review ?? '') ?></textarea>
 
             <?= $errors->render('review') ?>
         </div>

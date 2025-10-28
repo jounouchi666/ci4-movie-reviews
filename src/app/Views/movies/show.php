@@ -17,9 +17,9 @@
     <?php endif ?>
 
     <div>
-        <h1><?= esc($movie['title']) ?><span class="h3">（<?= esc($movie['year']) ?>年公開）</span></h1>
+        <h1><?= esc($movie->title) ?><span class="h3">（<?= esc($movie->year) ?>年公開）</span></h1>
         <div class="h4">
-            <span class="badge bg-primary"><?= esc($movie['genre']) ?></span>
+            <span class="badge bg-primary"><?= esc($movie->genre) ?></span>
         </div>
     </div>
     
@@ -31,8 +31,8 @@
 
     <div>
         <h2>評価</h2>
-        <p class="text-warning h4"><?= esc(str_repeat('★', $movie['rating'])) ?></p>
-        <p><?= esc($movie['review']) ?></p>
+        <p class="text-warning h4"><?= esc(str_repeat('★', $movie->rating)) ?></p>
+        <p><?= esc($movie->review) ?></p>
     </div>
 
     <hr class="mt-5">
@@ -41,13 +41,13 @@
         <h2 class="h5">投稿者</h2>
         <div class="mt-3 d-inline-block w-100">
             <div class="d-flex justify-content-start gap-3">
-                <img src="https://placehold.co/100x100" alt="<?= esc($movie['username']) ?>のアイコン" class="rounded-circle profile-icon-100">
+                <img src="<?= esc($movie->user->thumb_urls[100]) ?>" alt="<?= esc($movie->username) ?>のアイコン" class="rounded-circle profile-icon-100">
                 <div class="d-flex flex-column justify-content-start">
                     <h2 class="h5 mb-1">
-                        <a class="link-secondary" href="<?= route_to('userShow', $movie['user_id']) ?>"><?= esc($movie['username']) ?></a>
+                        <a class="link-secondary" href="<?= route_to('userShow', $movie->user_id) ?>"><?= esc($movie->username) ?></a>
                     </h2>
                     <p class="profile-status text-muted">
-                        <?= !empty($movie['status_message']) ? esc($movie['status_message']) : 'プロフィールが設定されていません' ?>
+                        <?= !empty($movie->user->status_message) ? esc($movie->user->status_message) : 'プロフィールが設定されていません' ?>
                     </p>
                 </div>
             </div>
@@ -59,7 +59,7 @@
     <div class="row d-flex justify-content-center align-items-center gap-2 gap-md-1">
         <?php if (ViewAuthHelper::isLoginUser($movie)): ?>
             <div class="col-12 col-md-3">
-                <a class="btn btn-primary w-100" href="<?= site_url(QueryHelper::buildUrl(route_to('edit', $movie['id']), $filters)) ?>">修正</a>
+                <a class="btn btn-primary w-100" href="<?= site_url(QueryHelper::buildUrl(route_to('edit', $movie->id), $filters)) ?>">修正</a>
             </div>
             <div class="col-12 col-md-3">
                 <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">削除</button>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">いいえ</button>
-                        <form action=<?= QueryHelper::buildUrl(route_to('delete', $movie['id']), $filters) ?> method="post">
+                        <form action=<?= QueryHelper::buildUrl(route_to('delete', $movie->id), $filters) ?> method="post">
                             <input class="btn btn-danger" type="submit" value="はい">
                         </form>
                     </div>
