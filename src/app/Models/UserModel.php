@@ -54,7 +54,7 @@ class UserModel extends ShieldUserModel
         }
 
         // ファイルの保存
-        $file->move($this->ICON_DIR, $fileName, true);
+        $file->move(self::ICON_DIR, $fileName, true);
 
         // 縮小サイズファイルの保存
         foreach (self::THUMB_SIZES as $size) {
