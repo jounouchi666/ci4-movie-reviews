@@ -6,7 +6,24 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libicu-dev \
-    && docker-php-ext-install pdo pdo_mysql mysqli intl
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
+    libavif-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+        --with-avif \
+    && docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    mysqli \
+    intl \
+    gd \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Composer インストール
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
