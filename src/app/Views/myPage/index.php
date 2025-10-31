@@ -22,7 +22,10 @@ use App\Helpers\ViewDateHelper;
         <div class="col-12 col-md-4">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="rounded-circle border shadow-sm mb-3 profile-icon">
+                    <picture class="mb-3">
+                        <source class="rounded-circle border shadow-sm profile-icon" media="(max-width: 768px)" srcset="<?= $user->thumb_urls[100] ?>">
+                        <img class="rounded-circle border shadow-sm profile-icon" src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" loading="lazy">    
+                    </picture>
 
                     <h2 class="h4 mb-1"><?= esc($user->username) ?></h2>
 
@@ -68,7 +71,7 @@ use App\Helpers\ViewDateHelper;
                                     <?php endif ?>
 
                                     <div class="mb-3 w-100 d-flex flex-column align-items-center">
-                                        <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="mb-3 rounded-circle border shadow-sm profile-icon">
+                                        <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="mb-3 rounded-circle border shadow-sm profile-icon" loading="lazy">
                                         <input
                                             class="<?= $errors->getInputClass('icon') ?> form-control"
                                             type="file"
