@@ -24,12 +24,10 @@ use App\Helpers\ViewDateHelper;
                 <div class="card-body">
                     <picture class="mb-3">
                         <source class="rounded-circle border shadow-sm profile-icon" media="(max-width: 768px)" srcset="<?= $user->thumb_urls[100] ?>">
-                        <img class="rounded-circle border shadow-sm profile-icon" src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" loading="lazy">    
+                        <img class="rounded-circle border shadow-sm profile-icon" src="<?= $user->thumb_urls[120] ?>" alt="<?= $user->username ?>のアイコン" loading="lazy">    
                     </picture>
 
                     <h2 class="h4 mb-1"><?= esc($user->username) ?></h2>
-
-                    <span class="badge bg-success mb-2"><?= esc($user->status) ?></span>
 
                     <p class="text-muted text-start mb-3">
                         <?= esc($user->status_message) ?>
@@ -42,7 +40,16 @@ use App\Helpers\ViewDateHelper;
             </div>
 
             <?php if ($mode === 'auth'): ?>
-                <div id="profile-modal" class="modal fade slide-up" tabindex="-1" aria-labelledby="profile-modal-label" aria-hidden="true">
+                <?php $errors = new FormValidationHelper(session()->getFlashdata('errors') ?? []); ?>
+
+                <div
+                    id="profile-modal"
+                    class="modal fade slide-up <?= $errors->whenHasErrors('show') ?>"
+                    tabindex="-1"
+                    aria-labelledby="profile-modal-label"
+                    style="display: <?= $errors->whenHasErrors('block', 'none') ?>;"
+                    <?= $errors->whenHasErrors('aria-modal="true" role="dialog"', 'aria-hidden="true"') ?>
+                >
                     <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -60,7 +67,6 @@ use App\Helpers\ViewDateHelper;
                                 ?>
                                     <?= csrf_field() ?>
 
-                                    <?php $errors = new FormValidationHelper(session()->getFlashdata('errors') ?? []); ?>
                                     <?php if ($errors->hasAny()): ?>
                                         <div class="alert alert-danger w-100 d-flex align-items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
@@ -70,21 +76,43 @@ use App\Helpers\ViewDateHelper;
                                         </div>
                                     <?php endif ?>
 
-                                    <div class="mb-3 w-100 d-flex flex-column align-items-center">
-                                        <img src="<?= $user->thumb_urls[120] ?>" alt="ユーザーアイコン" class="mb-3 rounded-circle border shadow-sm profile-icon" loading="lazy">
+                                    <div class="mb-4 w-100">
+                                        <label  class="form-label text-align-start" for="userIconInput">ユーザーアイコン</label>
+                                        <div class="mb-3 d-inline-block w-100 mx-auto position-relative spinner-wrapper">
+                                            <img
+                                                src="<?= $user->thumb_urls[120] ?>"
+                                                alt="<?= $user->username ?>のアイコン"
+                                                id="preview-user-icon"
+                                                class="rounded-circle border shadow-sm profile-icon"
+                                                loading="lazy"
+                                            >
+                                            <div style="display: none;" class="spinner-border text-secondary position-absolute top-0 bottom-0 start-0 end-0 m-auto" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
                                         <input
-                                            class="<?= $errors->getInputClass('icon') ?> form-control"
+                                            id="userIconInput"
+                                            class="<?= $errors->getInputClass('icon') ?> form-control form-control-sm image-preview"
                                             type="file"
                                             name="icon"
                                             accept="image/jpg, image/jpeg, image/png"
+                                            data-preview-target="preview-user-icon"
                                         >
                                         <?= $errors->render('icon') ?>
                                     </div>
 
-                                    <h2 class="h4 mb-3"><?= esc($user->username) ?></h2>
-
-                                    <span class="badge bg-success mb-2"><?= esc($user->status) ?></span>
-
+                                    <div class="form-floating mb-4 w-100">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="floatingUsernameInput"
+                                            name="username"
+                                            inputmode="text"
+                                            autocomplete="username"
+                                            placeholder="<?= lang('Auth.username') ?>"
+                                            value="<?= old('username', $user->username) ?>" required>
+                                        <label for="floatingUsernameInput">ユーザー名</label>
+                                    </div>
                                 
                                     <div class="form-floating mb-4 w-100">
                                         <textarea
@@ -102,9 +130,7 @@ use App\Helpers\ViewDateHelper;
                                 <?= form_close() ?>
                             </div>
                             <div class="modal-footer">
-                                <form action=<?= route_to('userProfileUpdate') ?> method="post">
-                                    <input class="btn btn-success" type="submit" form="userProfileUpdateForm" value="保存">
-                                </form>
+                                <input class="btn btn-success" type="submit" form="userProfileUpdateForm" value="保存">
                             </div>
                         </div>
                     </div>
