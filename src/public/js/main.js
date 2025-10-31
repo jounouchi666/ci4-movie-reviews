@@ -1,9 +1,12 @@
 import { autoSlideUp } from "./autoSlideUp.js";
 import { cleanQueryParam } from "./cleanQueryParam.js";
 import { formSubmitToggler } from "./FormSubmitToggler.js";
+import { initImagePreview } from "./initImagePreview.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
+import OverflowSpinner from "./OverflowSpinner.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
+import ValidationHelper from "./validationHelper.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     // フラッシュメッセージの自動フェードアウト
@@ -54,4 +57,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // 評価選択セレクトボックスの色を可変に設定
     const ratingSelects = document.querySelectorAll('.rating-select');
     selectValueClassToggle(ratingSelects, 'text-warning');
+
+
+    // 画像ファイルのプレビュー機能
+    document.querySelectorAll('.image-preview').forEach(input => {
+        const previewTarget = document.getElementById(input.dataset.previewTarget);
+        console.log(previewTarget);
+        if (!previewTarget) return;
+
+        // スピナー
+        const spinnerWrapper = previewTarget.closest('.spinner-wrapper');
+        const spinner = new OverflowSpinner(spinnerWrapper);
+
+        initImagePreview(
+            input,
+            loadingResult => {
+                if (loadingResult.state === 'error') {
+                    ValidationHelper.toggleInvalid(input);
+                    ValidationHelper.addInvalidFeedback(loadingResult.message, input);
+                } else if (loadingResult.state === 'done') {
+                    ValidationHelper.toggleValid(input);
+                    ValidationHelper.removeInvalidFeedback(input);
+                }
+            },
+            spinner
+        );
+    });
 })
