@@ -90,7 +90,7 @@ class MyPage extends BaseController
         }
 
         // フォームデータの保存
-        $data = $this->request->getPost(['status_message']);
+        $data = $this->request->getPost(['username', 'status_message']);
         $file = $this->request->getFile('icon');
 
         $userModel = model(UserModel::class);
