@@ -44,11 +44,10 @@ use App\Helpers\ViewDateHelper;
 
                 <div
                     id="profile-modal"
-                    class="modal fade slide-up <?= $errors->whenHasErrors('show') ?>"
+                    class="modal fade slide-up"
                     tabindex="-1"
                     aria-labelledby="profile-modal-label"
-                    style="display: <?= $errors->whenHasErrors('block', 'none') ?>;"
-                    <?= $errors->whenHasErrors('aria-modal="true" role="dialog"', 'aria-hidden="true"') ?>
+                    data-has-error="<?= $errors->whenHasErrors('true', 'false') ?>"
                 >
                     <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered">
                         <div class="modal-content">
