@@ -67,6 +67,7 @@ class Validation extends BaseConfig
 
     // ユーザープロフィール
     public $userProfile = [
+        'username' => 'permit_empty|max_length[30]|min_length[3]|regex_match[/\A[ぁ-んァ-ン一-龥a-zA-Z0-9＿ー－・.\s]+\z/u]',
         'status_message' => 'permit_empty|max_length[255]',
         'icon' => 'is_image[icon]|mime_in[icon,image/jpg,image/jpeg,image/png]|max_size[icon,2048]',
     ];
@@ -142,6 +143,11 @@ class Validation extends BaseConfig
 
     // ユーザープロフィール
     public $userProfile_errors = [
+        'username' => [
+            'max_length' => 'ユーザー名は30文字以内で入力してください。',
+            'min_length' => 'ユーザー名は3文字以上で入力してください。',
+            'regex_match' => 'ユーザー名は、日本語・英数字・「＿」「ー」「・」「.」と空白のみ使用できます。'
+        ],
         'status_message' => [
             'max_length[255]' => 'ステータスメッセージは255文字以内で入力してください。',
         ],
