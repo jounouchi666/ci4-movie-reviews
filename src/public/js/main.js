@@ -4,6 +4,7 @@ import { formSubmitToggler } from "./FormSubmitToggler.js";
 import { initImagePreview } from "./initImagePreview.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
+import { openModalByError } from "./modalOpener.js";
 import OverflowSpinner from "./OverflowSpinner.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
 import ValidationHelper from "./validationHelper.js";
@@ -12,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // フラッシュメッセージの自動フェードアウト
     const flashSuccess = document.querySelectorAll('.flash-success');
     flashSuccess.forEach(el => autoSlideUp(el));
+
+    
+    // バリデーションエラーを持つフォームモーダルを表示状態にする
+    document.querySelectorAll('.modal').forEach(openModalByError);
 
 
     // フォーム内のsubmitボタンの活性/非活性化
@@ -62,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 画像ファイルのプレビュー機能
     document.querySelectorAll('.image-preview').forEach(input => {
         const previewTarget = document.getElementById(input.dataset.previewTarget);
-        console.log(previewTarget);
         if (!previewTarget) return;
 
         // スピナー
