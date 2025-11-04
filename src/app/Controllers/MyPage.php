@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Helpers\QueryHelper;
 use App\Models\MovieModel;
 use App\Models\UserModel;
+use App\Validation\ValidationRules;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -84,7 +85,8 @@ class MyPage extends BaseController
         }
 
         // バリデーション
-        if (! $this->validate('userProfile')) {
+        $rules = (new ValidationRules)->getEditProfileRules();
+        if (!$rules) {
             $errors = $this->validator->getErrors();
             return redirect()->back()->withInput()->with('errors', $errors);
         }
