@@ -21,4 +21,7 @@ $routes->group('mypage', ['filter' => 'session'], function($routes) {
     $routes->post('profile', 'MyPage::updateProfile', ['as' => 'userProfileUpdate']);
 });
 
+$routes->get('register', '\App\Controllers\Auth\RegisterController::registerView', ['as' => 'register']);
+$routes->post('register', '\App\Controllers\Auth\RegisterController::registerAction');
+
 service('auth')->routes($routes);
