@@ -47,35 +47,46 @@ class Validation extends BaseConfig
 
     // editフォームなど（moviesテーブルへのsave時に使用）
     public $movie = [
-        'rules' => [
-            'title' => 'required|min_length[1]|max_length[255]',
-            'year' => 'required|integer|greater_than_equal_to[1900]',
-            'genre' => 'required|max_length[100]',
-            'rating' => 'required|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
-            'review' => 'permit_empty|max_length[2000]',
-        ],
-        'label' => '映画',
-        'errors' => [
-            'title' => [
-                'required' => 'タイトルは必須です。',
+        'title' => [
+            'rules' => 'required|min_length[1]|max_length[255]',
+            'label' => 'タイトル',
+            'errors' => [
+                'required'   => 'タイトルは必須です。',
                 'min_length' => 'タイトルは1文字以上で入力してください。',
                 'max_length' => 'タイトルは255文字以内で入力してください。',
             ],
-            'year' => [
-                'required' => '公開年は必須です。',
-                'integer' => '公開年は数字で入力してください。',
-                'greater_than_equal_to' => '公開年は1900年以降である必要があります。',
+        ],
+        'year' => [
+            'rules' => 'required|integer|greater_than_equal_to[1900]',
+            'label' => '公開年',
+            'errors' => [
+                'required'               => '公開年は必須です。',
+                'integer'                => '公開年は数字で入力してください。',
+                'greater_than_equal_to'  => '公開年は1900年以降である必要があります。',
             ],
-            'genre' => [
-                'required' => 'ジャンルは必須です。',
+        ],
+        'genre' => [
+            'rules' => 'required|max_length[100]',
+            'label' => 'ジャンル',
+            'errors' => [
+                'required'   => 'ジャンルは必須です。',
                 'max_length' => 'ジャンルは100文字以内で入力してください。',
             ],
-            'rating' => [
-                'required' => '評価を選択してください（★1～5）。',
+        ],
+        'rating' => [
+            'rules' => 'required|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
+            'label' => '評価',
+            'errors' => [
+                'required'              => '評価を選択してください（★1～5）。',
+                'integer'               => '評価は数値で入力してください。',
                 'greater_than_equal_to' => '評価は★1以上で入力してください。',
-                'less_than_equal_to' => '評価は★5以下で入力してください。',
+                'less_than_equal_to'    => '評価は★5以下で入力してください。',
             ],
-            'review' => [
+        ],
+        'review' => [
+            'rules' => 'permit_empty|max_length[2000]',
+            'label' => 'レビュー',
+            'errors' => [
                 'max_length' => 'レビューは2000文字以内で入力してください。',
             ],
         ],
@@ -83,53 +94,72 @@ class Validation extends BaseConfig
 
     // フィルター用
     public $movieFilter = [
-        'rules' => [
-            'title' => 'permit_empty|max_length[255]',
-            'year_exact' => 'permit_empty|integer|greater_than_equal_to[1900]',
-            'year_min' => 'permit_empty|integer|greater_than_equal_to[1900]|checkRange[year_max]',
-            'year_max' => 'permit_empty|integer|greater_than_equal_to[1900]',
-            'genre' => 'permit_empty|max_length[100]',
-            'rating_exact' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
-            'rating_min' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]|checkRange[rating_max]',
-            'rating_max' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
-        ],
-        'label' => '映画フィルター',
-        'errors' => [
-            'title' => [
+        'title' => [
+            'rules' => 'permit_empty|max_length[255]',
+            'label' => 'タイトル',
+            'errors' => [
                 'max_length' => 'タイトルは255文字以内で入力してください。',
             ],
-            'year_exact' => [
-                'integer' => '公開年は数字で入力してください。',
+        ],
+        'year_exact' => [
+            'rules' => 'permit_empty|integer|greater_than_equal_to[1900]',
+            'label' => '公開年（指定）',
+            'errors' => [
+                'integer'               => '公開年は数字で入力してください。',
                 'greater_than_equal_to' => '公開年は1900年以降である必要があります。',
             ],
-            'year_min' => [
-                'integer' => '公開年は数字で入力してください。',
+        ],
+        'year_min' => [
+            'rules' => 'permit_empty|integer|greater_than_equal_to[1900]|checkRange[year_max]',
+            'label' => '公開年（最小）',
+            'errors' => [
+                'integer'               => '公開年は数字で入力してください。',
                 'greater_than_equal_to' => '公開年の最小値は1900年以降である必要があります。',
-                'checkRange' => '公開年の最小値は最大値以下である必要があります。',
+                'checkRange'            => '公開年の最小値は最大値以下である必要があります。',
             ],
-            'year_max' => [
-                'integer' => '公開年は数字で入力してください。',
+        ],
+        'year_max' => [
+            'rules' => 'permit_empty|integer|greater_than_equal_to[1900]',
+            'label' => '公開年（最大）',
+            'errors' => [
+                'integer'               => '公開年は数字で入力してください。',
                 'greater_than_equal_to' => '公開年の最大値は1900年以降である必要があります。',
             ],
-            'genre' => [
+        ],
+        'genre' => [
+            'rules' => 'permit_empty|max_length[100]',
+            'label' => 'ジャンル',
+            'errors' => [
                 'max_length' => 'ジャンルは100文字以内で入力してください。',
             ],
-            'rating_exact' => [
-                'integer' => '評価は★1～5で入力してください。',
+        ],
+        'rating_exact' => [
+            'rules' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
+            'label' => '評価（指定）',
+            'errors' => [
+                'integer'               => '評価は★1～5で入力してください。',
                 'greater_than_equal_to' => '評価は★1以上で入力してください。',
-                'less_than_equal_to' => '評価は★5以下で入力してください。',
+                'less_than_equal_to'    => '評価は★5以下で入力してください。',
             ],
-            'rating_min' => [
-                'integer' => '評価は★1～5で入力してください。',
+        ],
+        'rating_min' => [
+            'rules' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]|checkRange[rating_max]',
+            'label' => '評価（最小）',
+            'errors' => [
+                'integer'               => '評価は★1～5で入力してください。',
                 'greater_than_equal_to' => '評価の最小値は★1以上で入力してください。',
-                'less_than_equal_to' => '評価の最小値は★5以下で入力してください。',
-                'checkRange' => '評価の最小値は最大値以下である必要があります。',
+                'less_than_equal_to'    => '評価の最小値は★5以下で入力してください。',
+                'checkRange'            => '評価の最小値は最大値以下である必要があります。',
             ],
-            'rating_max' => [
-                'integer' => '評価は★1～5で入力してください。',
+        ],
+        'rating_max' => [
+            'rules' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
+            'label' => '評価（最大）',
+            'errors' => [
+                'integer'               => '評価は★1～5で入力してください。',
                 'greater_than_equal_to' => '評価の最大値は★1以上で入力してください。',
-                'less_than_equal_to' => '評価の最大値は★5以下で入力してください。',
-            ]
+                'less_than_equal_to'    => '評価の最大値は★5以下で入力してください。',
+            ],
         ],
     ];
 }
