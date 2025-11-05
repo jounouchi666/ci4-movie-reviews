@@ -27,9 +27,17 @@ class DynamicValidationHelper
         // 追加ルールのマージ
         foreach ($fieldRule as $field => $rule) {
             if (isset($rules[$field])) {
-                $rules[$field] .= '|' . $rule;
+                if (is_array($rules[$field]) && isset($rules[$field]['rules'])) { // 配列形式のルール
+                    $rules[$field]['rules'] .= '|' . $rule;
+                } elseif (is_string($rule[$field])) { // 文字列形式のルール
+                    $rules[$field] .= '|' . $rule;
+                } else {
+                    $rules[$field] = [ // 例外：配列形式のルールだがrulesがないなど
+                        'rules' => $rule,
+                    ];
+                }
             } else {
-                $rules[$field] = $rule;
+                $rule[$field] = $rule;
             }
         }
 
