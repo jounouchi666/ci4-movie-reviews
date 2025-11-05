@@ -26,12 +26,12 @@ class ValidationRules extends ShieldValidationRules
         }
 
         $usernameRules = $this->config->usernameValidationRules;
-        $usernameRules['rules'][] = 'required';
-        $usernameRules['errors']['required'] = 'ユーザー名は必須です。';
 
         $emailRules = $this->config->emailValidationRules;
-        $emailRules['rules'][] = 'required';
-        $emailRules['errors']['required'] = 'メールアドレスは必須です。';
+        $emailRules['rules'][] = sprintf(
+            'is_unique[%s.secret]',
+            $this->tables['identities'],
+        );
 
         $passwordRules = $this->getPasswordRules();
         $passwordRules['rules'][] = 'strong_password[]';
@@ -49,10 +49,15 @@ class ValidationRules extends ShieldValidationRules
      */
     public function getEditProfileRules(): array
     {
-        $usernameRules = $this->getEditUsernameRules();
+        $usernameRules = [
+            'username' => $this->getPermitEmpty($this->config->usernameValidationRules),
+        ];
 
         $status_message = [
-            'rules' => 'permit_empty|max_length[255]',
+            'rules' => [
+                'permit_empty',
+                'max_length[255]',
+            ],
             'label' => 'ステータスメッセージ',
             'errors' => [
                 'max_length' => 'ステータスメッセージは255文字以内で入力してください。',
@@ -60,7 +65,12 @@ class ValidationRules extends ShieldValidationRules
         ];
 
         $icon = [
-            'rules' => 'is_image[icon]|mime_in[icon,image/jpg,image/jpeg,image/png]|max_size[icon,2048]',
+            'rules' => [
+                'permit_empty',
+                'is_image[icon]',
+                'mime_in[icon,image/jpg,image/jpeg,image/png]',
+                'max_size[icon,2048]',
+            ],
             'label' => 'アイコン',
             'errors' =>  [
                 'is_image' => 'アップロードされたファイルは画像ではありません',
@@ -78,12 +88,18 @@ class ValidationRules extends ShieldValidationRules
 
 
     /**
-     * ユーザー名編集用のルールを返す
+     * 編集用のルールを返す
+     * 必須入力を空白許可に変更する
      */
-    public function getEditUsernameRules(): array
+    public function getPermitEmpty($baseRule): array
     {
-        $usernameRules = $this->config->usernameValidationRules;
-        array_unshift($usernameRules['rules'], 'permit_empty');
-        return ['username' => $usernameRules];
+        // 空白許可化
+        $rules = array_filter($baseRule['rules'], fn($rule) => $rule !== 'required');
+        array_unshift($rules, 'permit_empty');
+        
+        return [
+            ...$baseRule,
+            'rules' => $rules,
+        ];
     }
 }
