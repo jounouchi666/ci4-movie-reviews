@@ -103,14 +103,18 @@ use App\Helpers\ViewDateHelper;
                                     <div class="form-floating mb-4 w-100">
                                         <input
                                             type="text"
-                                            class="form-control"
+                                            class="<?= $errors->getInputClass('username') ?> form-control"
                                             id="floatingUsernameInput"
                                             name="username"
                                             inputmode="text"
                                             autocomplete="username"
                                             placeholder="<?= lang('Auth.username') ?>"
-                                            value="<?= old('username', $user->username) ?>" required>
+                                            value="<?= old('username', $user->username) ?>"
+                                            minlength="3"
+                                            maxlength="30"
+                                        >
                                         <label for="floatingUsernameInput">ユーザー名</label>
+                                        <?= $errors->render('username') ?>
                                     </div>
                                 
                                     <div class="form-floating mb-4 w-100">
