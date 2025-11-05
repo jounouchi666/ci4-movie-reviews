@@ -86,7 +86,7 @@ class MyPage extends BaseController
 
         // バリデーション
         $rules = (new ValidationRules)->getEditProfileRules();
-        if (!$rules) {
+        if (!$this->validate($rules)) {
             $errors = $this->validator->getErrors();
             return redirect()->back()->withInput()->with('errors', $errors);
         }
