@@ -226,11 +226,13 @@ class Auth extends ShieldAuth
     public array $usernameValidationRules = [
         'label' => 'Auth.username',
         'rules' => [
+            'required',
             'max_length[30]',
             'min_length[3]',
             'regex_match[/\A[ぁ-んァ-ン一-龥a-zA-Z0-9＿ー－・.\s]+\z/u]',
         ],
         'errors' => [
+            'required' => 'ユーザー名は必須です。',
             'max_length' => 'ユーザー名は30文字以内で入力してください。',
             'min_length' => 'ユーザー名は3文字以上で入力してください。',
             'regex_match' => 'ユーザー名は、日本語・英数字・「＿」「ー」「・」「.」と空白のみ使用できます。'
@@ -249,10 +251,12 @@ class Auth extends ShieldAuth
     public array $emailValidationRules = [
         'label' => 'Auth.email',
         'rules' => [
+            'required',
             'max_length[254]',
             'valid_email',
         ],
         'errors' => [
+            'required' => 'メールアドレスは必須です。',
             'max_length' => 'メールアドレスは254文字以内で入力してください。',
             'valid_email' => '有効なメールアドレスを入力してください。',
         ],
