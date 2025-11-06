@@ -137,11 +137,7 @@ class Movies extends BaseController
      */
     public function save(): RedirectResponse
     {
-        // ログインチェック（一応）
         $userId = user_id();
-        if (!$userId) {
-            return redirect()->route('index')->with('error', 'ログイン状態を確認できなかったためリダイレクトされました');
-        }
 
         // バリデーション
         [$rules, $errors] = DynamicValidationHelper::buildRules(
@@ -187,15 +183,9 @@ class Movies extends BaseController
      */
     public function delete($id): RedirectResponse
     {
-        // 念のためログインチェック
-        $userId = user_id();
-        if (!$userId) {
-            return redirect()->route('index')->with('error', 'ログイン状態を確認できなかったためリダイレクトされました');
-        }
-
         $model = model(MovieModel::class);
         // 権限チェック
-        if (! $model->ownedByUser($id, $userId)) {
+        if (! $model->ownedByUser($id, user_id())) {
             return redirect()->back()->with('error', '権限がありません');
         }
         // 削除
