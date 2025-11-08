@@ -19,6 +19,9 @@ class UserModel extends ShieldUserModel
 
     protected $allowedFields = ['icon_path'];
 
+    protected $beforeInsert = ['hashPassword'];
+    protected $beforeUpdate = ['hashPassword'];
+
     public function __construct()
     {
         parent::__construct();
@@ -26,6 +29,22 @@ class UserModel extends ShieldUserModel
         // 継承元のallowedFieldsをマージ
         $parentFields = get_class_vars(get_parent_class($this))['allowedFields'];
         $this->allowedFields = array_merge($parentFields, $this->allowedFields);
+    }
+
+
+    /**
+     * パスワードをハッシュ化して保存する（beforeInsert / beforeUpdate用）
+     *
+     * @param array $data モデルイベントに渡されるデータ配列
+     * @return array 加工後のデータ配列
+     */
+    protected function hashPassword($data)
+    {
+        if (!empty($data['data']['password'])) {
+            $data['data']['password_hash'] = service('passwords')->hash($data['data']['password']);
+            unset($data['data']['password']);
+        }
+        return $data;
     }
 
 
