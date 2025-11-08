@@ -16,7 +16,7 @@ class ValidationRules extends ShieldValidationRules
 
 
     /**
-     * register用のルールを返す
+     * register用のルール
      */
     public function getRegistrationRules(): array
     {
@@ -45,7 +45,7 @@ class ValidationRules extends ShieldValidationRules
     }
 
     /**
-     * プロフィール編集用のルールを返す
+     * プロフィール編集用のルール
      */
     public function getEditProfileRules(): array
     {
@@ -86,16 +86,52 @@ class ValidationRules extends ShieldValidationRules
         ];
     }
 
+    /** 
+     * メールアドレス編集用のルール
+     * 
+     * @param bool $required メールアドレスを必須にする場合 true
+     */
+    public function getEditEmailRules($required = true): array
+    {
+        $emailRules = $required
+            ? $this->config->emailValidationRules
+            : $this->getPermitEmpty($this->config->emailValidationRules);
+        $emailRules['rules'][] = sprintf(
+            'is_unique[%s.secret]',
+            $this->tables['identities'],
+        );
+
+        return ['email' => $emailRules];
+    }
+
+    /** 
+     * パスワード編集用のルール
+     */
+    public function getEditPasswordRules(): array
+    {
+        $passwordRules            = $this->getPasswordRules();
+        $passwordRules['rules'][] = 'strong_password[]';
+
+        return [
+            'password'         => $passwordRules,
+            'password_confirm' => $this->getPasswordConfirmRules(),
+        ];
+    }
 
     /**
      * 編集用のルールを返す
      * 必須入力を空白許可に変更する
+     * @param array $baseRule バリデーションルール
      */
     public function getPermitEmpty($baseRule): array
     {
-        // 空白許可化
-        $rules = array_filter($baseRule['rules'], fn($rule) => $rule !== 'required');
-        array_unshift($rules, 'permit_empty');
+        if (is_array($baseRule['rules'])) {
+            $rules = array_filter($baseRule['rules'], fn($rule) => $rule !== 'required');
+            array_unshift($rules, 'permit_empty');
+        } else {
+            $rules = str_replace('required|', '', $baseRule['rules']);
+            $rules = 'permit_empty|'. ltrim($baseRule['rules'], '|');
+        }
         
         return [
             ...$baseRule,
