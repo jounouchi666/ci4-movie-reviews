@@ -79,10 +79,6 @@ class MyPage extends BaseController
     public function updateProfile(): RedirectResponse
     {
         $userId = user_id();
-        // ログインチェック
-        if (!$userId) {
-            return redirect()->route('index')->with('error', 'ログイン状態を確認できなかったためリダイレクトされました');
-        }
 
         // バリデーション
         $rules = (new ValidationRules)->getEditProfileRules();
@@ -103,5 +99,65 @@ class MyPage extends BaseController
         $userModel->update($userId, $data);
 
         return redirect()->route('userIndex')->with('message', '保存しました');
+    }
+
+
+    /**
+     * メールアドレスの編集
+     *
+     * @return RedirectResponse リダイレクト
+     */
+    public function updateEmail(): RedirectResponse
+    {
+        $rules = (new ValidationRules)->getEditEmailRules();
+        return $this->updateUserAccount('email', $rules, 'メールアドレスを更新しました');
+    }
+
+
+    /**
+     * パスワードの編集
+     *
+     * @return RedirectResponse リダイレクト
+     */
+    public function updatePassword(): RedirectResponse
+    {
+        $rules = (new ValidationRules)->getEditPasswordRules();
+        return $this->updateUserAccount(['password', 'password_confirm'], $rules, 'パスワードを更新しました');
+    }
+
+
+    /**
+     * ユーザーアカウント情報の編集（編集時にパスワードチェックが必要なもの）
+     * 
+     * @param array|string|null $index
+     * @param array $rules バリデーションルール
+     * @param string $message 成功メッセージ
+     * @return RedirectResponse リダイレクト
+     */
+    protected function updateUserAccount($index, $rules, $message): RedirectResponse
+    {
+        $user = auth()->user();
+
+        // パスワードの確認
+        $currentPassword = $this->request->getPost('current_password');
+        if(!service('passwords')->verify($currentPassword, $user->password_hash)) {
+            return redirect()->back()->with('errors', ['current_password' => '現在のパスワードが正しくありません']);
+        }
+
+        // バリデーション
+        if (!$this->validate($rules)) {
+            $errors = $this->validator->getErrors();
+            return redirect()->back()->withInput()->with('errors', $errors);
+        }
+
+        // フォームデータの保存
+        $data = is_array($index)
+            ? $this->request->getPost($index)
+            : [$index => $this->request->getPost($index)];
+
+        $userModel = model(UserModel::class);
+        $userModel->update($user->id, $data);
+
+        return redirect()->route('userIndex')->with('message', $message);
     }
 }
