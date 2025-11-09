@@ -19,6 +19,8 @@ $routes->get('user/(:num)', 'MyPage::show/$1', ['as' => 'userShow']);
 $routes->group('mypage', ['filter' => 'session'], function($routes) {
     $routes->get('', 'MyPage::index', ['as' => 'userIndex']);
     $routes->post('profile', 'MyPage::updateProfile', ['as' => 'userProfileUpdate']);
+    $routes->post('email', 'MyPage::updateEmail', ['as' => 'userEmailUpdate']);
+    $routes->post('password', 'MyPage::updatePassword', ['as' => 'userPasswordUpdate']);
 });
 
 $routes->get('register', '\App\Controllers\Auth\RegisterController::registerView', ['as' => 'register']);
