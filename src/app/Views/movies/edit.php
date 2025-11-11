@@ -36,7 +36,7 @@
             <label class="form-label" for="title">タイトル</label>
             <input
                 id="title"
-                class="<?= $errors->getInputClass('title') ?> form-control mt-1"
+                class="<?= $errors->getInputClass('title', ['form-control', 'mt-1']) ?>"
                 type="text"
                 name="title"
                 value="<?= old('title', $movie->title ?? '') ?>"
@@ -51,7 +51,7 @@
             <label class="form-label" for="year">公開年</label>
             <input
                 id="year"
-                class="<?= $errors->getInputClass('year') ?> form-control mt-1"
+                class="<?= $errors->getInputClass('year', ['form-control', 'mt-1']) ?>"
                 type="number"
                 name="year"
                 min="1900"
@@ -68,7 +68,7 @@
             <label class="form-label" for="genre">ジャンル</label>
             <input
                 id="genre"
-                class="<?= $errors->getInputClass('genre') ?> form-control mt-1"
+                class="<?= $errors->getInputClass('genre', ['form-control', 'mt-1']) ?>"
                 type="text"
                 name="genre"
                 value="<?= old('genre', $movie->genre ?? '') ?>"
@@ -81,7 +81,7 @@
         <!-- 評価 -->
         <div>
             <label class="form-label" for="rating">評価</label>
-            <select id="rating" class="<?= $errors->getInputClass('rating') ?> form-select mt-1 rating-select" name="rating" required>
+            <select id="rating" class="<?= $errors->getInputClass('rating', ['form-select', 'mt-1', 'rating-select']) ?>" name="rating" required>
                 <option class="text-muted" value="">--評価を選択--</option>
                 <?php for ($i = 1; $i <= 5; $i++): ?>
                     <option
@@ -100,7 +100,7 @@
             <label class="form-label" for="review">レビュー</label>
             <textarea 
                 id="review" 
-                class="<?= $errors->getInputClass('review') ?> form-control mt-1"
+                class="<?= $errors->getInputClass('review', ['form-control', 'mt-1']) ?>"
                 name="review" 
             ><?= old('review', $movie->review ?? '') ?></textarea>
 

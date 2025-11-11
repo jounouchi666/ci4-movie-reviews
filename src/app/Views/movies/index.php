@@ -85,7 +85,7 @@
                                         <div>
                                             <label class="form-label" for="title">タイトル</label>
                                             <input 
-                                                class="<?= $errors->getInputClass('title') ?> form-control"
+                                                class="<?= $errors->getInputClass('title', ['form-control']) ?>"
                                                 type="text"
                                                 name="title" 
                                                 value="<?= esc($filters['title'] ?? '') ?>"
@@ -126,7 +126,7 @@
                                             <div id="year_type-exact-group">
                                                 <input
                                                     id="year-exact"
-                                                    class="<?= $errors->getInputClass('year_exact') ?> form-control"
+                                                    class="<?= $errors->getInputClass('year_exact', ['form-control']) ?>"
                                                     type="number"
                                                     name="year_exact"
                                                     min="1900"
@@ -139,7 +139,7 @@
                                             <div id="year_type-range-group">
                                                 <div class="input-group">
                                                     <input
-                                                        class="<?= $errors->getInputClass('year_min') ?> form-control range-min"
+                                                        class="<?= $errors->getInputClass('year_min', ['form-control', 'range-min']) ?>"
                                                         type="number"
                                                         name="year_min"
                                                         min="1900"
@@ -152,7 +152,7 @@
                                                     <span class="input-group-text">～</span>
 
                                                     <input
-                                                        class="<?= $errors->getInputClass('year_max') ?> form-control range-max"
+                                                        class="<?= $errors->getInputClass('year_max', ['form-control', 'range-max']) ?>"
                                                         type="number"
                                                         name="year_max"
                                                         min="1900"
@@ -170,7 +170,7 @@
                                             <label class="form-label" for="genre">ジャンル</label>
                                             <input
                                                 id="genre"
-                                                class="<?= $errors->getInputClass('genre') ?> form-control"
+                                                class="<?= $errors->getInputClass('genre', ['form-control']) ?>"
                                                 type="text"
                                                 name="genre"
                                                 value="<?= esc($filters['genre'] ?? '') ?>"
@@ -209,7 +209,7 @@
                                             </div>
                                             
                                             <div id="rating_type-exact-group">
-                                                <select id="rating-exact" class="<?= $errors->getInputClass('rating_exact') ?> form-select rating-select" name="rating_exact">
+                                                <select id="rating-exact" class="<?= $errors->getInputClass('rating_exact', ['form-select', 'rating-select']) ?>" name="rating_exact">
                                                     <option value=""></option>
                                                     <?php for ($i = 1; $i <= 5; $i++): ?>
                                                         <option class="text-warning" value="<?= $i ?>"
@@ -222,7 +222,7 @@
                                             
                                             <div id="rating_type-range-group">
                                                 <div class="input-group">
-                                                    <select id="rating-min" class="<?= $errors->getInputClass('rating_min') ?> form-select rating-select" name="rating_min">
+                                                    <select id="rating-min" class="<?= $errors->getInputClass('rating_min', ['form-select', 'rating-select']) ?>" name="rating_min">
                                                         <option class="text-muted" value="">-- 下限 --</option>
                                                         <?php for ($i = 1; $i <= 5; $i++): ?>
                                                             <option class="text-warning" value="<?= $i ?>"
@@ -235,7 +235,7 @@
                                                     
                                                     <span class="input-group-text">～</span>
 
-                                                    <select class="<?= $errors->getInputClass('rating_max') ?> form-select rating-select" name="rating_max">
+                                                    <select class="<?= $errors->getInputClass('rating_max', ['form-select', 'rating-select']) ?>" name="rating_max">
                                                         <option class="text-muted" value="">-- 上限 --</option>
                                                         <?php for ($i = 1; $i <= 5; $i++): ?>
                                                             <option class="text-warning" value="<?= $i ?>"
