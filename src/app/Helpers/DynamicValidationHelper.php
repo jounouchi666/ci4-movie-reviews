@@ -43,10 +43,19 @@ class DynamicValidationHelper
 
         // エラーメッセージのマージ
         foreach ($fieldErrors as $field => $error) {
+            // _errors定義用
             if (!isset($errors[$field])) {
                 $errors[$field] = [];
             }
             $errors[$field] = array_merge($errors[$field], $error);
+
+            // rules配列のerrors用
+            if (isset($rules[$field])) {
+                if (!isset($rules[$field]['errors'])) {
+                    $rules[$field]['errors'] = [];
+                }
+                $rules[$field]['errors'] = array_merge($rules[$field]['errors'], $error);
+            }
         }
 
         return [$rules, $errors];
