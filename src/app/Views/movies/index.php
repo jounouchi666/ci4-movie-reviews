@@ -160,8 +160,8 @@
                                                         value="<?= esc($filters['year_max'] ?? '') ?>"
                                                         placeholder="上限"
                                                     >
+                                                    <?= $errors->render('year_max') ?>
                                                 </div>
-                                                <?= $errors->render('year_max') ?>
                                             </div>
                                         </div>
                                         
