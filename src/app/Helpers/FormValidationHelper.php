@@ -31,12 +31,18 @@ class FormValidationHelper
     /**
      * 指定したキーがエラーかどうかを返す
      *
-     * @param  string $key キー
-     * @return bool エラーならtrue
+     * @param  string|array $key キー
+     * @return bool 1つでもエラーならtrue
      */
-    public function hasError(string $key): bool
+    public function hasError(string|array $key): bool
     {
-        return !empty($this->errors[$key]);
+        $keys = is_array($key) ? $key : [$key];
+        foreach ($keys as $k) {
+            if (!empty($this->errors[$k])) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
