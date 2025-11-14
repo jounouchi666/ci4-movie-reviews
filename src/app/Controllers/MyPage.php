@@ -110,7 +110,7 @@ class MyPage extends BaseController
     public function updateEmail(): RedirectResponse
     {
         $rules = (new ValidationRules)->getEditEmailRules();
-        return $this->updateUserAccount('email', $rules, 'メールアドレスを更新しました');
+        return $this->updateUserAccount('email', $rules, 'メールアドレスを更新しました', 'current_password_for_email');
     }
 
 
@@ -122,7 +122,12 @@ class MyPage extends BaseController
     public function updatePassword(): RedirectResponse
     {
         $rules = (new ValidationRules)->getEditPasswordRules();
-        return $this->updateUserAccount(['password', 'password_confirm'], $rules, 'パスワードを更新しました');
+        return $this->updateUserAccount(
+            ['password', 'password_confirm'],
+            $rules,
+            'パスワードを更新しました',
+            'current_password_for_password',
+        );
     }
 
 
@@ -132,16 +137,17 @@ class MyPage extends BaseController
      * @param array|string|null $index
      * @param array $rules バリデーションルール
      * @param string $message 成功メッセージ
+     * @param string $currentPasswordName current_passwordに該当するname
      * @return RedirectResponse リダイレクト
      */
-    protected function updateUserAccount($index, $rules, $message): RedirectResponse
+    protected function updateUserAccount($index, $rules, $message, $currentPasswordName = 'current_password'): RedirectResponse
     {
         $user = auth()->user();
 
         // パスワードの確認
-        $currentPassword = $this->request->getPost('current_password');
+        $currentPassword = $this->request->getPost($currentPasswordName);
         if(!service('passwords')->verify($currentPassword, $user->password_hash)) {
-            return redirect()->back()->with('errors', ['current_password' => '現在のパスワードが正しくありません']);
+            return redirect()->back()->with('errors', [$currentPasswordName => '現在のパスワードが正しくありません']);
         }
 
         // バリデーション
@@ -156,7 +162,9 @@ class MyPage extends BaseController
             : [$index => $this->request->getPost($index)];
 
         $userModel = model(UserModel::class);
-        $userModel->update($user->id, $data);
+        $user = $userModel->findById($user->id);
+        $user->fill($data);
+        $userModel->save($user);
 
         return redirect()->route('userIndex')->with('message', $message);
     }
