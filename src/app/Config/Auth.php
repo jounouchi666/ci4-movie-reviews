@@ -454,7 +454,14 @@ class Auth extends ShieldAuth
     public function loginRedirect(): string
     {
         $session = session();
-        $url     = $session->getTempdata('beforeLoginUrl') ?? setting('Auth.redirects')['login'];
+        $before = $session->getTempdata('beforeLoginUrl');
+
+        // POSTの場合は無視するようにする
+        if ($before && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $before = null;
+        }
+        
+        $url = $before ?? setting('Auth.redirects')['login'];
 
         return $this->getUrl($url);
     }
