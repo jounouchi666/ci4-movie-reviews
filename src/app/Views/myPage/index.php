@@ -6,16 +6,16 @@
 
 use App\Helpers\FormValidationHelper;
 use App\Helpers\ViewDateHelper;
+
+$profileEditKeys = ['icon', 'username', 'status_message'];
+$emailEditKeys = ['email', 'current_password_for_email'];
+$passwordEditKeys = ['current_password_for_password', 'password', 'password_confirm'];
+
 ?>
 
 <main class="container py-3">
     <?php if (session('message')): ?>
-        <div class="alert alert-success flash-success d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-            </svg>
-            <div><?= esc(session('message')) ?></div>
-        </div>
+        <?= view('components/alerts/success', ['message' => session('message')]) ?>
     <?php endif ?>
     
     <div class="row g-4">
@@ -56,84 +56,259 @@ use App\Helpers\ViewDateHelper;
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <?= 
-                                    form_open(route_to('userProfileUpdate'),[
-                                        'method' => 'post',
-                                        'enctype' => 'multipart/form-data',
-                                        'id' => 'userProfileUpdateForm',
-                                        'class' => 'w-100 d-flex flex-column align-items-center'
-                                    ])
-                                ?>
-                                    <?= csrf_field() ?>
 
-                                    <?php if ($errors->hasAny()): ?>
-                                        <div class="alert alert-danger w-100 d-flex align-items-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-                                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                                            </svg>   
-                                            <div>入力内容に誤りがあります。修正してください。</div>
-                                        </div>
-                                    <?php endif ?>
+                                <ul id="profileEditTabs" class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button id="profile-tab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-tab-pane">プロフィール</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button id="account-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#account-tab-pane">会員情報</button>
+                                    </li>
+                                </ul>
 
-                                    <div class="mb-4 w-100">
-                                        <label  class="form-label text-align-start" for="userIconInput">ユーザーアイコン</label>
-                                        <div class="mb-3 d-inline-block w-100 mx-auto position-relative spinner-wrapper">
-                                            <img
-                                                src="<?= $user->thumb_urls[120] ?>"
-                                                alt="<?= $user->username ?>のアイコン"
-                                                id="preview-user-icon"
-                                                class="rounded-circle border shadow-sm profile-icon"
-                                                loading="lazy"
-                                            >
-                                            <div style="display: none;" class="spinner-border text-secondary position-absolute top-0 bottom-0 start-0 end-0 m-auto" role="status">
-                                                <span class="visually-hidden">Loading...</span>
+                                <div id="profileEditTabContent" class="tab-content">
+
+                                    <div
+                                        id="profile-tab-pane"
+                                        class="tab-pane fade show active"
+                                        role="tabpanel"
+                                        aria-labelledby="profile-tab"
+                                        tabindex="0"
+                                        data-has-error="<?= $errors->whenHasErrorsIn($profileEditKeys, 'true', 'false') ?>"
+                                    >
+                                        <?= 
+                                            form_open(route_to('userProfileUpdate'),[
+                                                'method' => 'post',
+                                                'enctype' => 'multipart/form-data',
+                                                'id' => 'userProfileUpdateForm',
+                                                'class' => 'mt-4 w-100 d-flex flex-column align-items-center'
+                                            ])
+                                        ?>
+                                            <?= csrf_field() ?>
+
+                                            <?php if ($errors->hasError($profileEditKeys)): ?>
+                                                <?= view('components/alerts/danger') ?>
+                                            <?php endif ?>
+
+                                            <div class="mb-4 w-100">
+                                                <label  class="form-label text-align-start" for="userIconInput">ユーザーアイコン</label>
+                                                <div class="mb-3 d-inline-block w-100 mx-auto position-relative spinner-wrapper">
+                                                    <img
+                                                        src="<?= $user->thumb_urls[120] ?>"
+                                                        alt="<?= $user->username ?>のアイコン"
+                                                        id="preview-user-icon"
+                                                        class="rounded-circle border shadow-sm profile-icon"
+                                                        loading="lazy"
+                                                    >
+                                                    <div style="display: none;" class="spinner-border text-secondary position-absolute top-0 bottom-0 start-0 end-0 m-auto" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    id="userIconInput"
+                                                    class="<?= $errors->getInputClass('icon', ['form-control', 'form-control-sm', 'image-preview']) ?>"
+                                                    type="file"
+                                                    name="icon"
+                                                    accept="image/jpg, image/jpeg, image/png"
+                                                    data-preview-target="preview-user-icon"
+                                                >
+                                                <?= $errors->render('icon') ?>
                                             </div>
-                                        </div>
-                                        <input
-                                            id="userIconInput"
-                                            class="<?= $errors->getInputClass('icon') ?> form-control form-control-sm image-preview"
-                                            type="file"
-                                            name="icon"
-                                            accept="image/jpg, image/jpeg, image/png"
-                                            data-preview-target="preview-user-icon"
-                                        >
-                                        <?= $errors->render('icon') ?>
+
+                                            <div class="form-floating mb-4 w-100">
+                                                <input
+                                                    type="text"
+                                                    class="<?= $errors->getInputClass('username', ['form-control']) ?>"
+                                                    id="floatingUsernameInput"
+                                                    name="username"
+                                                    inputmode="text"
+                                                    autocomplete="username"
+                                                    placeholder="<?= lang('Auth.username') ?>"
+                                                    value="<?= old('username', $user->username) ?>"
+                                                    minlength="3"
+                                                    maxlength="30"
+                                                >
+                                                <label for="floatingUsernameInput">ユーザー名</label>
+                                                <?= $errors->render('username') ?>
+                                            </div>
+                                        
+                                            <div class="form-floating mb-4 w-100">
+                                                <textarea
+                                                    class="<?= $errors->getInputClass('status_message', ['form-control', 'fixed-textarea']) ?>"
+                                                    id="floatingStatusMessageInput"
+                                                    name="status_message"
+                                                    inputmode="text"
+                                                    maxlength="255"
+                                                    autocomplete="status_message"
+                                                    placeholder="ステータスメッセージ"
+                                                ><?= old('status_message', $user->status_message ?? '') ?></textarea>
+                                                <label for="floatingStatusMessageInput">ステータスメッセージ</label>
+                                                <?= $errors->render('status_message') ?>
+                                            </div>
+
+                                            <input class="ms-auto d-inline-block btn btn-success" type="submit" value="プロフィールを変更">    
+                                            
+                                        <?= form_close() ?>
                                     </div>
 
-                                    <div class="form-floating mb-4 w-100">
-                                        <input
-                                            type="text"
-                                            class="<?= $errors->getInputClass('username') ?> form-control"
-                                            id="floatingUsernameInput"
-                                            name="username"
-                                            inputmode="text"
-                                            autocomplete="username"
-                                            placeholder="<?= lang('Auth.username') ?>"
-                                            value="<?= old('username', $user->username) ?>"
-                                            minlength="3"
-                                            maxlength="30"
-                                        >
-                                        <label for="floatingUsernameInput">ユーザー名</label>
-                                        <?= $errors->render('username') ?>
+                                    <div
+                                        id="account-tab-pane"
+                                        class="tab-pane fade"
+                                        role="tabpanel"
+                                        aria-labelledby="account-tab"
+                                        tabindex="0"
+                                        data-has-error="<?= $errors->whenHasErrorsIn([...$emailEditKeys, ...$passwordEditKeys], 'true', 'false') ?>"
+                                    >
+                                        <div class="mt-4">
+                                            <div class="btn-group mb-4 w-100" role="group">
+                                                <input
+                                                    id="btnradio-email"
+                                                    class="btn-check"
+                                                    name="account-edit-radio"
+                                                    type="radio"
+                                                    data-target="email-form"
+                                                    data-has-error="<?= $errors->whenHasErrorsIn($emailEditKeys, 'true', 'false') ?>"
+                                                    autocomplete="off"
+                                                    checked
+                                                >
+                                                <label class="btn btn-outline-primary w-50" for="btnradio-email">メールアドレスを変更</label>
+                                                <input
+                                                    id="btnradio-password"
+                                                    class="btn-check"
+                                                    name="account-edit-radio"
+                                                    type="radio"
+                                                    data-target="password-form"
+                                                    data-has-error="<?= $errors->whenHasErrorsIn($passwordEditKeys, 'true', 'false') ?>"
+                                                    autocomplete="off"
+                                                >
+                                                <label class="btn btn-outline-primary w-50" for="btnradio-password">パスワードを変更</label>
+                                                </button>
+                                            </div>
+
+                                            <?= 
+                                                form_open(route_to('userEmailUpdate'), [
+                                                    'method' => 'post',
+                                                    'id' => 'email-form',
+                                                    'class' => 'd-flex flex-column align-items-center account-form w-100'
+                                                ])
+                                            ?>
+                                                <?= csrf_field() ?>
+
+                                                <?php if ($errors->hasError($emailEditKeys)): ?>
+                                                    <?= view('components/alerts/danger') ?>
+                                                <?php endif ?>
+
+                                                <div class="form-floating mb-4 w-100">
+                                                    <input
+                                                        id="newEmail"
+                                                        class="<?= $errors->getInputClass('email', ['form-control']) ?>"
+                                                        type="email"
+                                                        name="email"
+                                                        inputmode="email"
+                                                        autocomplete="email"
+                                                        placeholder="新しいメールアドレス"
+                                                        value="<?= old('email') ?>"
+                                                        required
+                                                    >
+                                                    <label for="newEmail">新しいメールアドレス</label>
+                                                    <?= $errors->render('email') ?>
+                                                </div>
+
+                                                <div class="form-floating mb-4 w-100">
+                                                    <input
+                                                        id="currentPasswordForEmail"
+                                                        class="<?= $errors->getInputClass('current_password_for_email', ['form-control']) ?>"
+                                                        type="password"
+                                                        name="current_password_for_email"
+                                                        inputmode="text"
+                                                        autocomplete="current_password_for_email"
+                                                        placeholder="現在のパスワード"
+                                                        required
+                                                    >
+                                                    <label for="currentPasswordForEmail">現在のパスワード</label>
+                                                    <?= $errors->render('current_password_for_email') ?>
+                                                </div>
+
+                                                <button class="ms-auto d-inline-block btn btn-success" type="submit">メールアドレスを変更</button>
+                                            
+                                            <?= form_close() ?>
+
+                                            <?= 
+                                                form_open(route_to('userPasswordUpdate'), [
+                                                    'method' => 'post',
+                                                    'id' => 'password-form',
+                                                    'class' => 'd-flex flex-column align-items-center account-form w-100 d-none'
+                                                ])
+                                            ?>
+                                                <?= csrf_field() ?>
+
+                                                <?php if ($errors->hasError($passwordEditKeys)): ?>
+                                                    <?= view('components/alerts/danger') ?>
+                                                <?php endif ?>
+
+                                                <div class="form-floating mb-4 w-100">
+                                                    <input
+                                                        id="current_password_for_password"
+                                                        class="<?= $errors->getInputClass('current_password_for_password', ['form-control']) ?>"
+                                                        type="password"
+                                                        name="current_password_for_password"
+                                                        inputmode="text"
+                                                        autocomplete="current_password_for_password"
+                                                        placeholder="現在のパスワード"
+                                                        required
+                                                    >
+                                                    <label for="current_password_for_password">現在のパスワード</label>
+                                                    <?= $errors->render('current_password_for_password') ?>
+                                                </div>
+
+                                                <div class="form-floating mb-2 w-100">
+                                                    <input
+                                                        id="password"
+                                                        class="<?= $errors->getInputClass('password', ['form-control']) ?>"
+                                                        type="password"
+                                                        name="password"
+                                                        inputmode="text"
+                                                        autocomplete="password"
+                                                        placeholder="新しいパスワード"
+                                                        required
+                                                    >
+                                                    <label for="password">新しいパスワード</label>
+                                                    <?= $errors->render('password') ?>
+                                                </div>
+
+                                                <div class="form-floating mb-4 w-100">
+                                                    <input
+                                                        id="passwordConfirm"
+                                                        class="<?= $errors->getInputClass('password_confirm', ['form-control']) ?>"
+                                                        type="password"
+                                                        name="password_confirm"
+                                                        inputmode="text"
+                                                        autocomplete="password_confirm"
+                                                        placeholder="新しいパスワード（再入力）"
+                                                        required
+                                                    >
+                                                    <label for="passwordConfirm">新しいパスワード（再入力）</label>
+                                                    <?= $errors->render('password_confirm') ?>
+                                                </div>
+
+                                                <button class="ms-auto d-inline-block btn btn-success" type="submit">パスワードを変更</button>
+
+                                            <?= form_close() ?>
+                                            <script>
+                                                document.querySelectorAll('#account-tab-pane .btn-check').forEach(input => {
+                                                input.addEventListener('click', e => {
+                                                    const target = input.dataset.target;
+                                                    input.checked = true;
+                                                    document.querySelectorAll('#account-tab-pane .account-form').forEach(form => {
+                                                    form.classList.toggle('d-none', form.id !== target);
+                                                    });
+                                                });
+                                                });
+                                            </script>
+                                        </div>
                                     </div>
-                                
-                                    <div class="form-floating mb-4 w-100">
-                                        <textarea
-                                            class="<?= $errors->getInputClass('status_message') ?> form-control fixed-textarea"
-                                            id="floatingStatusMessageInput"
-                                            name="status_message"
-                                            inputmode="text"
-                                            maxlength="255"
-                                            autocomplete="status_message"
-                                            placeholder="ステータスメッセージ"
-                                        ><?= old('status_message', $user->status_message ?? '') ?></textarea>
-                                        <label for="floatingStatusMessageInput">ステータスメッセージ</label>
-                                        <?= $errors->render('status_message') ?>
-                                    </div>
-                                <?= form_close() ?>
-                            </div>
-                            <div class="modal-footer">
-                                <input class="btn btn-success" type="submit" form="userProfileUpdateForm" value="保存">
+                                </div>
+
                             </div>
                         </div>
                     </div>
