@@ -101,4 +101,17 @@ class FormValidationHelper
         $value = $this->hasAny() ? $then : $else;
         return is_array($value) ? implode(' ', $value) : $value;
     }
+
+    /**
+     * 指定したキーの中でバリデーションエラーがあるかどうかで返す値を切り替える
+     *
+     * @param  string|array $key キー
+     * @param  string|array $then バリデーションエラーがある場合に返す値
+     * @param  string|array $else バリデーションエラーがない場合に返す値。省略時は空文字
+     * @return string 評価結果の文字列
+     */
+    public function whenHasErrorsIn(string|array $key, string|array $then, string|array $else = ''): string {
+        $value = $this->hasError($key) ? $then : $else;
+        return is_array($value) ? implode(' ', $value) : $value;
+    }
 }
