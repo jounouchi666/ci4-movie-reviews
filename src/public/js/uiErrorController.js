@@ -19,6 +19,17 @@ export function selectTabWithError(navTabs) {
 
 
 /**
+ * エラーフラグを持っていたらリストグループを開く
+ * @param {HTMLElement} listGroup
+ */
+export function selectListGroupWithError(listGroup) {
+    listGroup.querySelectorAll('.list-group-item').forEach(triggerEl => {
+        whenHasError(triggerEl, selectTab, triggerEl);
+    });
+}
+
+
+/**
  * モーダルを開く
  * @param {HTMLElement} modal 
  */
