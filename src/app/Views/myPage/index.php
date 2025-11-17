@@ -158,151 +158,142 @@ $passwordEditKeys = ['current_password_for_password', 'password', 'password_conf
 
                                     <div id="account-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="account-tab" tabindex="0">
                                         <div class="mt-4">
-                                            <div class="btn-group mb-4 w-100" role="group">
-                                                <input
-                                                    id="btnradio-email"
-                                                    class="btn-check"
-                                                    name="account-edit-radio"
-                                                    type="radio"
-                                                    data-target="email-form"
+                                            <div class="list-group list-group-horizontal mb-4 w-100" role="tablist">
+                                                <button
+                                                    id="list-email-list"
+                                                    class="list-group-item list-group-item-action active text-center"
+                                                    data-bs-toggle="list"
+                                                    data-bs-target="#list-email"
                                                     data-has-error="<?= $errors->whenHasErrorsIn($emailEditKeys, 'true', 'false') ?>"
-                                                    autocomplete="off"
-                                                    checked
-                                                >
-                                                <label class="btn btn-outline-primary w-50" for="btnradio-email">メールアドレスを変更</label>
-                                                <input
-                                                    id="btnradio-password"
-                                                    class="btn-check"
-                                                    name="account-edit-radio"
-                                                    type="radio"
-                                                    data-target="password-form"
+                                                    role="tab"
+                                                    aria-controls="list-email"
+                                                >メールアドレスを変更</button>
+                                                <button
+                                                    id="list-password-list"
+                                                    class="list-group-item list-group-item-action text-center"
+                                                    data-bs-toggle="list"
+                                                    data-bs-target="#list-password"
                                                     data-has-error="<?= $errors->whenHasErrorsIn($passwordEditKeys, 'true', 'false') ?>"
-                                                    autocomplete="off"
-                                                >
-                                                <label class="btn btn-outline-primary w-50" for="btnradio-password">パスワードを変更</label>
-                                                </button>
+                                                    role="tab"
+                                                    aria-controls="list-password"
+                                                >パスワードを変更</button>
                                             </div>
 
-                                            <?= 
-                                                form_open(route_to('userEmailUpdate'), [
-                                                    'method' => 'post',
-                                                    'id' => 'email-form',
-                                                    'class' => 'd-flex flex-column align-items-center account-form w-100'
-                                                ])
-                                            ?>
-                                                <?= csrf_field() ?>
+                                            <div class="tab-content">
+                                                <div id="list-email" class="tab-pane fade show active w-100" role="tabpanel" aria-labelledby="list-email-list">
+                                                    <?= 
+                                                        form_open(route_to('userEmailUpdate'), [
+                                                            'method' => 'post',
+                                                            'id' => 'email-form',
+                                                            'class' => 'd-flex flex-column align-items-center w-100',
+                                                        ])
+                                                    ?>
+                                                        <?= csrf_field() ?>
 
-                                                <?php if ($errors->hasError($emailEditKeys)): ?>
-                                                    <?= view('components/alerts/danger') ?>
-                                                <?php endif ?>
+                                                        <?php if ($errors->hasError($emailEditKeys)): ?>
+                                                            <?= view('components/alerts/danger') ?>
+                                                        <?php endif ?>
 
-                                                <div class="form-floating mb-4 w-100">
-                                                    <input
-                                                        id="newEmail"
-                                                        class="<?= $errors->getInputClass('email', ['form-control']) ?>"
-                                                        type="email"
-                                                        name="email"
-                                                        inputmode="email"
-                                                        autocomplete="email"
-                                                        placeholder="新しいメールアドレス"
-                                                        value="<?= old('email') ?>"
-                                                        required
-                                                    >
-                                                    <label for="newEmail">新しいメールアドレス</label>
-                                                    <?= $errors->render('email') ?>
+                                                        <div class="form-floating mb-4 w-100">
+                                                            <input
+                                                                id="newEmail"
+                                                                class="<?= $errors->getInputClass('email', ['form-control']) ?>"
+                                                                type="email"
+                                                                name="email"
+                                                                inputmode="email"
+                                                                autocomplete="email"
+                                                                placeholder="新しいメールアドレス"
+                                                                value="<?= old('email') ?>"
+                                                                required
+                                                            >
+                                                            <label for="newEmail">新しいメールアドレス</label>
+                                                            <?= $errors->render('email') ?>
+                                                        </div>
+
+                                                        <div class="form-floating mb-4 w-100">
+                                                            <input
+                                                                id="currentPasswordForEmail"
+                                                                class="<?= $errors->getInputClass('current_password_for_email', ['form-control']) ?>"
+                                                                type="password"
+                                                                name="current_password_for_email"
+                                                                inputmode="text"
+                                                                autocomplete="current_password_for_email"
+                                                                placeholder="現在のパスワード"
+                                                                required
+                                                            >
+                                                            <label for="currentPasswordForEmail">現在のパスワード</label>
+                                                            <?= $errors->render('current_password_for_email') ?>
+                                                        </div>
+
+                                                        <button class="ms-auto d-inline-block btn btn-success" type="submit">メールアドレスを変更</button>
+                                                    
+                                                        <?= form_close() ?>
                                                 </div>
 
-                                                <div class="form-floating mb-4 w-100">
-                                                    <input
-                                                        id="currentPasswordForEmail"
-                                                        class="<?= $errors->getInputClass('current_password_for_email', ['form-control']) ?>"
-                                                        type="password"
-                                                        name="current_password_for_email"
-                                                        inputmode="text"
-                                                        autocomplete="current_password_for_email"
-                                                        placeholder="現在のパスワード"
-                                                        required
-                                                    >
-                                                    <label for="currentPasswordForEmail">現在のパスワード</label>
-                                                    <?= $errors->render('current_password_for_email') ?>
+                                                <div id="list-password" class="tab-pane fade w-100" role="tabpanel" aria-labelledby="list-password-list">
+                                                    <?= 
+                                                        form_open(route_to('userPasswordUpdate'), [
+                                                            'method' => 'post',
+                                                            'id' => 'password-form',
+                                                            'class' => 'd-flex flex-column align-items-center account-form w-100',
+                                                        ])
+                                                    ?>
+                                                        <?= csrf_field() ?>
+
+                                                        <?php if ($errors->hasError($passwordEditKeys)): ?>
+                                                            <?= view('components/alerts/danger') ?>
+                                                        <?php endif ?>
+
+                                                        <div class="form-floating mb-4 w-100">
+                                                            <input
+                                                                id="current_password_for_password"
+                                                                class="<?= $errors->getInputClass('current_password_for_password', ['form-control']) ?>"
+                                                                type="password"
+                                                                name="current_password_for_password"
+                                                                inputmode="text"
+                                                                autocomplete="current_password_for_password"
+                                                                placeholder="現在のパスワード"
+                                                                required
+                                                            >
+                                                            <label for="current_password_for_password">現在のパスワード</label>
+                                                            <?= $errors->render('current_password_for_password') ?>
+                                                        </div>
+
+                                                        <div class="form-floating mb-2 w-100">
+                                                            <input
+                                                                id="password"
+                                                                class="<?= $errors->getInputClass('password', ['form-control']) ?>"
+                                                                type="password"
+                                                                name="password"
+                                                                inputmode="text"
+                                                                autocomplete="password"
+                                                                placeholder="新しいパスワード"
+                                                                required
+                                                            >
+                                                            <label for="password">新しいパスワード</label>
+                                                            <?= $errors->render('password') ?>
+                                                        </div>
+
+                                                        <div class="form-floating mb-4 w-100">
+                                                            <input
+                                                                id="passwordConfirm"
+                                                                class="<?= $errors->getInputClass('password_confirm', ['form-control']) ?>"
+                                                                type="password"
+                                                                name="password_confirm"
+                                                                inputmode="text"
+                                                                autocomplete="password_confirm"
+                                                                placeholder="新しいパスワード（再入力）"
+                                                                required
+                                                            >
+                                                            <label for="passwordConfirm">新しいパスワード（再入力）</label>
+                                                            <?= $errors->render('password_confirm') ?>
+                                                        </div>
+
+                                                        <button class="ms-auto d-inline-block btn btn-success" type="submit">パスワードを変更</button>
+
+                                                    <?= form_close() ?>
                                                 </div>
-
-                                                <button class="ms-auto d-inline-block btn btn-success" type="submit">メールアドレスを変更</button>
-                                            
-                                            <?= form_close() ?>
-
-                                            <?= 
-                                                form_open(route_to('userPasswordUpdate'), [
-                                                    'method' => 'post',
-                                                    'id' => 'password-form',
-                                                    'class' => 'd-flex flex-column align-items-center account-form w-100 d-none'
-                                                ])
-                                            ?>
-                                                <?= csrf_field() ?>
-
-                                                <?php if ($errors->hasError($passwordEditKeys)): ?>
-                                                    <?= view('components/alerts/danger') ?>
-                                                <?php endif ?>
-
-                                                <div class="form-floating mb-4 w-100">
-                                                    <input
-                                                        id="current_password_for_password"
-                                                        class="<?= $errors->getInputClass('current_password_for_password', ['form-control']) ?>"
-                                                        type="password"
-                                                        name="current_password_for_password"
-                                                        inputmode="text"
-                                                        autocomplete="current_password_for_password"
-                                                        placeholder="現在のパスワード"
-                                                        required
-                                                    >
-                                                    <label for="current_password_for_password">現在のパスワード</label>
-                                                    <?= $errors->render('current_password_for_password') ?>
-                                                </div>
-
-                                                <div class="form-floating mb-2 w-100">
-                                                    <input
-                                                        id="password"
-                                                        class="<?= $errors->getInputClass('password', ['form-control']) ?>"
-                                                        type="password"
-                                                        name="password"
-                                                        inputmode="text"
-                                                        autocomplete="password"
-                                                        placeholder="新しいパスワード"
-                                                        required
-                                                    >
-                                                    <label for="password">新しいパスワード</label>
-                                                    <?= $errors->render('password') ?>
-                                                </div>
-
-                                                <div class="form-floating mb-4 w-100">
-                                                    <input
-                                                        id="passwordConfirm"
-                                                        class="<?= $errors->getInputClass('password_confirm', ['form-control']) ?>"
-                                                        type="password"
-                                                        name="password_confirm"
-                                                        inputmode="text"
-                                                        autocomplete="password_confirm"
-                                                        placeholder="新しいパスワード（再入力）"
-                                                        required
-                                                    >
-                                                    <label for="passwordConfirm">新しいパスワード（再入力）</label>
-                                                    <?= $errors->render('password_confirm') ?>
-                                                </div>
-
-                                                <button class="ms-auto d-inline-block btn btn-success" type="submit">パスワードを変更</button>
-
-                                            <?= form_close() ?>
-                                            <script>
-                                                document.querySelectorAll('#account-tab-pane .btn-check').forEach(input => {
-                                                input.addEventListener('click', e => {
-                                                    const target = input.dataset.target;
-                                                    input.checked = true;
-                                                    document.querySelectorAll('#account-tab-pane .account-form').forEach(form => {
-                                                    form.classList.toggle('d-none', form.id !== target);
-                                                    });
-                                                });
-                                                });
-                                            </script>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

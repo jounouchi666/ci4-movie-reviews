@@ -4,7 +4,7 @@ import { formSubmitToggler } from "./FormSubmitToggler.js";
 import { initImagePrevieWithSpinner } from "./initImagePreview.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
-import { openModalByError, selectTabWithError } from "./uiErrorController.js";
+import { openModalByError, selectListGroupWithError, selectTabWithError } from "./uiErrorController.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // バリデーションエラーを持つコンテンツを表示状態にする
     document.querySelectorAll('.modal').forEach(openModalByError); // モーダル
-    document.querySelectorAll('.nav-tabs').forEach(selectTabWithError); //タブ
+    document.querySelectorAll('.nav-tabs').forEach(selectTabWithError); // タブ
+    document.querySelectorAll('.list-group').forEach(selectListGroupWithError); // リストグループ
 
 
     // フォーム内のsubmitボタンの活性/非活性化
