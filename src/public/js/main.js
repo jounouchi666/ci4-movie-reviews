@@ -1,13 +1,11 @@
 import { autoSlideUp } from "./autoSlideUp.js";
 import { cleanQueryParam } from "./cleanQueryParam.js";
 import { formSubmitToggler } from "./FormSubmitToggler.js";
-import { initImagePreview } from "./initImagePreview.js";
+import { initImagePrevieWithSpinner } from "./initImagePreview.js";
 import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
 import { openModalByError } from "./modalOpener.js";
-import OverflowSpinner from "./OverflowSpinner.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
-import ValidationHelper from "./validationHelper.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     // フラッシュメッセージの自動フェードアウト
@@ -67,24 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 画像ファイルのプレビュー機能
     document.querySelectorAll('.image-preview').forEach(input => {
         const previewTarget = document.getElementById(input.dataset.previewTarget);
-        if (!previewTarget) return;
-
-        // スピナー
-        const spinnerWrapper = previewTarget.closest('.spinner-wrapper');
-        const spinner = new OverflowSpinner(spinnerWrapper);
-
-        initImagePreview(
-            input,
-            loadingResult => {
-                if (loadingResult.state === 'error') {
-                    ValidationHelper.toggleInvalid(input);
-                    ValidationHelper.addInvalidFeedback(loadingResult.message, input);
-                } else if (loadingResult.state === 'done') {
-                    ValidationHelper.toggleValid(input);
-                    ValidationHelper.removeInvalidFeedback(input);
-                }
-            },
-            spinner
-        );
+        initImagePrevieWithSpinner(input, previewTarget);
     });
 })
