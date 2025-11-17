@@ -59,23 +59,28 @@ $passwordEditKeys = ['current_password_for_password', 'password', 'password_conf
 
                                 <ul id="profileEditTabs" class="nav nav-tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button id="profile-tab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-tab-pane">プロフィール</button>
+                                        <button
+                                            id="profile-tab"
+                                            class="nav-link active"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#profile-tab-pane"
+                                            data-has-error="<?= $errors->whenHasErrorsIn($profileEditKeys, 'true', 'false') ?>"
+                                        >プロフィール</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button id="account-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#account-tab-pane">会員情報</button>
+                                        <button
+                                            id="account-tab"
+                                            class="nav-link"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#account-tab-pane"
+                                            data-has-error="<?= $errors->whenHasErrorsIn([...$emailEditKeys, ...$passwordEditKeys], 'true', 'false') ?>"
+                                        >会員情報</button>
                                     </li>
                                 </ul>
 
                                 <div id="profileEditTabContent" class="tab-content">
 
-                                    <div
-                                        id="profile-tab-pane"
-                                        class="tab-pane fade show active"
-                                        role="tabpanel"
-                                        aria-labelledby="profile-tab"
-                                        tabindex="0"
-                                        data-has-error="<?= $errors->whenHasErrorsIn($profileEditKeys, 'true', 'false') ?>"
-                                    >
+                                    <div id="profile-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                         <?= 
                                             form_open(route_to('userProfileUpdate'),[
                                                 'method' => 'post',
@@ -151,14 +156,7 @@ $passwordEditKeys = ['current_password_for_password', 'password', 'password_conf
                                         <?= form_close() ?>
                                     </div>
 
-                                    <div
-                                        id="account-tab-pane"
-                                        class="tab-pane fade"
-                                        role="tabpanel"
-                                        aria-labelledby="account-tab"
-                                        tabindex="0"
-                                        data-has-error="<?= $errors->whenHasErrorsIn([...$emailEditKeys, ...$passwordEditKeys], 'true', 'false') ?>"
-                                    >
+                                    <div id="account-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="account-tab" tabindex="0">
                                         <div class="mt-4">
                                             <div class="btn-group mb-4 w-100" role="group">
                                                 <input
