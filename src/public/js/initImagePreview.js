@@ -1,3 +1,36 @@
+import OverflowSpinner from "./OverflowSpinner.js";
+import ValidationHelper from "./validationHelper.js";
+
+/**
+ * 画像ファイルをプレビューする機能を設定する関数
+ * ロード中にスピナーを表示する
+ *
+ * @param {HTMLInputElement} input ファイルインプット
+ * @param {HTMLImageElement} previewTarget 画像を展開するimgタグ
+ */
+export function initImagePrevieWithSpinner(input, previewTarget) {
+    if (!previewTarget) return;
+    
+    // スピナー
+    const spinnerWrapper = previewTarget.closest('.spinner-wrapper');
+    const spinner = new OverflowSpinner(spinnerWrapper);
+
+    initImagePreview(
+        input,
+        loadingResult => {
+            if (loadingResult.state === 'error') {
+                ValidationHelper.toggleInvalid(input);
+                ValidationHelper.addInvalidFeedback(loadingResult.message, input);
+            } else if (loadingResult.state === 'done') {
+                ValidationHelper.toggleValid(input);
+                ValidationHelper.removeInvalidFeedback(input);
+            }
+        },
+        spinner
+    );
+}
+
+
 /**
  * 画像ファイルをプレビューする機能を設定する関数
  *
