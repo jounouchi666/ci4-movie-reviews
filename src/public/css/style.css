@@ -89,3 +89,8 @@ body {
   resize: none;
   height: 7em !important;
 }
+
+/* カラーモード */
+.colormode-dropdown .dropdown-menu {
+  min-width: 7rem;
+}
