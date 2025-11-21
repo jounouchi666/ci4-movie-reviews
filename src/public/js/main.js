@@ -6,8 +6,12 @@ import { initInputNumberRange } from "./initInputNumberRange.js";
 import { initToggleVisibility } from "./initToggleVisibility.js";
 import { openModalByError, selectListGroupWithError, selectTabWithError } from "./uiErrorController.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
+import { initColorMode } from "./initColorMode.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    // カラーモード動作の適用
+    initColorMode();
+    
     // フラッシュメッセージの自動フェードアウト
     const flashSuccess = document.querySelectorAll('.flash-success');
     flashSuccess.forEach(el => autoSlideUp(el));
