@@ -335,17 +335,22 @@ $passwordEditKeys = ['current_password_for_password', 'password', 'password_conf
 
                 <?php foreach ($movies as $movie): ?>
                     <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie->id ?>>
-                        <div class="card-body">
-                            <div>
-                                <span class="badge bg-primary mb-1"><?= esc($movie->genre) ?></span>    
+                        <div class="card-body d-flex align-items-stretch gap-3 w-100">
+                            <div class="card-thumb">
+                                <img src="<?= esc($movie->poster_path) ?>" alt="<?= esc($movie->title) . 'のポスター' ?>" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
                             </div>
-                            <a class="d-inline-block h3 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= route_to('show', $movie->id) ?>"><?= esc($movie->title) ?></a>
-                            <div><?= esc($movie->year) ?>年</div>
-                            <p class="text-warning mb-0"><?= str_repeat('★', $movie->rating) ?></p>
-                            <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie->review) ?></p>
-                            <p class="text-muted fst-italic mb-0">
-                                <?= $movie->updated_at ? ViewDateHelper::toStringUS(strtotime($movie->updated_at)) : '' ?>
-                        </p>
+                            <div class="card-text w-100">
+                                <div>
+                                    <span class="badge bg-primary mb-1"><?= esc($movie->genre) ?></span>    
+                                </div>
+                                <a class="d-inline-block h4 card-title text-decoration-none text-body stretched-link text-truncate w-100" href="<?= route_to('show', $movie->id) ?>"><?= esc($movie->title) ?></a>
+                                <div><?= esc($movie->year) ?>年</div>
+                                <p class="text-warning mb-0"><?= str_repeat('★', $movie->rating) ?></p>
+                                <p class="d-inline-block mb-0 text-truncate w-100"><?= esc($movie->review) ?></p>
+                                <p class="text-muted fst-italic mb-0">
+                                    <?= $movie->updated_at ? ViewDateHelper::toStringUS(strtotime($movie->updated_at)) : '' ?>
+                                </p>
+                            </div>
                         </div>
                     </li>
                 <?php endforeach ?>
