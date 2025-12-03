@@ -11,17 +11,19 @@
         <?= view('components/alerts/success', ['message' => session('message')]) ?>
     <?php endif ?>
 
-    <div>
-        <h1><?= esc($movie->title) ?><span class="h3">（<?= esc($movie->year) ?>年公開）</span></h1>
-        <div class="h4">
-            <span class="badge bg-primary"><?= esc($movie->genre) ?></span>
+    <div class="d-flex flex-column flex-md-row-reverse justify-content-top justify-content-md-end gap-0 gap-md-3">
+        <div>
+            <h1><?= esc($movie->title) ?><span class="h3">（<?= esc($movie->year) ?>年公開）</span></h1>
+            <div class="h4">
+                <span class="badge bg-primary"><?= esc($movie->genre) ?></span>
+            </div>
         </div>
+        
+        <div>
+            <img src="<?= esc($movie->poster_path) ?>" alt="ポスター" class="poster-image" loading="lazy">
+        </div>    
     </div>
     
-    <div>
-        <img src="" alt="ポスター" loading="lazy">
-    </div>
-
     <hr>
 
     <div>
