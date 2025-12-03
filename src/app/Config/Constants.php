@@ -83,3 +83,4 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest a
  */
 defined('DEFAULT_USER_ICON_PATH') || define('DEFAULT_USER_ICON_PATH', 'img/default_user_icon.svg'); // デフォルトユーザーアイコン
 defined('USER_ICON_DIR') || define('USER_ICON_DIR', 'uploads/user_icons/');                         // ユーザーアイコンのディレクトリ
+defined('DEFAULT_POSTER_IMAGE') || define('DEFAULT_POSTER_IMAGE', 'img/no_image.png');              // デフォルトポスターイメージ
