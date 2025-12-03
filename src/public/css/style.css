@@ -49,6 +49,11 @@ body {
   opacity: 0;
 }
 
+/* ポスター */
+.poster-image {
+  width: 260px;
+}
+
 /* ユーザーアイコン */
 .profile-icon,
 .profile-icon-100 {
