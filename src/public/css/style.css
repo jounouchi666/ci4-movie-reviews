@@ -10,6 +10,21 @@ body {
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
 }
 
+.topic .card-body {
+  box-sizing: border-box;
+}
+
+.card-thumb {
+  flex: 0 0 120px;
+  max-width: 120px;
+  height: 180px;
+}
+
+.card-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /* カード用グリッド */
 .movies-grid {
   display: grid;
