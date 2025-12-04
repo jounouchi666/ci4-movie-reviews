@@ -38,7 +38,7 @@
         <h2 class="h5">投稿者</h2>
         <div class="mt-3 d-inline-block w-100">
             <div class="d-flex justify-content-start gap-3">
-                <img src="<?= esc($movie->user->thumb_urls[100]) ?>" alt="<?= esc($movie->username) ?>のアイコン" class="rounded-circle profile-icon-100" loading="lazy">
+                <img src="<?= esc($movie->user->thumb_urls[100]) ?>" alt="<?= esc($movie->username) ?>のアイコン" class="rounded-circle border shadow-sm profile-icon-100" loading="lazy">
                 <div class="d-flex flex-column justify-content-start">
                     <h2 class="h5 mb-1">
                         <a class="link-secondary" href="<?= route_to('userShow', $movie->user_id) ?>"><?= esc($movie->username) ?></a>
