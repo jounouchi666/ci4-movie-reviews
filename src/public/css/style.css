@@ -85,6 +85,16 @@ body {
   height: 100px;
 }
 
+.profile-icon-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.profile-icon-32 {
+  width: 32px;
+  height: 32px;
+}
+
 @media (max-width: 768px) {
   .profile-icon {
     width: 100px;
@@ -110,7 +120,21 @@ body {
   height: 7em !important;
 }
 
+/* ナビゲーションバー */
+.undisplay-toggle-icon::after {
+  display: none;
+}
+
+.nav-item .btn {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
 /* カラーモード */
 .colormode-dropdown .dropdown-menu {
   min-width: 7rem;
+}
+
+.theme-icon svg {
+  vertical-align: -.125em;
 }
