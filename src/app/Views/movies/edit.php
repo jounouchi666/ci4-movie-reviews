@@ -12,7 +12,7 @@
     <!-- 検索 -->
     <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#movie-search-modal">映画を検索</button>
     <div id="movie-search-modal" class="modal fade slide-up" tabindex="-1" aria-labelledby="movie-search-modal-label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 id="movie-search-modal-label" class="modal-title fs-5">映画を検索</h5>
