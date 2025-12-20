@@ -9,7 +9,74 @@
 <main class="container py-3">
     <h1 class="h2 mb-3"><?= esc($config['title']) ?></h1>
 
-    <?= form_open(route_to('save'), ['class' => 'd-flex flex-column gap-3', 'method' => 'post']) ?>
+    <!-- 検索 -->
+    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#movie-search-modal">映画を検索</button>
+    <div id="movie-search-modal" class="modal fade slide-up" tabindex="-1" aria-labelledby="movie-search-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="movie-search-modal-label" class="modal-title fs-5">映画を検索</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-md">
+                        <form id="movie-search-form" class="d-flex justify-content-center">
+                            <div class="input-group mw-xl">
+                                <input class="form-control" type="text" name="title" placeholder="タイトルを入力">
+                                <button class="btn btn-primary" type="submit">検索</button>
+                            </div>
+                        </form>
+
+                        <div id="movie-search-results" class="w-100">
+                            <p class="mt-4 d-flex justify-content-end">検索結果：50件</p>
+                        
+                            <div class="mt-3 flex-1">
+                                <ul class="p-0">
+                                    <li class="p-0 card shadow-sm rounded w-100">
+                                        <div class="card-body d-flex align-items-stretch gap-3 w-100">
+                                            <div class="card-thumb shrink-0">
+                                                <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
+                                            </div>
+                                            <div class="card-text w-100">
+                                                <div class="movie-genres mb-1">
+                                                    <span class="badge bg-primary">カテゴリA</span>
+                                                    <span class="badge bg-primary">カテゴリB</span>
+                                                    <span class="badge bg-primary">カテゴリC</span>
+                                                </div>
+                                                <a class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100" href="">タイトル</a>
+                                                <p class="mb-2">YYYY年公開</p>
+                                                <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer d-flex flex-column align-items-center">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <button class="page-link" disabled=true>
+                                        <span aria-hidden="true">&lsaquo;</span>
+                                    </button>
+                                </li>
+                                <li class="page-item">
+                                    <button class="page-link">
+                                        <span aria-hidden="true">&rsaquo;</span>
+                                </button>
+                                </li>
+                            </ul>
+                            <p>1/30</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?= form_open(route_to('save'), ['class' => 'mt-3 d-flex flex-column gap-3', 'method' => 'post']) ?>
         <?= csrf_field() ?>
 
         <?php if ($mode === 'edit'):  ?>
