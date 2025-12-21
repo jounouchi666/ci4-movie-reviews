@@ -82,7 +82,10 @@
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <a class="d-flex align-items-center link-secondary link-offset-2 fs-5" href="#movie-search-modal" data-bs-toggle="modal">一覧に戻る</a>
+                    <a class="back-link d-flex align-items-center gap-1 link-secondary link-offset-2 fs-5" href="#movie-search-modal" data-bs-toggle="modal">
+                        <i class="bi bi-chevron-left fs-6"></i>
+                        一覧に戻る
+                    </a>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
