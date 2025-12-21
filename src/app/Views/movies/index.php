@@ -19,7 +19,7 @@
             <?php foreach ($movies as $movie): ?>
                 <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie->id ?>>
                     <div class="card-body d-flex align-items-stretch gap-3 w-100">
-                        <div class="card-thumb">
+                        <div class="card-thumb shrink-0">
                             <img src="<?= esc($movie->poster_path) ?>" alt="<?= esc($movie->title) . 'のポスター' ?>" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
                         </div>
                         <div class="card-text w-100">
