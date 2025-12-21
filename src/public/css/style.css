@@ -6,6 +6,10 @@ body {
   max-width: 576px;
 }
 
+.mw-md {
+  max-width: 448px;
+}
+
 .topic {
     transition: box-shadow .3s;
 }
