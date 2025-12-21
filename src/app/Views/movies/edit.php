@@ -32,7 +32,7 @@
                         
                             <div class="mt-3 flex-1">
                                 <ul class="p-0">
-                                    <li class="p-0 card shadow-sm rounded w-100">
+                                    <li id="movie-12345" class="p-0 card shadow-sm rounded w-100">
                                         <div class="card-body d-flex align-items-stretch gap-3 w-100">
                                             <div class="card-thumb shrink-0">
                                                 <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
@@ -43,17 +43,19 @@
                                                     <span class="badge bg-primary">カテゴリB</span>
                                                     <span class="badge bg-primary">カテゴリC</span>
                                                 </div>
-                                                <a class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100" href="">タイトル</a>
+                                                <a
+                                                    class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
+                                                    href="#movie-search-detail-modal"
+                                                    data-bs-toggle="modal"
+                                                >タイトル</a>
                                                 <p class="mb-2">YYYY年公開</p>
                                                 <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
                                             </div>
                                         </div>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
-
 
                         <div class="modal-footer d-flex flex-column align-items-center">
                             <ul class="pagination">
@@ -69,6 +71,43 @@
                                 </li>
                             </ul>
                             <p>1/30</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="movie-search-detail-modal" class="modal fade slide-up" tabindex="-1" aria-labelledby="movie-search-detail-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="d-flex align-items-center link-secondary link-offset-2 fs-5" href="#movie-search-modal" data-bs-toggle="modal">一覧に戻る</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-md">
+                        <div id="movie-search-detail" class="w-100 mb-3">
+                            <h3 class="h2">タイトル<span class="h3">（YYYY年公開）</span></h3>
+                            <div class="movie-genres h5">
+                                <span class="badge bg-primary">カテゴリA</span>
+                                <span class="badge bg-primary">カテゴリB</span>
+                                <span class="badge bg-primary">カテゴリC</span>
+                            </div>
+
+                            <div class="mt-2">
+                                <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="poster-image" loading="lazy">
+                            </div>
+
+                            <div class="mt-3">
+                                <h4 class="h4">あらすじ</h4>
+                                <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer px-0 d-flex justify-content-center">
+                            <button class="mx-0 btn btn-success w-100 mw-xl">適用</button>
                         </div>
                     </div>
                 </div>
