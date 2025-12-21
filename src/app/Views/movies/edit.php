@@ -110,7 +110,7 @@
                         </div>
 
                         <div class="modal-footer px-0 d-flex justify-content-center">
-                            <button class="mx-0 btn btn-success w-100 mw-xl">適用</button>
+                            <button class="mx-0 btn btn-success w-100 mw-md">適用</button>
                         </div>
                     </div>
                 </div>
