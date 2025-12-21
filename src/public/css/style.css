@@ -29,6 +29,11 @@ body {
   min-width: 0;
 }
 
+.back-link {
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
 /* カード用グリッド */
 .movies-grid {
   display: grid;
