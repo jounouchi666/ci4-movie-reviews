@@ -23,7 +23,7 @@ class MovieSearchRepository implements MovieSearchRepositoryInterface
      * @param  array $query
      * @return MovieSearchResultDTO
      */
-    public function search(array $query = ''): MovieSearchResultDTO
+    public function search(string $query = ''): MovieSearchResultDTO
     {
         $config = Config('TMDb');
 

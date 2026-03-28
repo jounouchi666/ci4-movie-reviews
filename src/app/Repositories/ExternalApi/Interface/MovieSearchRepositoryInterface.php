@@ -6,5 +6,5 @@ use App\DTO\MovieSearchResultDTO;
 
 interface MovieSearchRepositoryInterface
 {
-    public function search(array $query): MovieSearchResultDTO;
+    public function search(string $query): MovieSearchResultDTO;
 }
