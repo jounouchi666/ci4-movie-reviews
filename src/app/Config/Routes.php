@@ -16,7 +16,7 @@ $routes->group('movies', function($routes) {
 
 // API
 $routes->group('api', function($routes) {
-    $routes->get('movie/search', 'Api\MovieSearch:search', [
+    $routes->get('movie/search', 'Api\MovieSearch::search', [
         'as' => 'api.movies.search',
         'filter' => 'session'
     ]);
