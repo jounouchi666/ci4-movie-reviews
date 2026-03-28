@@ -9,7 +9,9 @@ use App\Repositories\ExternalApi\TMDb\MovieGenreCacheService;
 use App\Repositories\ExternalApi\TMDb\MovieGenreRepository;
 use App\Repositories\ExternalApi\TMDb\MovieSearchRepository;
 use App\Repositories\ExternalApi\TMDb\TMDbClient;
+use App\Repositories\ExternalApi\TMDb\TMDbMovieSearchMapper;
 use App\Repositories\ExternalApi\TMDb\TMDbRequestExecutor;
+use App\UseCases\MovieSearchUseCase;
 use CodeIgniter\Config\BaseService;
 
 /**
@@ -90,6 +92,22 @@ class Services extends BaseService
             static::movieGenreRepository()
         );
     }
+    
+    /**
+     * tmdbMovieSearchMapper
+     * 返却用DTOを組み立てるサービス
+     *
+     * @param  bool $getShared
+     * @return TMDbMovieSearchMapper
+     */
+    public static function tmdbMovieSearchMapper($getShared = true): TMDbMovieSearchMapper
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbMovieSearchMapper');
+        }
+
+        return new TMDbMovieSearchMapper();
+    }
 
     /**
      * movieGenreRepository
@@ -123,8 +141,26 @@ class Services extends BaseService
         }
 
         return new MovieSearchRepository(
+            static::tmdbMovieSearchMapper(),
             static::movieGenreCacheService(),
             static::tmdbRequestExecutor()
+        );
+    }
+    
+    /**
+     * movieSearchUseCase
+     *
+     * @param  bool $getShared
+     * @return MovieSearchUseCase
+     */
+    public static function movieSearchUseCase($getShared = true): MovieSearchUseCase
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieSearchUseCase');
+        }
+        
+        return new MovieSearchUseCase(
+            static::movieSearchRepository()
         );
     }
 }
