@@ -162,4 +162,17 @@ class Validation extends BaseConfig
             ],
         ],
     ];
+
+    // 映画検索用
+    public $searchMovies = [
+        'title' => [
+            'rules' => 'required|min_length[1]|max_length[255]',
+            'label' => 'タイトル',
+            'errors' => [
+                'required'   => 'タイトルは必須です。',
+                'min_length' => 'タイトルは1文字以上で入力してください。',
+                'max_length' => 'タイトルは255文字以内で入力してください。',
+            ],
+        ],
+    ];
 }
