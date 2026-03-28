@@ -10,7 +10,7 @@ class TMDbMovieSearchMapper
 {
     public function toDTO(array $response, array $genreMap): MovieSearchResultDTO
     {
-        $imageBaseUrl = config('tmdb.image_base_url');
+        $imageBaseUrl = Config('TMDb')->imageBaseUrl;
 
         $movies = array_map(fn ($movie) => new MovieSearchItemResultDTO(
                 id:             $movie['id'] ?? '',
