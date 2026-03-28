@@ -36,7 +36,7 @@ class TMDbClient implements MovieClientInterface
 
         $res = $client->request('GET', $url, compact('timeout', 'headers', 'query'));
 
-        return json_decode($res->getBody());
+        return json_decode($res->getBody(), true);
     }
 
     /**
@@ -46,7 +46,7 @@ class TMDbClient implements MovieClientInterface
      */
     private function getApiToken(): string
     {
-        $token = config('TMDb')->APIToken;
+        $token = config('TMDb')->apiToken;
         if(empty($token)) {
             throw new RuntimeException('APIトークンが見つかりません');
         }
