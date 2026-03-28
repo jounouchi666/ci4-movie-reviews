@@ -85,7 +85,7 @@ class Services extends BaseService
     public static function movieGenreCacheService($getShared = true): MovieGenreCacheService
     {
         if ($getShared) {
-            return static::getSharedInstance('movieServiceCacheService');
+            return static::getSharedInstance('movieGenreCacheService');
         }
 
         return new MovieGenreCacheService(
