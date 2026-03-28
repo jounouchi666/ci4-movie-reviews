@@ -11,7 +11,7 @@ class TMDb extends BaseConfig
 
     // Config
     public $timeout = 5;
-    public $languege = 'ja-JP';
+    public $language = 'ja-JP';
 
     // URL
     public $baseUrl = 'https://api.themoviedb.org/3';
@@ -22,6 +22,8 @@ class TMDb extends BaseConfig
     public function __construct()
     {
         parent::__construct();
+
+        $this->apiToken = env('TMDb.api_token') ?? $this->apiToken;
 
         $this->searchUrl = $this->baseUrl . '/search/movie';
         $this->genreUrl = $this->baseUrl . '/genre/movie/list';

@@ -2,7 +2,9 @@
 
 namespace App\DTO;
 
-final class MovieSearchItemResultDTO
+use JsonSerializable;
+
+final class MovieSearchItemResultDTO implements JsonSerializable
 {
     public function __construct(
         public int $id,
@@ -15,4 +17,19 @@ final class MovieSearchItemResultDTO
         public bool $adult,
         public string $releaseDate,
     ) {}
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'original_title' => $this->originalTitle,
+            'genre' => $this->genre,
+            'overview' => $this->overview,
+            'poster_path' => $this->posterPath,
+            'backdrop_path' => $this->backdropPath,
+            'adult' => $this->adult,
+            'release_date' => $this->releaseDate
+        ];
+    }
 }
