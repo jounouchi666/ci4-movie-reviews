@@ -2,6 +2,14 @@
 
 namespace Config;
 
+use App\Repositories\ExternalApi\Interface\MovieClientInterface;
+use App\Repositories\ExternalApi\Interface\MovieGenreRepositoryInterface;
+use App\Repositories\ExternalApi\Interface\MovieSearchRepositoryInterface;
+use App\Repositories\ExternalApi\TMDb\MovieGenreCacheService;
+use App\Repositories\ExternalApi\TMDb\MovieGenreRepository;
+use App\Repositories\ExternalApi\TMDb\MovieSearchRepository;
+use App\Repositories\ExternalApi\TMDb\TMDbClient;
+use App\Repositories\ExternalApi\TMDb\TMDbRequestExecutor;
 use CodeIgniter\Config\BaseService;
 
 /**
@@ -29,4 +37,94 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+        
+    /**
+     * movieClient
+     * 映画取得API接続用クライアント
+     *
+     * @param  bool $getShared
+     * @return MovieClientInterface
+     */
+    public static function movieClient($getShared = true): MovieClientInterface
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieClient');
+        }
+
+        return new TMDbClient();
+    }
+
+    /**
+     * tmdbRequestExecutor
+     * TMDbリクエスト実行モジュール
+     *
+     * @param  bool $getShared
+     * @return TMDbRequestExecutor
+     */
+    public static function tmdbRequestExecutor($getShared = true): TMDbRequestExecutor
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbRequestExecutor');
+        }
+
+        return new TMDbRequestExecutor(
+            static::movieClient()
+        );
+    }
+
+    /**
+     * movieGenreCacheService
+     * 映画ジャンルキャッシュサービス
+     *
+     * @param  bool $getShared
+     * @return MovieGenreCacheService
+     */
+    public static function movieGenreCacheService($getShared = true): MovieGenreCacheService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieServiceCacheService');
+        }
+
+        return new MovieGenreCacheService(
+            static::movieGenreRepository()
+        );
+    }
+
+    /**
+     * movieGenreRepository
+     * 映画ジャンル用リポジトリ―
+     *
+     * @param  bool $getShared
+     * @return MovieGenreRepositoryInterface
+     */
+    public static function movieGenreRepository($getShared = true): MovieGenreRepositoryInterface
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieGenreRepository');
+        }
+
+        return new MovieGenreRepository(
+            static::tmdbRequestExecutor()
+        );
+    }
+
+    /**
+     * movieSearchRepository
+     * 映画検索用リポジトリ―
+     *
+     * @param  bool $getShared
+     * @return MovieSearchRepositoryInterface
+     */
+    public static function movieSearchRepository($getShared = true): MovieSearchRepositoryInterface
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieSearchRepository');
+        }
+
+        return new MovieSearchRepository(
+            static::movieGenreCacheService(),
+            static::tmdbRequestExecutor()
+        );
+    }
 }
