@@ -12,7 +12,7 @@ use App\Repositories\ExternalApi\TMDb\TMDbRequestExecutor;
 class MovieSearchRepository implements MovieSearchRepositoryInterface
 {
     public function __construct(
-        private TMDbMovieSearchMapper $TMDbMovieSearchMapper,
+        private TMDbMovieSearchMapper $tmdbMovieSearchMapper,
         private MovieGenreCacheService $movieGenreCacheService,
         private TMDbRequestExecutor $tmdbRequestExecutor
     ) {}
@@ -27,7 +27,7 @@ class MovieSearchRepository implements MovieSearchRepositoryInterface
     {
         $config = Config('TMDb');
 
-        return $this->TMDbMovieSearchMapper->toDTO(
+        return $this->tmdbMovieSearchMapper->toDTO(
             $this->tmdbRequestExecutor->get(
                 $config->searchUrl,
                 [
