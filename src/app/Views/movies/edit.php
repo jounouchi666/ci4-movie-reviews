@@ -28,10 +28,12 @@
                         </form>
 
                         <div id="movie-search-results" class="w-100">
-                            <p class="mt-4 d-flex justify-content-end">検索結果：50件</p>
+                            <div class="spinner-wrapper overflow-hidden"></div>
+
+                            <p class="total-results mt-4 d-flex justify-content-end">検索結果：50件</p>
                         
                             <div class="mt-3 flex-1">
-                                <ul class="p-0">
+                                <ul class="p-0 results">
                                     <li id="movie-12345" class="p-0 card shadow-sm rounded w-100">
                                         <div class="card-body d-flex align-items-stretch gap-3 w-100">
                                             <div class="card-thumb shrink-0">
@@ -58,16 +60,16 @@
                         </div>
 
                         <div class="modal-footer d-flex flex-column align-items-center">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
+                            <ul class="pagination moviesearch-pagination">
+                                <li class="page-item page-prev disabled">
                                     <button class="page-link" disabled=true>
                                         <span aria-hidden="true">&lsaquo;</span>
                                     </button>
                                 </li>
-                                <li class="page-item">
+                                <li class="page-item page-next">
                                     <button class="page-link">
                                         <span aria-hidden="true">&rsaquo;</span>
-                                </button>
+                                    </button>
                                 </li>
                             </ul>
                             <p>1/30</p>
