@@ -22,7 +22,7 @@
                     <div class="container-md">
                         <form id="movie-search-form" class="d-flex justify-content-center">
                             <div class="input-group mw-xl">
-                                <input class="form-control" type="text" name="title" placeholder="タイトルを入力">
+                                <input class="form-control" type="text" name="title" minlength="1" maxlength="255" placeholder="タイトルを入力" required>
                                 <button class="btn btn-primary" type="submit">検索</button>
                             </div>
                         </form>
