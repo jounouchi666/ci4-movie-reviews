@@ -1,6 +1,6 @@
 // URL
-const BASE_URL = import.meta.env.VITE_LARAVEL_API_URL;
-export const SEARCH_URL = BASE_URL + '/api/movie/search';
+const BASE_URL = document.getElementById('api-config').dataset.url;
+export const SEARCH_URL = '/api/movie/search';
 
 const headers = {
     'Content-Type': 'application/json',
@@ -50,6 +50,15 @@ const createClient = (baseUrl, defaultHeaders = {}) => {
             body: body ? JSON.stringify(body) : undefined,
             ...rest
         });
+
+        // ログイン画面へのリダイレクト
+        if (res.redirected) {
+            throw {
+                status: 302,
+                message: 'Redirecct detected',
+                redurectUrl: res.url
+            };
+        }
 
         let data;
         try {
