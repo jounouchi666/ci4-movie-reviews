@@ -320,16 +320,16 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     /**
      * ページネーションのUIを更新
      */
-    const pagePerTotalPage = paginationEl.querySelector('.page-per-totalpage');
-    const updatePaginationUI = (page, totalPage) => {
+    const pagePerTotalPages = paginationEl.querySelector('.page-per-totalpage');
+    const updatePaginationUI = (page, totalPages) => {
         const isFirstPage = page === 1;
-        const isLastPage = page === totalPage;
+        const isLastPage = page === totalPages;
 
         prevButtonEl.classList.toggle('disabled', isFirstPage);
         nextButtonEl.classList.toggle('disabled', isLastPage);
         prevButtonEl.querySelector('button.page-link').disabled = isFirstPage;
         nextButtonEl.querySelector('button.page-link').disabled = isLastPage;
 
-        pagePerTotalPage.textContent = `${page}/${totalPages}`;
+        pagePerTotalPages.textContent = `${page}/${totalPages}`;
     };
 }
