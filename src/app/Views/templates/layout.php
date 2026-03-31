@@ -29,6 +29,7 @@
         </div>
 
         <?= $this->renderSection('pageScripts') ?>
+        <div id="api-config" data-url="<?= rtrim(base_url(), '/') ?>"></div>
         <script type="module" src="<?= base_url('js/main.js') ?>"></script>
     </body>
 </html>
