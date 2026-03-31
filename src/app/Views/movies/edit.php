@@ -56,7 +56,7 @@
                                     </button>
                                 </li>
                             </ul>
-                            <p class="page-per-totalpage"></p>
+                            <p class="page-per-totalpages"></p>
                         </div>
                     </div>
                 </div>
