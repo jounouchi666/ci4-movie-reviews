@@ -1,7 +1,9 @@
+import LoadingSpinner from "./LoadingSpinner.js";
+
 /**
  * 要素の上にオーバーフロー表示するローディングスピナーを扱うクラス
  */
-export default class OverflowSpinner {
+export default class OverflowSpinner extends LoadingSpinner {
     #wrapper;
     #spinner;
 
@@ -10,9 +12,7 @@ export default class OverflowSpinner {
      * @param {HTMLElement} wrapper スピナーを内包する要素（.spinner-wrapper）
      */
     constructor(wrapper) {
-        this.#wrapper = wrapper;
-        this.#spinner = this.#wrapper.querySelector('.spinner-border');
-        this.#spinner.style.display = 'none';
+        super(wrapper);
     };
 
     
