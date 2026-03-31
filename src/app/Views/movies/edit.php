@@ -28,39 +28,23 @@
                         </form>
 
                         <div id="movie-search-results" class="w-100">
-                            <div class="spinner-wrapper overflow-hidden"></div>
+                            <div style="display: none;" class="spinner-wrapper w-100">
+                                <div class="h-120px w-100 d-inline-flex justify-content-center align-items-center">
+                                    <div class="spinner-border text-secondary top-0 bottom-0 start-0 end-0 m-auto" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <p class="total-results mt-4 d-flex justify-content-end">検索結果：50件</p>
+                            <p class="total-results mt-4 d-flex justify-content-end"></p>
                         
                             <div class="mt-3 flex-1">
-                                <ul class="p-0 results">
-                                    <li id="movie-12345" class="p-0 card shadow-sm rounded w-100">
-                                        <div class="card-body d-flex align-items-stretch gap-3 w-100">
-                                            <div class="card-thumb shrink-0">
-                                                <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
-                                            </div>
-                                            <div class="card-text w-100">
-                                                <div class="movie-genres mb-1">
-                                                    <span class="badge bg-primary">カテゴリA</span>
-                                                    <span class="badge bg-primary">カテゴリB</span>
-                                                    <span class="badge bg-primary">カテゴリC</span>
-                                                </div>
-                                                <a
-                                                    class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
-                                                    href="#movie-search-detail-modal"
-                                                    data-bs-toggle="modal"
-                                                >タイトル</a>
-                                                <p class="mb-2">YYYY年公開</p>
-                                                <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <ul class="p-0 results"></ul>
                             </div>
                         </div>
 
-                        <div class="modal-footer d-flex flex-column align-items-center">
-                            <ul class="pagination moviesearch-pagination">
+                        <div class="modal-footer moviesearch-pagination d-flex flex-column align-items-center">
+                            <ul class="pagination">
                                 <li class="page-item page-prev disabled">
                                     <button class="page-link" disabled=true>
                                         <span aria-hidden="true">&lsaquo;</span>
@@ -72,7 +56,7 @@
                                     </button>
                                 </li>
                             </ul>
-                            <p>1/30</p>
+                            <p class="page-per-totalpage"></p>
                         </div>
                     </div>
                 </div>
