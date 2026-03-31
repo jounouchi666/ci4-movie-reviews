@@ -21,6 +21,14 @@ export default class ValidationHelper {
         el.classList.add('is-invalid');
     }
 
+    /**
+     * is-invalid、is-validクラスを削除
+     * @param {HTMLElement} el HTMLエレメント
+     */
+    static cleanValidState(el) {
+        el.classList.remove(['is-valid', 'is-invalid']);
+    }
+
 
     /**
      * バリデーションメッセージ用の<div>を生成
