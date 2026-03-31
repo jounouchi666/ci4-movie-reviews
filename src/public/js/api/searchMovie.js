@@ -1,4 +1,4 @@
-import { apiClient, SEARCH_URL } from "./apiClient";
+import { apiClient, SEARCH_URL } from "./apiClient.js";
 
 /**
  * 映画を検索
