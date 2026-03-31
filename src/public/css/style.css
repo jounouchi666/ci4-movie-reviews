@@ -6,6 +6,10 @@ body {
   max-width: 576px;
 }
 
+.h-120px {
+  height: 180px;
+}
+
 .topic {
     transition: box-shadow .3s;
 }
