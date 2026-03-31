@@ -320,7 +320,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     /**
      * ページネーションのUIを更新
      */
-    const pagePerTotalPages = paginationEl.querySelector('.page-per-totalpage');
+    const pagePerTotalPages = paginationEl.querySelector('.page-per-totalpages');
     const updatePaginationUI = (page, totalPages) => {
         const isFirstPage = page === 1;
         const isLastPage = page === totalPages;
