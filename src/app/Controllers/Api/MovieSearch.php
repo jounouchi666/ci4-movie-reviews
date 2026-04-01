@@ -35,7 +35,7 @@ class MovieSearch extends ResourceController
             return $this->failValidationErrors($errors);
         }
 
-        $data = $this->movieSearchUseCase->execute($query['title']);
+        $data = $this->movieSearchUseCase->execute($query['title'], $query['page']);
         
         return $this->respond($data, 200);
     }
