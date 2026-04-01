@@ -11,8 +11,8 @@ class MovieSearchUseCase
         private MovieSearchRepositoryInterface $movieSearchRepository
     ) {}
 
-    public function execute(string $query): MovieSearchResultDTO
+    public function execute(string $query, int $page = 1): MovieSearchResultDTO
     {
-        return $this->movieSearchRepository->search($query);
+        return $this->movieSearchRepository->search($query, $page);
     }
 }
