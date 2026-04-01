@@ -15,12 +15,13 @@ import ValidationHelper from "../validationHelper.js";
 export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginationEl, spinnerWrapper) {
     const state = {
         isLoading: false,
+        loadingUse: null, 
         hasSearched: false,
         title: '',
         currentTitle: '',
         movies: [],
         page: 1,
-        totalPages: 0,
+        totalPages: 1,
         totalResults: 0,
         error: null,
         validationErrors: null
@@ -96,8 +97,8 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     }
 
     const titleInputEl = searchFormEl.querySelector('input[name="title"]');
-    const prevButtonEl = paginationEl.querySelector('.page-prev');
-    const nextButtonEl = paginationEl.querySelector('.page-next');
+    const prevButtonEl = paginationEl.querySelector('.movie-search__page-prev');
+    const nextButtonEl = paginationEl.querySelector('.movie-search__page-next');
     bindEvent(
         { searchFormEl, titleInputEl, prevButtonEl, nextButtonEl }
     );
@@ -138,6 +139,9 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         try {
             state.error = null;
             state.validationErrors = null;
+
+            scrollTop();
+            
             startLoading();
 
             const data = await fetchMovies(targetTitle, targetPage);
@@ -183,8 +187,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                 window.location.href = e.redirectUrl;
                 break;
             case 400:
-                console.error(e)
-                state.validationErrors = e.messages;
+                state.validationErrors = e.data.messages;
                 break;
             default:
                 state.error = '読み込み失敗';
@@ -196,7 +199,16 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const startLoading = () => {
         state.isLoading = true;
-        spinner.start();
+
+        // 画面操作禁止化処理
+
+        if (!state.hasSearched) {
+            state.loadingUse = 'spinner';
+            spinner.start();
+            return;
+        }
+
+        // スケルトン開始
     }
 
     /**
@@ -204,10 +216,40 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const endLoading = () => {
         state.isLoading = false;
-        spinner.end();
-    }
 
+        // 画面操作許可化処理
+
+        switch (state.loadingUse) {
+            case 'spinner': 
+                spinner.end();
+                break;
+            case 'skeleton':
+                ;
+                break;
+            default: break;
+        }
+        
+    }
+    
+    /**
+     * エラーの存在確認
+     *
+     * @returns {boolean} 
+     */
+    const hasError = () => state.error !== null || state.validationErrors !== null;
+
+    /**
+     * 最初のページか確認
+     *
+     * @returns {boolean} 
+     */
     const checkIsFirstPage = () => state.page === 1;
+    
+    /**
+     * 最後のページか確認
+     *
+     * @returns {boolean} 
+     */
     const checkIsLastPage = () => state.page === state.totalPages;
 
 
@@ -219,8 +261,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const renderResults = () => {
         // ローディング中、またはエラーがある場合は非表示
-        const hasError = state.error !== null || state.validationErrors !== null;
-        const showContent = !state.isLoading && !hasError;
+        const showContent = !state.isLoading && !hasError();
 
         toggleVisibility(showContent);
         
@@ -232,7 +273,8 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         if (state.error) {
             return;
         }
-        
+
+        // コンテンツ描画
         updateTotalResults(state.totalResults);
         updateMovieList(state.movies);
         updatePaginationUI(state.page, state.totalPages);
@@ -244,14 +286,14 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const renderSearchFormValidationError = () => {
         ValidationHelper.cleanValidState(titleInputEl);
-        ValidationHelper.removeInvalidFeedback(searchFormEl);
+        ValidationHelper.removeInvalidFeedback(titleInputEl);
 
         const errors = state.validationErrors?.title ?? [];
         if (!errors || errors.length === 0) {
             return;
         }
-        const errorEl = ValidationHelper.createInvalidFeedback(errors[0]);
-        ValidationHelper.addInvalidFeedback(errorEl, searchFormEl);
+        ValidationHelper.toggleInvalid(titleInputEl);
+        ValidationHelper.addInvalidFeedback(errors, titleInputEl);
     }
 
     /**
@@ -265,12 +307,25 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     };
 
     /**
+     * 指定したエレメント箇所にスクロール
+     */
+    const scrollTop = () => {
+        const modalBody = document.querySelector('#movie-search-modal .modal-body');
+        modalBody.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    /**
      * 検索結果の件数を更新
      *
      * @param {number} totalResultsCount
      */
     const updateTotalResults = totalResults => {
-        totalResultsEl.innerText = `検索結果：${totalResults}件`;
+        totalResultsEl.innerText = state.hasSearched && !hasError()
+            ? `検索結果：${totalResults}件`
+            : '';
     };
 
     /**
@@ -292,7 +347,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * @returns 
      */
     const createMovieItem = movie => {
-        const {id, title, release_date, genre, poster_path, overview} = movie;
+        const {id, title, release_date, genre, poster_url, overview} = movie;
         const releaseYear = release_date
             ? `${release_date.slice(0, 4)}年公開`
             : '公開日未定';
@@ -301,7 +356,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
             <li id="movie-${id}" class="p-0 card shadow-sm rounded w-100">
                 <div class="card-body d-flex align-items-stretch gap-3 w-100">
                     <div class="card-thumb shrink-0">
-                        <img src="${poster_path}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
+                        <img src="${poster_url}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
                     </div>
                     <div class="card-text w-100">
                         <div class="movie-genres mb-1">
@@ -330,6 +385,8 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         prevButtonEl.querySelector('button.page-link').disabled = isFirstPage;
         nextButtonEl.querySelector('button.page-link').disabled = isLastPage;
 
-        pagePerTotalPages.textContent = `${page}/${totalPages}`;
+        pagePerTotalPages.innerText = state.hasSearched && !hasError()
+            ? `${page}/${totalPages}`
+            : '';
     };
 }
