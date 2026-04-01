@@ -18,40 +18,38 @@
                     <h5 id="movie-search-modal-label" class="modal-title fs-5">映画を検索</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="container-md">
-                        <form id="movie-search-form" class="d-flex justify-content-center">
+                <div class="modal-body h-100 d-flex flex-column p-0">
+                    <div class="container-md p-3 flex-shrink-0">
+                        <form id="movie-search-form" class="d-flex justify-content-center" autocomplete="off">
                             <div class="input-group mw-xl">
-                                <input class="form-control" type="text" name="title" minlength="1" maxlength="255" placeholder="タイトルを入力" required>
+                                <input class="form-control" type="text" name="title" maxlength="255" placeholder="タイトルを入力" aria-label="映画タイトル" required>
                                 <button class="btn btn-primary" type="submit">検索</button>
                             </div>
                         </form>
 
-                        <div id="movie-search-results" class="w-100">
-                            <div style="display: none;" class="spinner-wrapper w-100">
-                                <div class="h-120px w-100 d-inline-flex justify-content-center align-items-center">
-                                    <div class="spinner-border text-secondary top-0 bottom-0 start-0 end-0 m-auto" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
+                        <div id="movie-search-results" class="position-relative flex-grow-1 overflow-auto mh-212px">
+                            <div class="spinner-wrapper position-absolute w-100 h-100 z-3 d-none d-flex justify-content-center align-items-center bg-white bg-opacity-50">
+                                <div class="spinner-border text-secondary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
                                 </div>
                             </div>
 
-                            <p class="total-results mt-4 d-flex justify-content-end"></p>
+                            <p class="movie-search__total mt-4 d-flex justify-content-end"></p>
                         
                             <div class="mt-3 flex-1">
-                                <ul class="p-0 results"></ul>
+                                <ul class="p-0 movie-search__results"></ul>
                             </div>
                         </div>
 
-                        <div class="modal-footer moviesearch-pagination d-flex flex-column align-items-center">
+                        <div class="modal-footer movie-search__pagination d-flex flex-column align-items-center">
                             <ul class="pagination">
-                                <li class="page-item page-prev disabled">
-                                    <button class="page-link" disabled=true>
+                                <li class="page-item movie-search__page-prev disabled">
+                                    <button class="page-link" disabled>
                                         <span aria-hidden="true">&lsaquo;</span>
                                     </button>
                                 </li>
-                                <li class="page-item page-next">
-                                    <button class="page-link">
+                                <li class="page-item movie-search__page-next disabled">
+                                    <button class="page-link" disabled>
                                         <span aria-hidden="true">&rsaquo;</span>
                                     </button>
                                 </li>
