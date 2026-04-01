@@ -6,8 +6,9 @@ body {
   max-width: 576px;
 }
 
-.h-120px {
-  height: 180px;
+.mh-212px {
+  min-height: 212px;
+  height: 100%;
 }
 
 .topic {
