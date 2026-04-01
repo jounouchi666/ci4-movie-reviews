@@ -13,6 +13,7 @@ final class MovieSearchItemResultDTO implements JsonSerializable
         public array $genre,
         public string $overview,
         public ?string $posterPath,
+        public string $posterUrl,
         public ?string $backdropPath,
         public bool $adult,
         public string $releaseDate,
@@ -27,6 +28,7 @@ final class MovieSearchItemResultDTO implements JsonSerializable
             'genre' => $this->genre,
             'overview' => $this->overview,
             'poster_path' => $this->posterPath,
+            'poster_url' => $this->posterUrl,
             'backdrop_path' => $this->backdropPath,
             'adult' => $this->adult,
             'release_date' => $this->releaseDate
