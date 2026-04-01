@@ -21,7 +21,7 @@ export default class LoadingSpinner {
      * スピナー表示開始
      */
     start() {
-        if (this.#wrapper) this.#wrapper.style.display = 'inline-block';
+        if (this.#wrapper) this.#wrapper.classList.remove('d-none');
     }
 
 
@@ -29,6 +29,6 @@ export default class LoadingSpinner {
      * スピナー表示終了
      */
     end() {
-        if (this.#wrapper) this.#wrapper.style.display = 'none'
+        if (this.#wrapper) this.#wrapper.classList.add('d-none');
     }
 };
