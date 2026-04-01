@@ -18,17 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
     flashSuccess.forEach(el => autoSlideUp(el));
 
     // 映画Ajax検索機能の初期化
+    const movieSearchModal = document.getElementById('movie-search-modal');
     const movieSearchFormEl = document.getElementById('movie-search-form');
     const movieSearchResultsWrapperEl = document.getElementById('movie-search-results');
-    const movieSearchResultsEl = movieSearchResultsWrapperEl.querySelector('.results');
-    const movieSerachTotalResultsEl = movieSearchResultsWrapperEl.querySelector('.total-results');
-    const movieSearchPaginationEl = document.querySelector('.moviesearch-pagination');
-    const movieSearchSpinnerEl = movieSearchResultsWrapperEl.querySelector('.spinner-wrapper');
+    const movieSearchResultsEl = movieSearchResultsWrapperEl.querySelector('.movie-search__results');
+    const movieSerachTotalEl = movieSearchResultsWrapperEl.querySelector('.movie-search__total');
+    const movieSearchPaginationEl = document.querySelector('.movie-search__pagination');
+    const movieSearchSpinnerEl = movieSearchModal.querySelector('.spinner-wrapper');
 
     initMovieSearch(
         movieSearchFormEl,
         movieSearchResultsEl,
-        movieSerachTotalResultsEl,
+        movieSerachTotalEl,
         movieSearchPaginationEl,
         movieSearchSpinnerEl
     );
