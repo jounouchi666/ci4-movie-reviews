@@ -1,6 +1,7 @@
 import { searchMovie } from "../api/searchMovie.js";
 import LoadingSpinner from "../LoadingSpinner.js";
 import ValidationHelper from "../validationHelper.js";
+import Movie from "./Movie.js";
 
 /**
  * Ajax映画検索init
@@ -340,37 +341,68 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         resultsEl.innerHTML = movieList;
     };
 
+    const updateToSkeleton = count => {
+        
+    }
+
     /**
      * 映画アイテム生成
      * 
      * @param {object} movie 
      * @returns 
      */
-    const createMovieItem = movie => {
-        const {id, title, release_date, genre, poster_url, overview} = movie;
+    const createMovieItem = ({id, title, release_date, genre, poster_path, poster_url, overview}) => {
         const releaseYear = release_date
             ? `${release_date.slice(0, 4)}年公開`
             : '公開日未定';
 
+        const movieInstance = new Movie(id, title, releaseYear, genre, poster_path, poster_url, overview);
+        return createMovieCard(movieInstance);
+    };
+
+
+    const createSkeltonItem = () => {
+        const movie = Movie.createSkeleton();
+        return createMovieCard(movie);
+    }
+    
+    /**
+     * 映画カードを生成
+     *
+     * @param {{Movie}} movie
+     * @returns {string} 
+     */
+    const createMovieCard = movie => {
+        const {id, title, releaseYear, genre, posterUrl, overview } = movie.toObject();
         return `
             <li id="movie-${id}" class="p-0 card shadow-sm rounded w-100">
                 <div class="card-body d-flex align-items-stretch gap-3 w-100">
+
                     <div class="card-thumb shrink-0">
-                        <img src="${poster_url}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
+                        <img src="${posterUrl}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
                     </div>
+
                     <div class="card-text w-100">
+
                         <div class="movie-genres mb-1">
                             ${Object.values(genre).map(g => `<span class="badge bg-primary">${g.name}</span>`).join('')}
                         </div>
+
                         <a
                             class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
-                            href="#movie-search-detail-modal" data-bs-toggle="modal">${title}</a>
+                            href="#movie-search-detail-modal"
+                            data-bs-toggle="modal"
+                        >
+                            ${title}
+                        </a>
+
                         <p class="mb-2">${releaseYear}</p>
+                        
                         <p class="mb-0 d-inline-block text-truncate w-100">${overview}</p>
                     </div>
                 </div>
             </li>`;
-    };
+    }
 
     /**
      * ページネーションのUIを更新
