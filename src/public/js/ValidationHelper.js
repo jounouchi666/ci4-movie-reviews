@@ -26,7 +26,7 @@ export default class ValidationHelper {
      * @param {HTMLElement} el HTMLエレメント
      */
     static cleanValidState(el) {
-        el.classList.remove(['is-valid', 'is-invalid']);
+        el.classList.remove('is-valid', 'is-invalid');
     }
 
 
