@@ -14,6 +14,13 @@ import Movie from "./Movie.js";
  * @param {HTMLElement} spinnerWrapper 
  */
 export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginationEl, spinnerWrapper) {
+    // ローディングタイプENUM
+    const LOADING_TYPE = {
+        SPINNER: 'spinner',
+        SKELETON: 'skeleton',
+        NONE: 'none'
+    }
+
     const state = {
         isLoading: false,
         loadingUse: LOADING_TYPE.NONE, 
@@ -27,13 +34,6 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         error: null,
         validationErrors: null
     };
-
-    // ローディングタイプENUM
-    const LOADING_TYPE = {
-        SPINNER: 'spinner',
-        SKELETON: 'skeleton',
-        NONE: 'none'
-    }
     
     const spinner = new LoadingSpinner(spinnerWrapper);
 
@@ -466,13 +466,17 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                             
                         </div>
 
-                        <a
-                            class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
-                            href="#movie-search-detail-modal"
-                            data-bs-toggle="modal"
-                        >
-                            ${title}
-                        </a>
+                        ${isSkeleton
+                            ? `<span class="mb-0 d-inline-block h4 card-title text-decoration-none text-body w-100">${title}</span>`
+                            : `
+                                <a
+                                    class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
+                                    href="#movie-search-detail-modal"
+                                    data-bs-toggle="modal"
+                                >
+                                    ${title}
+                                </a>`
+                        }
 
                         <p class="mb-2">${releaseYear}</p>
                         
