@@ -452,7 +452,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                     <div class="card-thumb shrink-0">
                         ${isSkeleton
                             ? '<div class="placeholder w-100 h-100" style="min-width: 120px; height: 180px;"></div>'
-                            : `<img src="${posterUrl}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy"></img>`
+                            : `<img src="${posterUrl}" alt="${title}のポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy"></img>`
                         }
                     </div>
 
