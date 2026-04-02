@@ -19,7 +19,6 @@ class Movie
         this.#posterUrl = posterUrl;
         this.#overview = overview;
     }
-
     
     /**
      * スケルトン用のファクトリー
@@ -32,11 +31,11 @@ class Movie
             null,
             '<span class="placeholder col-8"></span>',
             '<span class="placeholder col-3"></span>',
-            [
-                '<span class="placeholder col-2 me-1"></span>',
-                '<span class="placeholder col-3 me-1"></span>',
-                '<span class="placeholder col-2"></span>'
-            ],
+            {
+                0: '<span class="placeholder col-2 me-1"></span>',
+                1: '<span class="placeholder col-3 me-1"></span>',
+                2: '<span class="placeholder col-2"></span>'
+            },
             null,
             '',
             '<span class="placeholder col-10"></span><span class="placeholder col-9"></span>'
@@ -47,7 +46,6 @@ class Movie
         return instance;
     }
 
-    
     /**
      * Getter
      */
@@ -59,22 +57,12 @@ class Movie
     get posterUrl() {return this.#posterUrl}
     get overview() {return this.#overview}
     get isSkeleton() {return this.#isSkeleton}
-
     
     /**
-     * オブジェクトとして出力
+     * ジャンル名の配列を出力
      */
-    toObject() {
-        return {
-            id: this.#id,
-            title: this.#title,
-            releaseYear: this.#releaseYear,
-            genre: this.#genre,
-            posterPath: this.#posterPath,
-            posterUrl: this.#posterUrl,
-            overview: this.#overview,
-            isSkeleton: this.#isSkeleton
-        };
+    get genreNames() {
+        return Object.values(this.#genre).map(g => g.name);
     }
 }
 
