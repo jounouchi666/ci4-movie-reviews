@@ -16,7 +16,7 @@ import Movie from "./Movie.js";
 export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginationEl, spinnerWrapper) {
     const state = {
         isLoading: false,
-        loadingUse: null, 
+        loadingUse: LOADING_TYPE.NONE, 
         hasSearched: false,
         title: '',
         currentTitle: '',
@@ -31,7 +31,8 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     // ローディングタイプENUM
     const LOADING_TYPE = {
         SPINNER: 'spinner',
-        SKELETON: 'skeleton'
+        SKELETON: 'skeleton',
+        NONE: 'none'
     }
     
     const spinner = new LoadingSpinner(spinnerWrapper);
@@ -199,7 +200,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                 if (state.hasSearched) renderContents();
                 break;
             default:
-                state.error = new DangerAlert('読み込み失敗');
+                state.error = '読み込み失敗';
                 // 検索結果の初期化
                 resetResults();
         };
@@ -210,8 +211,6 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const startLoading = () => {
         state.isLoading = true;
-
-        // 画面操作禁止化処理
 
         if (!state.hasSearched) {
             state.loadingUse = LOADING_TYPE.SPINNER;
@@ -230,15 +229,13 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     const endLoading = () => {
         state.isLoading = false;
 
-        // 画面操作許可化処理
-
         switch (state.loadingUse) {
             case LOADING_TYPE.SPINNER: 
                 spinner.end();
-                state.loadingUse = null;
+                state.loadingUse = LOADING_TYPE.NONE;
                 break;
             case LOADING_TYPE.SKELETON:
-                state.loadingUse = null;
+                state.loadingUse = LOADING_TYPE.NONE;
                 break;
             default: break;
         }
@@ -272,12 +269,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     /**
      * 更新結果の反映
      */
-    const renderResults = () => {
-        // ローディング中、またはエラーがある場合は非表示
-        const showContent = !state.isLoading && !hasError();
-
-        toggleVisibility();
-        
+    const renderResults = () => {       
         if (state.validationErrors) {
             renderSearchFormValidationError();
             return;
@@ -318,8 +310,17 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     /**
      * エラー状態を描画
      */
+    let alertInstance = null;
     const renderError = () => {
-        if (state.error) state.error.show(searchFormEl);
+        if (alertInstance) {
+            alertInstance.remove();
+            alertInstance = null;
+        }
+        
+        if (!state.error) return;
+
+        alertInstance = new DangerAlert(state.error);
+        alertInstance.show(searchFormEl);
     }
 
     /**
@@ -334,19 +335,9 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * エラー表示状態をクリア
      */
     const cleanError = () => {
-        if (state.error) state.error.remove();
+        alertInstance?.remove();
+        alertInstance = null;
     }
-
-    /**
-     * コンテンツの表示非表示切り替え
-     */
-    const toggleVisibility = () => {
-        const hideResults = state.isLoading || state.error;
-
-        [totalResultsEl, resultsEl, paginationEl].forEach(el =>
-            el?.classList.toggle('hidden', hideResults)
-        );
-    };
 
     /**
      * 指定したエレメント箇所にスクロール
@@ -404,8 +395,8 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         applyMovies({
             page: 1,
             results: [],
-            totalPages: 1,
-            totalResults: 0
+            total_pages: 1,
+            total_results: 0
         });
         renderContents();
     };
