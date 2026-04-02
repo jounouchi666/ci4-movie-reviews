@@ -27,6 +27,12 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         error: null,
         validationErrors: null
     };
+
+    // ローディングタイプENUM
+    const LOADING_TYPE = {
+        SPINNER: 'spinner',
+        SKELETON: 'skeleton'
+    }
     
     const spinner = new LoadingSpinner(spinnerWrapper);
 
@@ -126,6 +132,9 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const onPagination = (targetPage) => {
         if (targetPage < 1 || targetPage > state.totalPages) return;
+
+        scrollTop();
+
         loadMovies(state.currentTitle, targetPage);
     }
     
@@ -138,10 +147,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      */
     const loadMovies = async (targetTitle, targetPage) => {
         try {
-            state.error = null;
-            state.validationErrors = null;
-
-            scrollTop();
+            resetErrors();
             
             startLoading();
 
@@ -189,9 +195,13 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                 break;
             case 400:
                 state.validationErrors = e.data.messages;
+                // 直前のデータがあれば復元
+                if (state.hasSearched) renderContents();
                 break;
             default:
-                state.error = '読み込み失敗';
+                state.error = new DangerAlert('読み込み失敗');
+                // 検索結果の初期化
+                resetResults();
         };
     }
 
@@ -204,12 +214,14 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         // 画面操作禁止化処理
 
         if (!state.hasSearched) {
-            state.loadingUse = 'spinner';
+            state.loadingUse = LOADING_TYPE.SPINNER;
             spinner.start();
             return;
         }
 
         // スケルトン開始
+        state.loadingUse = LOADING_TYPE.SKELETON;
+        updateToSkeleton();
     }
 
     /**
@@ -221,15 +233,15 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         // 画面操作許可化処理
 
         switch (state.loadingUse) {
-            case 'spinner': 
+            case LOADING_TYPE.SPINNER: 
                 spinner.end();
+                state.loadingUse = null;
                 break;
-            case 'skeleton':
-                ;
+            case LOADING_TYPE.SKELETON:
+                state.loadingUse = null;
                 break;
             default: break;
         }
-        
     }
     
     /**
@@ -264,7 +276,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         // ローディング中、またはエラーがある場合は非表示
         const showContent = !state.isLoading && !hasError();
 
-        toggleVisibility(showContent);
+        toggleVisibility();
         
         if (state.validationErrors) {
             renderSearchFormValidationError();
@@ -272,23 +284,29 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         }
 
         if (state.error) {
+            renderError();
             return;
         }
 
         // コンテンツ描画
+        renderContents();
+    };
+
+    
+    /** 
+     * コンテンツ描画
+     */
+    const renderContents = () => {
         updateTotalResults(state.totalResults);
         updateMovieList(state.movies);
         updatePaginationUI(state.page, state.totalPages);
-    };
+    }
 
     
     /**
      * 検索結果のバリデーションエラー状態を描画
      */
     const renderSearchFormValidationError = () => {
-        ValidationHelper.cleanValidState(titleInputEl);
-        ValidationHelper.removeInvalidFeedback(titleInputEl);
-
         const errors = state.validationErrors?.title ?? [];
         if (!errors || errors.length === 0) {
             return;
@@ -298,12 +316,35 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     }
 
     /**
-     * コンテンツの表示非表示切り替え
-     * @param {boolean} showContent 
+     * エラー状態を描画
      */
-    const toggleVisibility = showContent => {
+    const renderError = () => {
+        if (state.error) state.error.show(searchFormEl);
+    }
+
+    /**
+     * バリデーションエラー表示状態をクリア
+     */
+    const cleanValidationErrors = () => {
+        ValidationHelper.cleanValidState(titleInputEl);
+        ValidationHelper.removeInvalidFeedback(titleInputEl);
+    }
+
+    /**
+     * エラー表示状態をクリア
+     */
+    const cleanError = () => {
+        if (state.error) state.error.remove();
+    }
+
+    /**
+     * コンテンツの表示非表示切り替え
+     */
+    const toggleVisibility = () => {
+        const hideResults = state.isLoading || state.error;
+
         [totalResultsEl, resultsEl, paginationEl].forEach(el =>
-            el?.classList.toggle('hidden', !showContent)
+            el?.classList.toggle('hidden', hideResults)
         );
     };
 
@@ -324,7 +365,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * @param {number} totalResultsCount
      */
     const updateTotalResults = totalResults => {
-        totalResultsEl.innerText = state.hasSearched && !hasError()
+        totalResultsEl.innerText = state.hasSearched
             ? `検索結果：${totalResults}件`
             : '';
     };
@@ -341,8 +382,42 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         resultsEl.innerHTML = movieList;
     };
 
-    const updateToSkeleton = count => {
-        
+    
+    /**
+     * 映画検索結果をスケルトンカードに更新
+     *
+     * @param {*} count 
+     */
+    const updateToSkeleton = (count = 20) => {
+        let movieList = '';
+        for (let i = 0; i < count; i++) {
+            movieList += createSkeletonItem();
+        }
+        resultsEl.innerHTML = movieList;
+    }
+    
+    /** 
+     * 検索状態を初期化
+     */
+    const resetResults = () => {
+        state.hasSearched = false;
+        applyMovies({
+            page: 1,
+            results: [],
+            totalPages: 1,
+            totalResults: 0
+        });
+        renderContents();
+    };
+
+    /**
+     * エラー状態の初期化
+     */
+    const resetErrors = () => {
+        state.error = null;
+        state.validationErrors = null;
+        cleanError();
+        cleanValidationErrors();
     }
 
     /**
@@ -360,8 +435,12 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         return createMovieCard(movieInstance);
     };
 
-
-    const createSkeltonItem = () => {
+    /**
+     * スケルトンカードを生成
+     *
+     * @returns {string} 
+     */
+    const createSkeletonItem = () => {
         const movie = Movie.createSkeleton();
         return createMovieCard(movie);
     }
@@ -373,19 +452,27 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * @returns {string} 
      */
     const createMovieCard = movie => {
-        const {id, title, releaseYear, genre, posterUrl, overview } = movie.toObject();
+        const {id, title, releaseYear, genre, genreNames, posterUrl, overview, isSkeleton} = movie;
+
         return `
-            <li id="movie-${id}" class="p-0 card shadow-sm rounded w-100">
+            <li id="movie-${id ?? ''}" class="p-0 card shadow-sm rounded w-100 ${isSkeleton ? 'placeholder-glow' : ''}">
                 <div class="card-body d-flex align-items-stretch gap-3 w-100">
 
                     <div class="card-thumb shrink-0">
-                        <img src="${posterUrl}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
+                        ${isSkeleton
+                            ? '<div class="placeholder w-100 h-100" style="min-width: 120px; height: 180px;"></div>'
+                            : `<img src="${posterUrl}" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy"></img>`
+                        }
                     </div>
 
                     <div class="card-text w-100">
 
                         <div class="movie-genres mb-1">
-                            ${Object.values(genre).map(g => `<span class="badge bg-primary">${g.name}</span>`).join('')}
+                            ${isSkeleton
+                                ? `${Object.values(genre).join('')}`
+                                : `${genreNames.map(genre => `<span class="badge bg-primary">${genre}</span>`).join('')}`
+                            }
+                            
                         </div>
 
                         <a
@@ -399,7 +486,9 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                         <p class="mb-2">${releaseYear}</p>
                         
                         <p class="mb-0 d-inline-block text-truncate w-100">${overview}</p>
+
                     </div>
+
                 </div>
             </li>`;
     }
@@ -417,7 +506,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         prevButtonEl.querySelector('button.page-link').disabled = isFirstPage;
         nextButtonEl.querySelector('button.page-link').disabled = isLastPage;
 
-        pagePerTotalPages.innerText = state.hasSearched && !hasError()
+        pagePerTotalPages.innerText = state.hasSearched
             ? `${page}/${totalPages}`
             : '';
     };
