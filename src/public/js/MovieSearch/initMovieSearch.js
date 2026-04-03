@@ -72,8 +72,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         const movie = state.movies.find(m => m.id === Number(id));
         if (!movie) return;
 
-        const {title, releaseYear, genre, poster_path, poster_url, overview} = movie;
-        const movieInstance = new Movie(id, title, releaseYear, genre, poster_path, poster_url, overview);
+        const movieInstance = Movie.fromSearchResponse(movie);
         showMovieDetail(movieSearchDetailWrapperEl, movieInstance);
     }
 
@@ -436,12 +435,8 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * @param {object} movie 
      * @returns 
      */
-    const createMovieItem = ({id, title, release_date, genre, poster_path, poster_url, overview}) => {
-        const releaseYear = release_date
-            ? `${release_date.slice(0, 4)}年公開`
-            : '公開日未定';
-
-        const movieInstance = new Movie(id, title, releaseYear, genre, poster_path, poster_url, overview);
+    const createMovieItem = (movie) => {
+        const movieInstance = Movie.fromSearchResponse(movie);
         return createMovieCard(movieInstance);
     };
 
@@ -462,7 +457,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * @returns {string} 
      */
     const createMovieCard = movie => {
-        const {id, title, releaseYear, genre, genreNames, posterUrl, overview, isSkeleton} = movie;
+        const {id, title, releaseYearString, genre, genreNames, posterUrl, overview, isSkeleton} = movie;
 
         return `
             <li id="movie-${id ?? ''}" class="p-0 card shadow-sm rounded w-100 ${isSkeleton ? 'placeholder-glow' : ''}">
@@ -498,7 +493,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                                 </a>`
                         }
 
-                        <p class="mb-2">${releaseYear}</p>
+                        <p class="mb-2">${releaseYearString}</p>
                         
                         <p class="mb-0 d-inline-block text-truncate w-100">${overview}</p>
 
