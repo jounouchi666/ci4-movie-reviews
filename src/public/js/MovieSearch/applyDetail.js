@@ -13,7 +13,7 @@
  * }} 
  */
 export const createEditFormController = ({movieIdEl, titleEl, yearEl, genreEl}) => {
-    return {
+    const controller = {
         /**
          * フォームにデータを反映
          * @param {{
@@ -35,10 +35,23 @@ export const createEditFormController = ({movieIdEl, titleEl, yearEl, genreEl}) 
          * フォームの映画情報部分をクリア
          */
         clear: () => {
-            movieIdEl.value = '';
-            titleEl.value = '';
-            yearEl.value = '';
-            genreEl.value = '';
+            controller.unlock();
+            [movieIdEl, titleEl, yearEl, genreEl].forEach(el => el.value = '');
+
+        },
+        /**
+         * 操作不可にする
+         */
+        lock: () => {
+            [movieIdEl, titleEl, yearEl, genreEl].forEach(el => el.disabled = true);
+        },
+        /**
+         * 操作可にする
+         */
+        unlock: () => {
+            [movieIdEl, titleEl, yearEl, genreEl].forEach(el => el.disabled = false);
         }
     }
+
+    return controller;
 };
