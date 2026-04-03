@@ -75,26 +75,10 @@
 
                 <div class="modal-body">
                     <div class="container-md">
-                        <div id="movie-search-detail" class="w-100 mb-3">
-                            <h3 class="h2">タイトル<span class="h3">（YYYY年公開）</span></h3>
-                            <div class="movie-genres h5">
-                                <span class="badge bg-primary">カテゴリA</span>
-                                <span class="badge bg-primary">カテゴリB</span>
-                                <span class="badge bg-primary">カテゴリC</span>
-                            </div>
+                        <div id="movie-search-detail" class="movie-detail__detail w-100 mb-3"></div>
 
-                            <div class="mt-2">
-                                <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="poster-image" loading="lazy">
-                            </div>
-
-                            <div class="mt-3">
-                                <h4 class="h4">あらすじ</h4>
-                                <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer px-0 d-flex justify-content-center">
-                            <button class="mx-0 btn btn-success w-100 mw-xl">適用</button>
+                        <div class="modal-footer px-0 d-flex justify-content-center movie-detail__apply">
+                            <button class="mx-0 btn btn-success w-100 mw-xl apply-button">適用</button>
                         </div>
                     </div>
                 </div>
