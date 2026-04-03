@@ -23,7 +23,7 @@ export function initEdit() {
     }
 
     const editFormController = buildController(movieEditForm);
-    const clearButton = document.getElementById('.edit__clear-form');
+    const clearButton = document.querySelector('.edit__clear-form');
     if (clearButton && editFormController) {
         clearButton.addEventListener('click', editFormController.clear);
     }
