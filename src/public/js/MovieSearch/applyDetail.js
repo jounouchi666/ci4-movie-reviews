@@ -1,21 +1,44 @@
-import Movie from "./Movie.js";
-
 /**
- * 検索結果を編集画面に反映
+ * EditFormControllerを生成
  *
- * @export
- * @param {HTMLFormElement} formEl 
- * @param {Movie} movie 
+ * @param {{
+ *  movieIdEl: HTMLInputElement,
+ *  titleEl: HTMLInputElement,
+ *  yearEl: : HTMLInputElement,
+ *  genreEl: : HTMLInputElement
+ * }}
+ * @returns {{
+ *  apply: ({ movieId, title, year, genre }) => void,
+ *  clear: () => void;
+ * }} 
  */
-export function applyDetail (formEl, movie) {
-    const movieIdEl = formEl.querySelector('input[name="movie_id"]');
-    const titleEl = formEl.querySelector('input[name="title"]');
-    const yearEl = formEl.querySelector('input[name="year"]');
-    const genreEl = formEl.querySelector('input[name="genre"]');
-    
-    const {id, title, releaseYear, genreNames} = movie;
-    movieIdEl.value = id;
-    titleEl.value = title;
-    yearEl.value = releaseYear;
-    genreEl.value = genreNames.join(',');
-}
+export const createEditFormController = ({movieIdEl, titleEl, yearEl, genreEl}) => {
+    return {
+        /**
+         * フォームにデータを反映
+         * @param {{
+         *  movieId: number,
+         *  title: string,
+         *  year: number,
+         *  genre: string|[string]
+         * }} 
+         */
+        apply: ({movieId, title, year, genre}) => {
+            genre = Array.isArray(genre) ? genre : [genre];
+
+            movieIdEl.value = movieId;
+            titleEl.value = title;
+            yearEl.value = year;
+            genreEl.value = genre.join(',');
+        },
+        /**
+         * フォームの映画情報部分をクリア
+         */
+        clear: () => {
+            movieIdEl.value = '';
+            titleEl.value = '';
+            yearEl.value = '';
+            genreEl.value = '';
+        }
+    }
+};
