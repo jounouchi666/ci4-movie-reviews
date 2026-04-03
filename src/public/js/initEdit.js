@@ -41,6 +41,7 @@ export function initEdit() {
             year: movie.releaseYear ?? '',
             genre: movie.genreNames
         });
+        editFormController.lock();
         hideModal(modal);
     }
    
