@@ -7,7 +7,7 @@ import { initToggleVisibility } from "./initToggleVisibility.js";
 import { openModalByError, selectListGroupWithError, selectTabWithError } from "./uiErrorController.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
 import { initColorMode } from "./initColorMode.js";
-import { initMovieSearch } from "./MovieSearch/initMovieSearch.js";
+import { initEdit } from "./initEdit.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     // カラーモード動作の適用
@@ -17,24 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const flashSuccess = document.querySelectorAll('.flash-success');
     flashSuccess.forEach(el => autoSlideUp(el));
 
-    // 映画Ajax検索機能の初期化
-    const movieSearchModal = document.getElementById('movie-search-modal');
-    const movieSearchFormEl = document.getElementById('movie-search-form');
-    const movieSearchResultsWrapperEl = document.getElementById('movie-search-results');
-    const movieSearchResultsEl = movieSearchResultsWrapperEl.querySelector('.movie-search__results');
-    const movieSerachTotalEl = movieSearchResultsWrapperEl.querySelector('.movie-search__total');
-    const movieSearchPaginationEl = document.querySelector('.movie-search__pagination');
-    const movieSearchSpinnerEl = movieSearchModal.querySelector('.spinner-wrapper');
-    const movieSearchDetailModal = document.getElementById('movie-search-detail-modal');
-
-    initMovieSearch(
-        movieSearchFormEl,
-        movieSearchResultsEl,
-        movieSerachTotalEl,
-        movieSearchPaginationEl,
-        movieSearchSpinnerEl,
-        movieSearchDetailModal
-    );
+    // 編集画面の初期化
+    initEdit();
 
     // バリデーションエラーを持つコンテンツを表示状態にする
     document.querySelectorAll('.modal').forEach(openModalByError); // モーダル
