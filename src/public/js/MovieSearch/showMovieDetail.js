@@ -1,13 +1,11 @@
-import { hideModal } from "../uiErrorController.js";
-import { applyDetail } from "./applyDetail.js";
-
 /**
  * 映画詳細を生成し表示
  *
  * @param {HTMLElement} movieSearchDetailModalEl
  * @param {{Movie}} movie
+ * @param {movie => void} onApply
  */
-export function showMovieDetail (movieSearchDetailModalEl, movie) {
+export function showMovieDetail (movieSearchDetailModalEl, movie, onApply) {
     const detailModalEl = movieSearchDetailModalEl.querySelector('.movie-detail__detail');
 
     /**
@@ -39,19 +37,10 @@ export function showMovieDetail (movieSearchDetailModalEl, movie) {
      * Applyイベントハンドラ
      */
     const handleApply = e => {
-        onApply(formEl, movie);
-    }
-
-    /**
-     * Apply処理
-     */
-    const onApply = () => {
-        applyDetail(formEl, movie);
-        hideModal(movieSearchDetailModalEl);
+        onApply(movie);
     }
 
     detailModalEl.innerHTML = createMovieDetail(movie);
     const applyButton = movieSearchDetailModalEl.querySelector('.movie-detail__apply .apply-button');
-    const formEl = document.getElementById('movie-edit-form');
     applyButton.addEventListener('click', handleApply);
 }
