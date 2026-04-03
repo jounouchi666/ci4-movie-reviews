@@ -1,14 +1,14 @@
+import { hideModal } from "../uiErrorController.js";
 import { applyDetail } from "./applyDetail.js";
 
 /**
- * 映画カードを生成
+ * 映画詳細を生成し表示
  *
- * @param {string} movieSearchDetailWrapperEl
+ * @param {HTMLElement} movieSearchDetailModalEl
  * @param {{Movie}} movie
- * @returns {string} 
  */
-export function showMovieDetail (movieSearchDetailWrapperEl, movie) {
-    const detailWrapperEl = movieSearchDetailWrapperEl.querySelector('.movie-detail__detail');
+export function showMovieDetail (movieSearchDetailModalEl, movie) {
+    const detailModalEl = movieSearchDetailModalEl.querySelector('.movie-detail__detail');
 
     /**
      * 映画詳細を生成
@@ -18,7 +18,6 @@ export function showMovieDetail (movieSearchDetailWrapperEl, movie) {
      */
     const createMovieDetail = movie => {
         const {title, releaseYearString, genreNames, posterUrl, overview} = movie;
-        console.dir(movie)
         return `
             <h3 class="h2">${title}<span class="h3">（${releaseYearString}）</span></h3>
 
@@ -37,13 +36,22 @@ export function showMovieDetail (movieSearchDetailWrapperEl, movie) {
     }
 
     /**
-     * Apply処理
+     * Applyイベントハンドラ
      */
     const handleApply = e => {
-        applyDetail(movie);
+        onApply(formEl, movie);
     }
 
-    detailWrapperEl.innerHTML = createMovieDetail(movie);
-    const applyButton = movieSearchDetailWrapperEl.querySelector('.movie-detail__apply .apply-button');
+    /**
+     * Apply処理
+     */
+    const onApply = () => {
+        applyDetail(formEl, movie);
+        hideModal(movieSearchDetailModalEl);
+    }
+
+    detailModalEl.innerHTML = createMovieDetail(movie);
+    const applyButton = movieSearchDetailModalEl.querySelector('.movie-detail__apply .apply-button');
+    const formEl = document.getElementById('movie-edit-form');
     applyButton.addEventListener('click', handleApply);
 }
