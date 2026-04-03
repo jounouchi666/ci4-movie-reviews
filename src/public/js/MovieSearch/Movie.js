@@ -19,6 +19,19 @@ class Movie
         this.#posterUrl = posterUrl;
         this.#overview = overview;
     }
+
+    /**
+     * 検索結果のオブジェクトから生成
+     * 
+     * @param {{id, title, release_date, genre, poster_path, poster_url, overview}} movie 
+     */
+    static fromSearchResponse({id, title, release_date, genre, poster_path, poster_url, overview}) {
+        const releaseYear = release_date
+            ? release_date.slice(0, 4)
+            : null;
+
+        return new this(id, title, releaseYear, genre, poster_path, poster_url, overview);
+    }
     
     /**
      * スケルトン用のファクトリー
@@ -58,6 +71,14 @@ class Movie
     get overview() {return this.#overview}
     get isSkeleton() {return this.#isSkeleton}
     
+    
+    /**
+     * 公開年を文字列で出力
+     */
+    get releaseYearString() {
+        return this.releaseYear ? `${this.releaseYear}年公開` : '公開日未定';
+    }
+
     /**
      * ジャンル名の配列を出力
      */
