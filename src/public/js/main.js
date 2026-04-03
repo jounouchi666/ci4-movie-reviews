@@ -25,13 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const movieSerachTotalEl = movieSearchResultsWrapperEl.querySelector('.movie-search__total');
     const movieSearchPaginationEl = document.querySelector('.movie-search__pagination');
     const movieSearchSpinnerEl = movieSearchModal.querySelector('.spinner-wrapper');
+    const movieSearchDetailModal = document.getElementById('movie-search-detail-modal');
 
     initMovieSearch(
         movieSearchFormEl,
         movieSearchResultsEl,
         movieSerachTotalEl,
         movieSearchPaginationEl,
-        movieSearchSpinnerEl
+        movieSearchSpinnerEl,
+        movieSearchDetailModal
     );
 
     // バリデーションエラーを持つコンテンツを表示状態にする
