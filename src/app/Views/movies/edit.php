@@ -86,8 +86,16 @@
         </div>
     </div>
 
-    <?= form_open(route_to('save'), ['class' => 'mt-3 d-flex flex-column gap-3', 'method' => 'post']) ?>
+    <button class="btn btn-danger edit__clear-form">映画情報をクリア</button>
+
+    <?= form_open(route_to('save'), ['id' => 'movie-edit-form', 'class' => 'mt-3 d-flex flex-column gap-3', 'method' => 'post']) ?>
         <?= csrf_field() ?>
+
+        <input
+            type="hidden"
+            name="movie_id"
+            value="<?= isset($movie->movieId) ? esc($movie->movieId) : '' ?>"
+        >
 
         <?php if ($mode === 'edit'):  ?>
             <!-- ID -->
