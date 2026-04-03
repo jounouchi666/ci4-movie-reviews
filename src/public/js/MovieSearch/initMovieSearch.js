@@ -1,6 +1,7 @@
 import { searchMovie } from "../api/searchMovie.js";
 import LoadingSpinner from "../LoadingSpinner.js";
 import ValidationHelper from "../validationHelper.js";
+import { showMovieDetail } from "./showMovieDetail.js";
 import Movie from "./Movie.js";
 
 /**
@@ -12,8 +13,9 @@ import Movie from "./Movie.js";
  * @param {HTMLElement} totalResultsEl 
  * @param {HTMLElement} paginationEl 
  * @param {HTMLElement} spinnerWrapper 
+ * @param {HTMLElement} movieSearchDetailWrapperEl
  */
-export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginationEl, spinnerWrapper) {
+export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginationEl, spinnerWrapper, movieSearchDetailWrapperEl) {
     // ローディングタイプENUM
     const LOADING_TYPE = {
         SPINNER: 'spinner',
@@ -34,7 +36,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         error: null,
         validationErrors: null
     };
-    
+
     const spinner = new LoadingSpinner(spinnerWrapper);
 
     /**
@@ -58,6 +60,24 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         state.title = e.target.value;
 
     /**
+     * Search Results
+     *
+     * @param {InputEvent} e 
+     */
+    const handleResultsClick = e => {
+        const linkEl = e.target.closest('.movie-detail__link');
+        if (!linkEl) return;
+
+        const id = linkEl.dataset.movieId;
+        const movie = state.movies.find(m => m.id === Number(id));
+        if (!movie) return;
+
+        const {title, releaseYear, genre, poster_path, poster_url, overview} = movie;
+        const movieInstance = new Movie(id, title, releaseYear, genre, poster_path, poster_url, overview);
+        showMovieDetail(movieSearchDetailWrapperEl, movieInstance);
+    }
+
+    /**
      * Pagination PrevButton
      * 
      * @param {InputEvent} e  
@@ -77,10 +97,6 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         onPagination(state.page + 1)
     }
 
-
-
-
-
     /**
      * イベントバインド
      *
@@ -88,16 +104,19 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
      * @param {{ 
      *  searchFormEl: HTMLFormElement,
      *  titleInputEl: InputEvent,
+     *  resultsEl: HTMLElement
      *  prevButtonEl: InputEvent,
-     *  nextButtonEl: InputEvent
+     *  nextButtonEl: InputEvent,
      * }}
      */
     const bindEvent = (
-        { searchFormEl, titleInputEl, prevButtonEl, nextButtonEl },
+        { searchFormEl, titleInputEl, resultsEl, prevButtonEl, nextButtonEl },
     ) => {
         searchFormEl.addEventListener('submit', handleSubmit);
 
         titleInputEl.addEventListener('input', handleTitleInput);
+
+        resultsEl.addEventListener('click', handleResultsClick);
 
         prevButtonEl.addEventListener('click', handlePrevButton);
             
@@ -108,7 +127,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
     const prevButtonEl = paginationEl.querySelector('.movie-search__page-prev');
     const nextButtonEl = paginationEl.querySelector('.movie-search__page-next');
     bindEvent(
-        { searchFormEl, titleInputEl, prevButtonEl, nextButtonEl }
+        { searchFormEl, titleInputEl, resultsEl, prevButtonEl, nextButtonEl}
     );
 
 
@@ -470,9 +489,10 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
                             ? `<span class="mb-0 d-inline-block h4 card-title text-decoration-none text-body w-100">${title}</span>`
                             : `
                                 <a
-                                    class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
+                                    class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100 movie-detail__link"
                                     href="#movie-search-detail-modal"
                                     data-bs-toggle="modal"
+                                    data-movie-id="${id}"
                                 >
                                     ${title}
                                 </a>`
