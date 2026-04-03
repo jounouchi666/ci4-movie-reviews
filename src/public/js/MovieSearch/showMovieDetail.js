@@ -17,9 +17,10 @@ export function showMovieDetail (movieSearchDetailWrapperEl, movie) {
      * @returns {string} 
      */
     const createMovieDetail = movie => {
-        const {title, releaseYear, genreNames, posterUrl, overview} = movie;
+        const {title, releaseYearString, genreNames, posterUrl, overview} = movie;
+        console.dir(movie)
         return `
-            <h3 class="h2">${title}<span class="h3">（${releaseYear}年公開）</span></h3>
+            <h3 class="h2">${title}<span class="h3">（${releaseYearString}）</span></h3>
 
             <div class="movie-genres h5">
                 ${genreNames.map(genre => `<span class="badge bg-primary">${genre}</span>`).join('')}
