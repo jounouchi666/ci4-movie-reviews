@@ -14,8 +14,17 @@ import Movie from "./Movie.js";
  * @param {HTMLElement} paginationEl 
  * @param {HTMLElement} spinnerWrapper 
  * @param {HTMLElement} movieSearchDetailWrapperEl
+ * @param {function} onApply
  */
-export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginationEl, spinnerWrapper, movieSearchDetailWrapperEl) {
+export function initMovieSearch(
+    searchFormEl,
+    resultsEl,
+    totalResultsEl,
+    paginationEl,
+    spinnerWrapper,
+    movieSearchDetailWrapperEl,
+    onApply
+) {
     // ローディングタイプENUM
     const LOADING_TYPE = {
         SPINNER: 'spinner',
@@ -73,7 +82,7 @@ export function initMovieSearch(searchFormEl, resultsEl, totalResultsEl, paginat
         if (!movie) return;
 
         const movieInstance = Movie.fromSearchResponse(movie);
-        showMovieDetail(movieSearchDetailWrapperEl, movieInstance);
+        showMovieDetail(movieSearchDetailWrapperEl, movieInstance, onApply);
     }
 
     /**
