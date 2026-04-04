@@ -9,10 +9,12 @@ class Movie extends Entity
 {
     protected $attributes = [
         'id' => null,
+        'tmdb_id' => null,
         'user_id' => null,
         'title' => null,
         'year' => null,
         'genre' => null,
+        'poster_path' => null,
         'rating' => null,
         'review' => null,
         'created_at' => null,
@@ -25,6 +27,18 @@ class Movie extends Entity
         'id' => 'integer',
         'user_id' => 'integer',
     ];
+
+
+    /**
+     * ポスターのパスを返す
+     * 登録されていなければデフォルトイメージを返す
+     * 
+     * @return string
+     */
+    public function getPosterPath(): string {
+        $imageBaseUrl = Config('TMDb')->imageBaseUrl;
+        return "{$imageBaseUrl}/original/{$this->attributes['poster_path']}" ?? base_url(DEFAULT_POSTER_IMAGE);
+    }
 
 
     /**
