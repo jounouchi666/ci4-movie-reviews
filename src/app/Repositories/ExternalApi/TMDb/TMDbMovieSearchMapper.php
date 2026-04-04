@@ -28,7 +28,7 @@ class TMDbMovieSearchMapper
                                     : null,
                 posterUrl:      !empty($movie['poster_path'])
                                     ? "{$imageBaseUrl}/original/{$movie['poster_path']}"
-                                    : base_url('img/no_image.png'),
+                                    : base_url(DEFAULT_POSTER_IMAGE),
                 backdropPath:   !empty($movie['backdrop_path'])
                                     ? "{$imageBaseUrl}/original/{$movie['backdrop_path']}"
                                     : null,
