@@ -3,6 +3,7 @@ import LoadingSpinner from "../LoadingSpinner.js";
 import ValidationHelper from "../validationHelper.js";
 import { showMovieDetail } from "./showMovieDetail.js";
 import Movie from "./Movie.js";
+import DangerAlert from "../dangerAlert.js";
 
 /**
  * Ajax映画検索init
