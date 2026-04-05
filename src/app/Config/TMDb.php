@@ -16,6 +16,7 @@ class TMDb extends BaseConfig
     // URL
     public $baseUrl = 'https://api.themoviedb.org/3';
     public $searchUrl = '';
+    public $movieDetailsUrl = '';
     public $genreUrl = '';
     public $imageBaseUrl = 'http://image.tmdb.org/t/p';
 
@@ -27,5 +28,6 @@ class TMDb extends BaseConfig
 
         $this->searchUrl = $this->baseUrl . '/search/movie';
         $this->genreUrl = $this->baseUrl . '/genre/movie/list';
+        $this->movieDetailsUrl = $this->baseUrl . '/movie';
     }
 }
