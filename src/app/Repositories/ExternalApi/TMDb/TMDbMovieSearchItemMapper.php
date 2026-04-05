@@ -64,9 +64,7 @@ class TMDbMovieSearchItemMapper
             'original_title' => $movie['original_title'] ?? '',
             'genres' =>         $movie['genre_ids'] ?? [],
             'overview' =>       $movie['overview'] ?? '',
-            'poster_path' =>    !empty($movie['poster_path'])
-                                ? "{$imageBaseUrl}/original/{$movie['poster_path']}"
-                                : null,
+            'poster_path' =>    $movie['poster_path'],
             'poster_url' =>     !empty($movie['poster_path'])
                                 ? "{$imageBaseUrl}/original/{$movie['poster_path']}"
                                 : base_url(DEFAULT_POSTER_IMAGE),
