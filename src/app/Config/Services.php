@@ -9,8 +9,12 @@ use App\Repositories\ExternalApi\TMDb\MovieGenreCacheService;
 use App\Repositories\ExternalApi\TMDb\MovieGenreRepository;
 use App\Repositories\ExternalApi\TMDb\MovieSearchRepository;
 use App\Repositories\ExternalApi\TMDb\TMDbClient;
+use App\Repositories\ExternalApi\TMDb\TMDbMovieGenreMapper;
+use App\Repositories\ExternalApi\TMDb\TMDbMovieSearchItemMapper;
 use App\Repositories\ExternalApi\TMDb\TMDbMovieSearchMapper;
 use App\Repositories\ExternalApi\TMDb\TMDbRequestExecutor;
+use App\Services\MovieCacheService;
+use App\UseCases\CreateReviewUseCase;
 use App\UseCases\MovieSearchUseCase;
 use CodeIgniter\Config\BaseService;
 
@@ -76,6 +80,24 @@ class Services extends BaseService
     }
 
     /**
+     * movieCacheService
+     * 映画キャッシュサービス
+     *
+     * @param  bool $getShared
+     * @return MovieCacheService
+     */
+    public static function movieCacheService($getShared = true): MovieCacheService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieCacheService');
+        }
+
+        return new MovieCacheService(
+            static::movieSearchRepository()
+        );
+    }
+
+    /**
      * movieGenreCacheService
      * 映画ジャンルキャッシュサービス
      *
@@ -106,7 +128,43 @@ class Services extends BaseService
             return static::getSharedInstance('tmdbMovieSearchMapper');
         }
 
-        return new TMDbMovieSearchMapper();
+        return new TMDbMovieSearchMapper(
+            static::tmdbMovieSearchItemMapper()
+        );
+    }
+
+    /**
+     * TMDbMovieSearchItemMapper
+     * 返却用DTOを組み立てるサービス
+     *
+     * @param  bool $getShared
+     * @return TMDbMovieSearchItemMapper
+     */
+    public static function tmdbMovieSearchItemMapper($getShared = true): TMDbMovieSearchItemMapper
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbMovieSearchItemMapper');
+        }
+
+        return new TMDbMovieSearchItemMapper(
+            static::tmdbMovieGenreMapper()
+        );
+    }
+
+    /**
+     * tmdbMovieGenreMapper
+     * 返却用DTOを組み立てるサービス
+     *
+     * @param  bool $getShared
+     * @return TMDbMovieGenreMapper
+     */
+    public static function tmdbMovieGenreMapper($getShared = true): TMDbMovieGenreMapper
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbMovieGenreMapper');
+        }
+
+        return new TMDbMovieGenreMapper();
     }
 
     /**
@@ -142,6 +200,7 @@ class Services extends BaseService
 
         return new MovieSearchRepository(
             static::tmdbMovieSearchMapper(),
+            static::tmdbMovieSearchItemMapper(),
             static::movieGenreCacheService(),
             static::tmdbRequestExecutor()
         );
@@ -160,7 +219,25 @@ class Services extends BaseService
         }
         
         return new MovieSearchUseCase(
-            static::movieSearchRepository()
+            static::movieSearchRepository(),
+            static::movieCacheService()
+        );
+    }
+
+    /**
+     * createReviewUseCase
+     *
+     * @param  bool $getShared
+     * @return CreateReviewUseCase
+     */
+    public static function createReviewUseCase($getShared = true): CreateReviewUseCase
+    {
+        if ($getShared) {
+            return static::getSharedInstance('createReviewUseCase');
+        }
+        
+        return new CreateReviewUseCase(
+            static::movieCacheService()
         );
     }
 }
