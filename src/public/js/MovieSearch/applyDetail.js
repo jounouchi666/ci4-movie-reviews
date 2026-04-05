@@ -43,13 +43,13 @@ export const createEditFormController = ({movieIdEl, titleEl, yearEl, genreEl}) 
          * 操作不可にする
          */
         lock: () => {
-            [movieIdEl, titleEl, yearEl, genreEl].forEach(el => el.disabled = true);
+            [titleEl, yearEl, genreEl].forEach(el => el.disabled = true);
         },
         /**
          * 操作可にする
          */
         unlock: () => {
-            [movieIdEl, titleEl, yearEl, genreEl].forEach(el => el.disabled = false);
+            [titleEl, yearEl, genreEl].forEach(el => el.disabled = false);
         }
     }
 
