@@ -37,7 +37,9 @@ class Movie extends Entity
      */
     public function getPosterPath(): string {
         $imageBaseUrl = Config('TMDb')->imageBaseUrl;
-        return "{$imageBaseUrl}/original/{$this->attributes['poster_path']}" ?? base_url(DEFAULT_POSTER_IMAGE);
+        return $this->attributes['poster_path']
+            ? "{$imageBaseUrl}/original/{$this->attributes['poster_path']}"
+            : base_url(DEFAULT_POSTER_IMAGE);
     }
 
 
