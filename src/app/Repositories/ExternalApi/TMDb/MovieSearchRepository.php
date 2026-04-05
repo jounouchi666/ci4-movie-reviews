@@ -2,6 +2,7 @@
 
 namespace App\Repositories\ExternalApi\TMDb;
 
+use App\DTO\MovieSearchItemResultDTO;
 use App\DTO\MovieSearchResultDTO;
 use App\Repositories\ExternalApi\Interface\MovieSearchRepositoryInterface;
 use App\Repositories\ExternalApi\TMDb\TMDbRequestExecutor;
@@ -13,6 +14,7 @@ class MovieSearchRepository implements MovieSearchRepositoryInterface
 {
     public function __construct(
         private TMDbMovieSearchMapper $tmdbMovieSearchMapper,
+        private TMDbMovieSearchItemMapper $tmdbMovieSearchItemMapper,
         private MovieGenreCacheService $movieGenreCacheService,
         private TMDbRequestExecutor $tmdbRequestExecutor
     ) {}
@@ -37,6 +39,20 @@ class MovieSearchRepository implements MovieSearchRepositoryInterface
                 ]
             ),
             $this->movieGenreCacheService->getGenreMap()
+        );
+    }
+
+    public function getDetails(string $movieId): MovieSearchItemResultDTO
+    {
+        $config = Config('TMDb');
+
+        return $this->tmdbMovieSearchItemMapper->toDTOFromObjects(
+            $this->tmdbRequestExecutor->get(
+                "{$config->movieDetailsUrl}/{$movieId}",
+                [
+                    'language' => $config->language
+                ]
+            )
         );
     }
 }
