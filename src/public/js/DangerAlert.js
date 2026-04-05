@@ -1,4 +1,4 @@
-class DangerAlert
+export default class DangerAlert
 {
     #message = '';
 
