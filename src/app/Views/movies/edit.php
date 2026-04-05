@@ -18,59 +18,43 @@
                     <h5 id="movie-search-modal-label" class="modal-title fs-5">映画を検索</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="container-md">
-                        <form id="movie-search-form" class="d-flex justify-content-center">
+                <div class="modal-body h-100 d-flex flex-column p-0">
+                    <div class="container-md p-3 flex-shrink-0">
+                        <form id="movie-search-form" class="d-flex justify-content-center" autocomplete="off">
                             <div class="input-group mw-xl">
-                                <input class="form-control" type="text" name="title" placeholder="タイトルを入力">
+                                <input class="form-control" type="text" name="title" maxlength="255" placeholder="タイトルを入力" aria-label="映画タイトル" required>
                                 <button class="btn btn-primary" type="submit">検索</button>
                             </div>
                         </form>
 
-                        <div id="movie-search-results" class="w-100">
-                            <p class="mt-4 d-flex justify-content-end">検索結果：50件</p>
+                        <div id="movie-search-results" class="position-relative flex-grow-1 overflow-auto mh-212px">
+                            <div class="spinner-wrapper position-absolute w-100 h-100 z-3 d-none d-flex justify-content-center align-items-center bg-white bg-opacity-50">
+                                <div class="spinner-border text-secondary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+
+                            <p class="movie-search__total mt-4 d-flex justify-content-end"></p>
                         
                             <div class="mt-3 flex-1">
-                                <ul class="p-0">
-                                    <li id="movie-12345" class="p-0 card shadow-sm rounded w-100">
-                                        <div class="card-body d-flex align-items-stretch gap-3 w-100">
-                                            <div class="card-thumb shrink-0">
-                                                <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
-                                            </div>
-                                            <div class="card-text w-100">
-                                                <div class="movie-genres mb-1">
-                                                    <span class="badge bg-primary">カテゴリA</span>
-                                                    <span class="badge bg-primary">カテゴリB</span>
-                                                    <span class="badge bg-primary">カテゴリC</span>
-                                                </div>
-                                                <a
-                                                    class="mb-0 d-inline-block text-truncate h4 card-title text-decoration-none text-body stretched-link w-100"
-                                                    href="#movie-search-detail-modal"
-                                                    data-bs-toggle="modal"
-                                                >タイトル</a>
-                                                <p class="mb-2">YYYY年公開</p>
-                                                <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <ul class="p-0 movie-search__results"></ul>
                             </div>
                         </div>
 
-                        <div class="modal-footer d-flex flex-column align-items-center">
+                        <div class="modal-footer movie-search__pagination d-flex flex-column align-items-center">
                             <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <button class="page-link" disabled=true>
+                                <li class="page-item movie-search__page-prev disabled">
+                                    <button class="page-link" disabled>
                                         <span aria-hidden="true">&lsaquo;</span>
                                     </button>
                                 </li>
-                                <li class="page-item">
-                                    <button class="page-link">
+                                <li class="page-item movie-search__page-next disabled">
+                                    <button class="page-link" disabled>
                                         <span aria-hidden="true">&rsaquo;</span>
-                                </button>
+                                    </button>
                                 </li>
                             </ul>
-                            <p>1/30</p>
+                            <p class="page-per-totalpages"></p>
                         </div>
                     </div>
                 </div>
@@ -91,26 +75,10 @@
 
                 <div class="modal-body">
                     <div class="container-md">
-                        <div id="movie-search-detail" class="w-100 mb-3">
-                            <h3 class="h2">タイトル<span class="h3">（YYYY年公開）</span></h3>
-                            <div class="movie-genres h5">
-                                <span class="badge bg-primary">カテゴリA</span>
-                                <span class="badge bg-primary">カテゴリB</span>
-                                <span class="badge bg-primary">カテゴリC</span>
-                            </div>
+                        <div id="movie-search-detail" class="movie-detail__detail w-100 mb-3"></div>
 
-                            <div class="mt-2">
-                                <img src="<?= base_url(DEFAULT_POSTER_IMAGE)?>" alt="ポスター" class="poster-image" loading="lazy">
-                            </div>
-
-                            <div class="mt-3">
-                                <h4 class="h4">あらすじ</h4>
-                                <p class="mb-0 d-inline-block text-truncate w-100">あらすじ文章</p>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer px-0 d-flex justify-content-center">
-                            <button class="mx-0 btn btn-success w-100 mw-md">適用</button>
+                        <div class="modal-footer px-0 d-flex justify-content-center movie-detail__apply">
+                            <button class="mx-0 btn btn-success w-100 mw-xl apply-button">適用</button>
                         </div>
                     </div>
                 </div>
@@ -118,8 +86,16 @@
         </div>
     </div>
 
-    <?= form_open(route_to('save'), ['class' => 'mt-3 d-flex flex-column gap-3', 'method' => 'post']) ?>
+    <button class="btn btn-danger edit__clear-form">映画情報をクリア</button>
+
+    <?= form_open(route_to('save'), ['id' => 'movie-edit-form', 'class' => 'mt-3 d-flex flex-column gap-3', 'method' => 'post']) ?>
         <?= csrf_field() ?>
+
+        <input
+            type="hidden"
+            name="movie_id"
+            value="<?= isset($movie->movieId) ? esc($movie->movieId) : '' ?>"
+        >
 
         <?php if ($mode === 'edit'):  ?>
             <!-- ID -->

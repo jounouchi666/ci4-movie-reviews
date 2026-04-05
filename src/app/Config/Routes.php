@@ -14,6 +14,14 @@ $routes->group('movies', function($routes) {
     $routes->post('delete/(:num)', 'Movies::delete/$1', ['as' => 'delete', 'filter' => 'session']);
 });
 
+// API
+$routes->group('api', function($routes) {
+    $routes->get('movie/search', 'Api\MovieSearch::search', [
+        'as' => 'api.movies.search',
+        'filter' => 'session'
+    ]);
+});
+
 $routes->get('user/(:num)', 'MyPage::show/$1', ['as' => 'userShow']);
 
 $routes->group('mypage', ['filter' => 'session'], function($routes) {

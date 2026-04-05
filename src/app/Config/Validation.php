@@ -46,7 +46,14 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
 
     // editフォームなど（moviesテーブルへのsave時に使用）
-    public $movie = [
+    public $movieInfo = [
+        'movie_id' => [
+            'rules' => 'max_length[11]',
+            'label' => '映画ID',
+            'errors' => [
+                'max_length' => '映画IDは11文字以内にしてください。',
+            ],
+        ],
         'title' => [
             'rules' => 'required|min_length[1]|max_length[255]',
             'label' => 'タイトル',
@@ -72,7 +79,10 @@ class Validation extends BaseConfig
                 'required'   => 'ジャンルは必須です。',
                 'max_length' => 'ジャンルは100文字以内で入力してください。',
             ],
-        ],
+        ]
+    ];
+
+    public $movieReview = [
         'rating' => [
             'rules' => 'required|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
             'label' => '評価',
@@ -89,7 +99,7 @@ class Validation extends BaseConfig
             'errors' => [
                 'max_length' => 'レビューは2000文字以内で入力してください。',
             ],
-        ],
+        ]
     ];
 
     // フィルター用
@@ -159,6 +169,19 @@ class Validation extends BaseConfig
                 'integer'               => '評価は★1～5で入力してください。',
                 'greater_than_equal_to' => '評価の最大値は★1以上で入力してください。',
                 'less_than_equal_to'    => '評価の最大値は★5以下で入力してください。',
+            ],
+        ],
+    ];
+
+    // 映画検索用
+    public $searchMovies = [
+        'title' => [
+            'rules' => 'required|min_length[1]|max_length[255]',
+            'label' => 'タイトル',
+            'errors' => [
+                'required'   => 'タイトルは必須です。',
+                'min_length' => 'タイトルは1文字以上で入力してください。',
+                'max_length' => 'タイトルは255文字以内で入力してください。',
             ],
         ],
     ];

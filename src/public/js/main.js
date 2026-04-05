@@ -7,6 +7,7 @@ import { initToggleVisibility } from "./initToggleVisibility.js";
 import { openModalByError, selectListGroupWithError, selectTabWithError } from "./uiErrorController.js";
 import { selectValueClassToggle } from "./selectValueClassToggle.js";
 import { initColorMode } from "./initColorMode.js";
+import { initEdit } from "./initEdit.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     // カラーモード動作の適用
@@ -16,7 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const flashSuccess = document.querySelectorAll('.flash-success');
     flashSuccess.forEach(el => autoSlideUp(el));
 
-    
+    // 編集画面の初期化
+    initEdit();
+
     // バリデーションエラーを持つコンテンツを表示状態にする
     document.querySelectorAll('.modal').forEach(openModalByError); // モーダル
     document.querySelectorAll('.nav-tabs').forEach(selectTabWithError); // タブ

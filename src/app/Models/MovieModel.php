@@ -16,8 +16,10 @@ class MovieModel extends Model
     protected $allowedFields = [
         'title',
         'user_id',
+        'tmdb_id',
         'year',
         'genre',
+        'poster_path',
         'rating',
         'review',
         'created_at',

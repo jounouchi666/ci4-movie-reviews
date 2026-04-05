@@ -50,6 +50,16 @@ export function selectTab(triggerEl) {
 
 
 /**
+ * モーダルを閉じる
+ * @param {HTMLElement} modal 
+ */
+export function hideModal(modal) {
+    const bsModal = bootstrap.Modal.getInstance(modal);
+    bsModal.hide();
+}
+
+
+/**
  * エラーフラグを持っていたらコールバックを実行する
  * @param {HTMLElement} trigger data-has-error属性を持つトリガー
  * @param {function} callback エラー時に実行するコールバック

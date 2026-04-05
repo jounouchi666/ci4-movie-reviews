@@ -97,16 +97,21 @@ $passwordEditKeys = ['current_password_for_password', 'password', 'password_conf
 
                                             <div class="mb-4 w-100">
                                                 <label  class="form-label text-align-start" for="userIconInput">ユーザーアイコン</label>
-                                                <div class="mb-3 d-inline-block w-100 mx-auto position-relative spinner-wrapper">
-                                                    <img
-                                                        src="<?= $user->thumb_urls[120] ?>"
-                                                        alt="<?= $user->username ?>のアイコン"
-                                                        id="preview-user-icon"
-                                                        class="rounded-circle border shadow-sm profile-icon"
-                                                        loading="lazy"
-                                                    >
-                                                    <div style="display: none;" class="spinner-border text-secondary position-absolute top-0 bottom-0 start-0 end-0 m-auto" role="status">
-                                                        <span class="visually-hidden">Loading...</span>
+                                                <div class="mb-3 position-relative rounded-circle border shadow-sm profile-icon overflow-hidden">
+                                                    <div>
+                                                        <img
+                                                            src="<?= $user->thumb_urls[120] ?>"
+                                                            alt="<?= $user->username ?>のアイコン"
+                                                            id="preview-user-icon"
+                                                            class="position-absolute w-100"
+                                                            loading="lazy"
+                                                        >
+                                                        <div class="spinner-wrapper position-absolute w-100 h-100 z-3 overflow-hidden d-none">
+                                                            <div class="position-absolute w-100 h-100 bg-black bg-opacity-50"></div>
+                                                            <div class="spinner-border position-absolute top-0 bottom-0 start-0 end-0 m-auto text-secondary" role="status">
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <input
@@ -336,7 +341,7 @@ $passwordEditKeys = ['current_password_for_password', 'password', 'password_conf
                 <?php foreach ($movies as $movie): ?>
                     <li class="card topic shadow-sm rounded col-12 col-sm-6 col-md-4 w-100" data-movie-id=<?= $movie->id ?>>
                         <div class="card-body d-flex align-items-stretch gap-3 w-100">
-                            <div class="card-thumb">
+                            <div class="card-thumb shrink-0">
                                 <img src="<?= esc($movie->poster_path) ?>" alt="<?= esc($movie->title) . 'のポスター' ?>" class="w-100 h-100 d-block object-fit-cover" loading="lazy">
                             </div>
                             <div class="card-text w-100">

@@ -6,8 +6,14 @@ body {
   max-width: 576px;
 }
 
+<<<<<<< HEAD
 .mw-md {
   max-width: 448px;
+=======
+.mh-212px {
+  min-height: 212px;
+  height: 100%;
+>>>>>>> feature/frontend
 }
 
 .topic {

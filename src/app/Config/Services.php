@@ -2,6 +2,20 @@
 
 namespace Config;
 
+use App\Repositories\ExternalApi\Interface\MovieClientInterface;
+use App\Repositories\ExternalApi\Interface\MovieGenreRepositoryInterface;
+use App\Repositories\ExternalApi\Interface\MovieSearchRepositoryInterface;
+use App\Repositories\ExternalApi\TMDb\MovieGenreCacheService;
+use App\Repositories\ExternalApi\TMDb\MovieGenreRepository;
+use App\Repositories\ExternalApi\TMDb\MovieSearchRepository;
+use App\Repositories\ExternalApi\TMDb\TMDbClient;
+use App\Repositories\ExternalApi\TMDb\TMDbMovieGenreMapper;
+use App\Repositories\ExternalApi\TMDb\TMDbMovieSearchItemMapper;
+use App\Repositories\ExternalApi\TMDb\TMDbMovieSearchMapper;
+use App\Repositories\ExternalApi\TMDb\TMDbRequestExecutor;
+use App\Services\MovieCacheService;
+use App\UseCases\CreateReviewUseCase;
+use App\UseCases\MovieSearchUseCase;
 use CodeIgniter\Config\BaseService;
 
 /**
@@ -29,4 +43,201 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+        
+    /**
+     * movieClient
+     * 映画取得API接続用クライアント
+     *
+     * @param  bool $getShared
+     * @return MovieClientInterface
+     */
+    public static function movieClient($getShared = true): MovieClientInterface
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieClient');
+        }
+
+        return new TMDbClient();
+    }
+
+    /**
+     * tmdbRequestExecutor
+     * TMDbリクエスト実行モジュール
+     *
+     * @param  bool $getShared
+     * @return TMDbRequestExecutor
+     */
+    public static function tmdbRequestExecutor($getShared = true): TMDbRequestExecutor
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbRequestExecutor');
+        }
+
+        return new TMDbRequestExecutor(
+            static::movieClient()
+        );
+    }
+
+    /**
+     * movieCacheService
+     * 映画キャッシュサービス
+     *
+     * @param  bool $getShared
+     * @return MovieCacheService
+     */
+    public static function movieCacheService($getShared = true): MovieCacheService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieCacheService');
+        }
+
+        return new MovieCacheService(
+            static::movieSearchRepository()
+        );
+    }
+
+    /**
+     * movieGenreCacheService
+     * 映画ジャンルキャッシュサービス
+     *
+     * @param  bool $getShared
+     * @return MovieGenreCacheService
+     */
+    public static function movieGenreCacheService($getShared = true): MovieGenreCacheService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieGenreCacheService');
+        }
+
+        return new MovieGenreCacheService(
+            static::movieGenreRepository()
+        );
+    }
+    
+    /**
+     * tmdbMovieSearchMapper
+     * 返却用DTOを組み立てるサービス
+     *
+     * @param  bool $getShared
+     * @return TMDbMovieSearchMapper
+     */
+    public static function tmdbMovieSearchMapper($getShared = true): TMDbMovieSearchMapper
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbMovieSearchMapper');
+        }
+
+        return new TMDbMovieSearchMapper(
+            static::tmdbMovieSearchItemMapper()
+        );
+    }
+
+    /**
+     * TMDbMovieSearchItemMapper
+     * 返却用DTOを組み立てるサービス
+     *
+     * @param  bool $getShared
+     * @return TMDbMovieSearchItemMapper
+     */
+    public static function tmdbMovieSearchItemMapper($getShared = true): TMDbMovieSearchItemMapper
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbMovieSearchItemMapper');
+        }
+
+        return new TMDbMovieSearchItemMapper(
+            static::tmdbMovieGenreMapper()
+        );
+    }
+
+    /**
+     * tmdbMovieGenreMapper
+     * 返却用DTOを組み立てるサービス
+     *
+     * @param  bool $getShared
+     * @return TMDbMovieGenreMapper
+     */
+    public static function tmdbMovieGenreMapper($getShared = true): TMDbMovieGenreMapper
+    {
+        if ($getShared) {
+            return static::getSharedInstance('tmdbMovieGenreMapper');
+        }
+
+        return new TMDbMovieGenreMapper();
+    }
+
+    /**
+     * movieGenreRepository
+     * 映画ジャンル用リポジトリ―
+     *
+     * @param  bool $getShared
+     * @return MovieGenreRepositoryInterface
+     */
+    public static function movieGenreRepository($getShared = true): MovieGenreRepositoryInterface
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieGenreRepository');
+        }
+
+        return new MovieGenreRepository(
+            static::tmdbRequestExecutor()
+        );
+    }
+
+    /**
+     * movieSearchRepository
+     * 映画検索用リポジトリ―
+     *
+     * @param  bool $getShared
+     * @return MovieSearchRepositoryInterface
+     */
+    public static function movieSearchRepository($getShared = true): MovieSearchRepositoryInterface
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieSearchRepository');
+        }
+
+        return new MovieSearchRepository(
+            static::tmdbMovieSearchMapper(),
+            static::tmdbMovieSearchItemMapper(),
+            static::movieGenreCacheService(),
+            static::tmdbRequestExecutor()
+        );
+    }
+    
+    /**
+     * movieSearchUseCase
+     *
+     * @param  bool $getShared
+     * @return MovieSearchUseCase
+     */
+    public static function movieSearchUseCase($getShared = true): MovieSearchUseCase
+    {
+        if ($getShared) {
+            return static::getSharedInstance('movieSearchUseCase');
+        }
+        
+        return new MovieSearchUseCase(
+            static::movieSearchRepository(),
+            static::movieCacheService()
+        );
+    }
+
+    /**
+     * createReviewUseCase
+     *
+     * @param  bool $getShared
+     * @return CreateReviewUseCase
+     */
+    public static function createReviewUseCase($getShared = true): CreateReviewUseCase
+    {
+        if ($getShared) {
+            return static::getSharedInstance('createReviewUseCase');
+        }
+        
+        return new CreateReviewUseCase(
+            static::movieCacheService()
+        );
+    }
 }

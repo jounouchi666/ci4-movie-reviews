@@ -21,22 +21,35 @@ export default class ValidationHelper {
         el.classList.add('is-invalid');
     }
 
-
     /**
-     * バリデーションメッセージ用の<div>を生成
-     * @param {string} message バリデーションメッセージ
-     * @return {HTMLElement} <div class="invalid-feedback">{メッセージ}</div>
+     * is-invalid、is-validクラスを削除
+     * @param {HTMLElement} el HTMLエレメント
      */
-    static createInvalidFeedback(message) {
-        const div = document.createElement('div');
-        div.classList.add('invalid-feedback');
-        div.innerText = message;
-        return div;
+    static cleanValidState(el) {
+        el.classList.remove('is-valid', 'is-invalid');
     }
 
 
     /**
-     * 指定要素の直後にエラーメッセージを表示
+     * バリデーションメッセージ用の<ul>を生成
+     * @param {string|array} messages バリデーションメッセージ
+     * @return {HTMLElement} <ul class="invalid-feedback"><li>{メッセージ}<li></ul>
+     */
+    static createInvalidFeedback(messages) {
+        messages = Array.isArray(messages) ? messages : [messages];
+        const ul = document.createElement('ul');
+        ul.classList.add('invalid-feedback', 'list-unstyled');
+        messages.forEach(message => {
+            const li = document.createElement('li');
+            li.innerText = message;
+            ul.append(li);
+        })
+        return ul;
+    }
+
+
+    /**
+     * 指定要素の兄弟の末尾にエラーメッセージを表示
      * @param {string} message メッセージ内容
      * @param {HTMLElement} el 対象要素
      * @param {boolean} replace 既存メッセージを置き換えるか
@@ -49,7 +62,7 @@ export default class ValidationHelper {
 
         // 新しいメッセージを追加
         const newFeedback = this.createInvalidFeedback(message);
-        el.after(newFeedback);
+        el.parentElement.append(newFeedback);
     }
 
 

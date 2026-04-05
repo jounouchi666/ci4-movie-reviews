@@ -60,6 +60,22 @@ class DynamicValidationHelper
 
         return [$rules, $errors];
     }
+    
+    /**
+     * ルールの取得
+     *
+     * @param  string $group 既存のValidationルールグループ名（例: 'movie'）
+     * @return array
+     */
+    public static function getRules(string $group): array
+    {
+        $config = config(Validation::class);
+
+        $rules = $config->{$group} ?? [];
+        $errors = $config->{$group . '_errors'} ?? [];
+
+        return [$rules, $errors];
+    }
 
     /**
      * 「>=今年」を表すルール文字列を返す

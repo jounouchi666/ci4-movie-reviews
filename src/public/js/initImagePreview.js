@@ -1,4 +1,4 @@
-import OverflowSpinner from "./OverflowSpinner.js";
+import LoadingSpinner from "./LoadingSpinner.js";
 import ValidationHelper from "./validationHelper.js";
 
 /**
@@ -12,8 +12,8 @@ export function initImagePrevieWithSpinner(input, previewTarget) {
     if (!previewTarget) return;
     
     // スピナー
-    const spinnerWrapper = previewTarget.closest('.spinner-wrapper');
-    const spinner = new OverflowSpinner(spinnerWrapper);
+    const spinnerWrapper = previewTarget.parentElement.querySelector('.spinner-wrapper');
+    const spinner = new LoadingSpinner(spinnerWrapper);
 
     initImagePreview(
         input,

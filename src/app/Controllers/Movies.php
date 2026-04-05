@@ -2,18 +2,29 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\MovieNotFoundException;
+use App\Exceptions\NoPermissionException;
 use App\Helpers\DynamicValidationHelper;
 use App\Helpers\MovieViewHelper;
 use App\Helpers\QueryHelper;
 use App\Models\MovieModel;
+use App\UseCases\CreateReviewUseCase;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\Services;
 
 /**
  * Moviesコントローラー
  */
 class Movies extends BaseController
 {    
+    private CreateReviewUseCase $createReviewUseCase;
+
+    public function __construct()
+    {
+        $this->createReviewUseCase = Services::createReviewUseCase();
+    }
+
     /**
      * 一覧表示
      *
@@ -137,22 +148,25 @@ class Movies extends BaseController
      */
     public function save(): RedirectResponse
     {
-        $userId = user_id();
+        $data = $this->request->getPost();
 
         // バリデーション
-        [$rules, $errors] = DynamicValidationHelper::buildRules(
-            'movie',
-            ['year' => DynamicValidationHelper::lteThisYearRule()],
-            ['year' => DynamicValidationHelper::lteThisYearMessage('公開年')],
-        );
+        [$rules, $errors] = DynamicValidationHelper::getRules('movieReview');
+
+        if (empty($data['movie_id'])) {
+            [$movieInfoRules, $movieInfoErrors] = DynamicValidationHelper::buildRules(
+                'movieInfo',
+                ['year' => DynamicValidationHelper::lteThisYearRule()],
+                ['year' => DynamicValidationHelper::lteThisYearMessage('公開年')],
+            );
+            $rules = [...$rules, ...$movieInfoRules];
+            $errors = [...$errors, ...$movieInfoErrors];
+        }
 
         if (! $this->validate($rules, $errors)) {
             $error = $this->validator->getErrors();
             return redirect()->back()->withInput()->with('error', $error);
         };
-
-        $data = $this->request->getPost();
-        $data['user_id'] = $userId;
 
         $id = $data['id'] ?? null;
 
@@ -161,17 +175,17 @@ class Movies extends BaseController
             ? route_to('show', $id)
             : route_to('index');
 
-        $model = model(MovieModel::class);
-        // 権限チェック
-        if (!empty($id) && ! $model->ownedByUser($id, $userId)) {
-                return redirect()->route('show', $id)->with('error', '権限がありません');
+        try {
+            $this->createReviewUseCase->execute($data);
+        } catch (MovieNotFoundException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (NoPermissionException $e) {
+            return redirect()->route('show', $id)->with('error', $e->getMessage());
         }
-        // 保存
-        $model->save($data);
 
         $filters = QueryHelper::getParam($this->request);
         return redirect()->to(QueryHelper::buildUrl($redirectTarget, $filters))
-                         ->with('message', '登録しました');
+            ->with('message', '登録しました');
     }
     
 
