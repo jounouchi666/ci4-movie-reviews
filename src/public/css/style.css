@@ -1,0 +1,154 @@
+body {
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+.mw-xl {
+  max-width: 576px;
+}
+
+.mh-212px {
+  min-height: 212px;
+  height: 100%;
+}
+
+.topic {
+    transition: box-shadow .3s;
+}
+
+.topic:hover {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
+}
+
+.topic .card-body {
+  box-sizing: border-box;
+}
+
+.card-thumb {
+  flex: 0 0 120px;
+  max-width: 120px;
+  height: 180px;
+}
+
+.card-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.back-link {
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+/* カード用グリッド */
+.movies-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+/* モーダルウィンドウ */
+.modal.slide-up .modal-dialog {
+  transform: translateY(10%);
+  opacity: 0;
+  transition: transform .3s ease-out, opacity .3s linear;
+}
+
+.modal.slide-up.show .modal-dialog {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .modal.slide-up .modal-dialog {
+    transform: translateY(100%);
+    transition: transform .4s ease-out, opacity .15s linear;
+  }
+}
+
+/* スライドアップ */
+.flash-success {
+  overflow: hidden;
+  transition: height .35s ease, opacity .35s ease;
+  height: auto;
+  opacity: 1;
+}
+
+.flash-success.slide-up-hide {
+  height: 0;
+  opacity: 0;
+}
+
+/* ポスター */
+.poster-image {
+  width: 260px;
+}
+
+/* ユーザーアイコン */
+.profile-icon,
+.profile-icon-100 {
+  object-fit: cover;
+}
+
+.profile-icon {
+  width: 120px;
+  height: 120px;
+}
+
+.profile-icon-100 {
+  width: 100px;
+  height: 100px;
+}
+
+.profile-icon-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.profile-icon-32 {
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 768px) {
+  .profile-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* ユーザープロフィールカード */
+.profile-status {
+  margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: breal-word;
+  white-space: normal;
+  max-height: 6em;
+}
+
+.fixed-textarea {
+  resize: none;
+  height: 7em !important;
+}
+
+/* ナビゲーションバー */
+.undisplay-toggle-icon::after {
+  display: none;
+}
+
+.nav-item .btn {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+/* カラーモード */
+.colormode-dropdown .dropdown-menu {
+  min-width: 7rem;
+}
+
+.theme-icon svg {
+  vertical-align: -.125em;
+}

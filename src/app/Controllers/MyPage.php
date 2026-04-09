@@ -1,0 +1,171 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Helpers\QueryHelper;
+use App\Models\MovieModel;
+use App\Models\UserModel;
+use App\Validation\ValidationRules;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\RedirectResponse;
+
+
+class MyPage extends BaseController
+{
+    /**
+     * ログインユーザーのユーザーページ
+     *
+     * @return string view
+     */
+    public function index(): string
+    {
+        $currentUser = auth()->user();
+        return $this->renderUserPage($currentUser->id, 'auth');
+    }
+
+
+    /**
+     * 他ユーザーのユーザーページ
+     *
+     * @return string view
+     */
+    public function show($userId): string
+    {
+        return $this->renderUserPage($userId);
+    }
+
+
+    /**
+     * ユーザーページをレンダリングする
+     *
+     * @param  int $userId ユーザーID
+     * @param  string $mode 
+     * @return string view
+     */
+    private function renderUserPage($userId, $mode = 'show'): string
+    {
+        helper('form');
+
+        $userModel = model(UserModel::class);
+        $user = $userModel->find($userId);
+
+        if (is_null($user)) {
+            throw new PageNotFoundException('ユーザーがみつかりませんでした');
+        }
+
+        $filters = QueryHelper::getParam($this->request);
+        $filters['user_id'] = $userId;
+        $filters['order'] ?? $filters['order'] = ['column' => 'updated_at', 'direction' => 'desc'];
+        
+        $movieModel = model(MovieModel::class);
+        $perPage = 12;
+        $movies = $movieModel->filterPaginated($filters, $perPage);
+
+        return view('myPage/index', [
+            'user' => $user,
+            'mode' => $mode,
+            'filters' => $filters,
+            'movies' => $movies['movies'],
+            'pager' => $movies['pager'],
+        ]);
+    }
+
+
+    /**
+     * ユーザープロフィールデータの保存
+     *
+     * @return RedirectResponse リダイレクト
+     */
+    public function updateProfile(): RedirectResponse
+    {
+        $userId = user_id();
+
+        // バリデーション
+        $rules = (new ValidationRules)->getEditProfileRules();
+        if (!$this->validate($rules)) {
+            $errors = $this->validator->getErrors();
+            return redirect()->back()->withInput()->with('errors', $errors);
+        }
+
+        // フォームデータの保存
+        $data = $this->request->getPost(['username', 'status_message']);
+        $file = $this->request->getFile('icon');
+
+        $userModel = model(UserModel::class);
+
+        if ($file && $file->isValid()) {
+            $userModel->saveIcon($userId, $file);
+        }
+        $userModel->update($userId, $data);
+
+        return redirect()->route('userIndex')->with('message', '保存しました');
+    }
+
+
+    /**
+     * メールアドレスの編集
+     *
+     * @return RedirectResponse リダイレクト
+     */
+    public function updateEmail(): RedirectResponse
+    {
+        $rules = (new ValidationRules)->getEditEmailRules();
+        return $this->updateUserAccount('email', $rules, 'メールアドレスを更新しました', 'current_password_for_email');
+    }
+
+
+    /**
+     * パスワードの編集
+     *
+     * @return RedirectResponse リダイレクト
+     */
+    public function updatePassword(): RedirectResponse
+    {
+        $rules = (new ValidationRules)->getEditPasswordRules();
+        return $this->updateUserAccount(
+            ['password', 'password_confirm'],
+            $rules,
+            'パスワードを更新しました',
+            'current_password_for_password',
+        );
+    }
+
+
+    /**
+     * ユーザーアカウント情報の編集（編集時にパスワードチェックが必要なもの）
+     * 
+     * @param array|string|null $index
+     * @param array $rules バリデーションルール
+     * @param string $message 成功メッセージ
+     * @param string $currentPasswordName current_passwordに該当するname
+     * @return RedirectResponse リダイレクト
+     */
+    protected function updateUserAccount($index, $rules, $message, $currentPasswordName = 'current_password'): RedirectResponse
+    {
+        $user = auth()->user();
+
+        // パスワードの確認
+        $currentPassword = $this->request->getPost($currentPasswordName);
+        if(!service('passwords')->verify($currentPassword, $user->password_hash)) {
+            return redirect()->back()->with('errors', [$currentPasswordName => '現在のパスワードが正しくありません']);
+        }
+
+        // バリデーション
+        if (!$this->validate($rules)) {
+            $errors = $this->validator->getErrors();
+            return redirect()->back()->withInput()->with('errors', $errors);
+        }
+
+        // フォームデータの保存
+        $data = is_array($index)
+            ? $this->request->getPost($index)
+            : [$index => $this->request->getPost($index)];
+
+        $userModel = model(UserModel::class);
+        $user = $userModel->findById($user->id);
+        $user->fill($data);
+        $userModel->save($user);
+
+        return redirect()->route('userIndex')->with('message', $message);
+    }
+}

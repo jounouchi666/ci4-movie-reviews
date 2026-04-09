@@ -77,3 +77,10 @@ defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7);     // invalid u
 defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database error
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
+
+/**
+ * ユーザープロフィールアイコンのディレクトリ
+ */
+defined('DEFAULT_USER_ICON_PATH') || define('DEFAULT_USER_ICON_PATH', 'img/default_user_icon.svg'); // デフォルトユーザーアイコン
+defined('USER_ICON_DIR') || define('USER_ICON_DIR', 'uploads/user_icons/');                         // ユーザーアイコンのディレクトリ
+defined('DEFAULT_POSTER_IMAGE') || define('DEFAULT_POSTER_IMAGE', 'img/no_image.png');              // デフォルトポスターイメージ
